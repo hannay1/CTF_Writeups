@@ -214,7 +214,6 @@ admin cookie: 7C33fcd5b7aabe0352f0bdbce805400e6150fef191ebb15f0dd75424c6c12f2890
 
 action=heartbeat in one of the requests upon reload?
 
-
 many metasploit modules later, no shell >:{
 
 need a different approach...
@@ -287,7 +286,7 @@ I did this with three different exploits, all failed as above.
 
 there seems to be no difference in privs between these two shells.
 local privesc does not work on either....
-
+neither did adding robot to /etc/sudoers, although idk why?
 
 another way 3.13.0-55 can be exploited, accorind to https://www.exploit-db.com/papers/18168/, is this:
 had to look this one up, but still didn't exactly work. used the below commands to finally crack it:
@@ -335,6 +334,8 @@ nmap> !sh
 uid=1002(robot) gid=1002(robot) euid=0(root) groups=0(root),1002(robot)
 
 
-WOW. that was fucking hard. easily the best CTF I've done yet.
-
-
+WOW. that was fucking hard. so basically an old version of nmap was 
+installed with root. this version used to have 
+an option called "--interactive" which allows for root privilages to be 
+executed in the context of nmap version 3.81. weird. easily the best CTF 
+I've done yet.
