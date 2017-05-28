@@ -244,6 +244,10 @@ File found: /Hackademic_RTB1/wp-rss2.php - 200
 File found: /Hackademic_RTB1/xmlrpc.php - 200
 File found: /Hackademic_RTB1/wp-includes/wp-db.php - 200
 
+crack johnsmith's password:
+
+hashid + johntheripper for b986448f0bb9e5e124ca91d3d650f52c | JohnSmith 
+
 
 
 
