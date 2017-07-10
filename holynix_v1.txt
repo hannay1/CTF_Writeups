@@ -109,7 +109,7 @@ uid=33(www-data) gid=33(www-data) groups=33(www-data)
 immediatelty go for vmsplice as linux kernel is 2.6.24... DID NOT WORK.
 
 I really need to develop a more sophisticated method of rooting rather than relying on uploading
-exploits like a mandman until I find one that works.
+exploits like a madman until I find one that works.
 
 $ sudo -l
 User www-data may run the following commands on this host:
