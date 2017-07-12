@@ -461,7 +461,6 @@ Matching Defaults entries for robin on this host:
 User robin may run the following commands on this host:
     (root) NOPASSWD: /opt/start_apache/restart.sh
 
-let's not restart this VM...
 
 let's remeber what docker does. it allows for "containers" (environments) to be run for the purposes of building/modifying apps in the context of this "container"
 
