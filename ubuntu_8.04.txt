@@ -287,7 +287,9 @@ wew
 
 after a LONG time, I figured out that a shell can be uploaded by altering the php
 code in one of the existing pages (Members), as it contains executable php code.
-replacing it with the oh so reliable php-reverse-shell did the trick
+replacing it with the oh so reliable php-reverse-shell did the trick.
+this took a while as there are some restrictions on file type, PHP code is 
+not allowed to be uploaded by itself it seems.
 
 so go to Page --> Members --> PHP Script and replace php with php-reverse-shell.php
 this CMS is revolting to look at.
