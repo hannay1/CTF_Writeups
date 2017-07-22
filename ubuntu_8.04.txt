@@ -518,8 +518,16 @@ Program exited normally.
 (gdb)quit
 $
 
-adding one more byte causes a segfault. shit. this may mean that weak.c has been compiled not to 
-execute on the stack. fuuuuuuuu
+adding one more byte causes a segfault. 
+
+trying to expand the buffer does not work...maybe the buffer in weak.c is too small to hold the 
+shellcode :(
+
+this must be why we are given get_env.c. the buffer may only need to hold a return address to some
+UNIX environment variable?
+
+we could retry the above after loading our shellcode into some env. variable, but 
+there may be a more elegant way...
 
 on a second look at get_env.c, the code looks familar...
 
@@ -553,7 +561,7 @@ int main(int argc, char *argv[]){
 }
 
 
-basically the way this code works is that an "environment varibale" (not really, just a C var that 
+basically the way this code works is that an "environment variable" (not really, just a C var that 
 will be used later as a real environment variable) is set to contain some 
 shellcode. 
 the program then creates a character buffer of length 160. 
@@ -583,11 +591,6 @@ bash-3.2#
 
 
 BOOM!!! also turns out password for "test" user ssh is test lol
-
-
-
-
-
 
 
 
