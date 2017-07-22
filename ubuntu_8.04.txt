@@ -533,7 +533,8 @@ on a second look at get_env.c, the code looks familar...
 
 turns out it came from a book that I own called Hacking: The Art of Exploitation (2nd edition)
 
-a brief thumb through the book took me to some code that I think may work:
+a brief thumb through the book took me to some code that I think may work. 
+I edited the code to the following:
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -572,6 +573,8 @@ shellcode.
 the buffer is then filled with this address, repeated enough times to overwrite the return address 
 of weak.c
 execle() then executes weak.c in the environment specified, which is our shellcode.
+weak.c is owned and compiled by root, so anything that happens in weak.c will be of root 
+permissions.
 I thought to use this as get_env.c predicts the address of an environment variable:
 
 $ ./get_env SHELL weak
