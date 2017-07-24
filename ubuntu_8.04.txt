@@ -563,8 +563,8 @@ int main(int argc, char *argv[]){
 }
 
 
-basically the way this code works is that an "environment variable" (not really, just a C var that 
-will be used later as a real environment variable) is set to contain some 
+basically the way this code works is that an "environment variable" (not really, just a C pointer that 
+will be used later to reference a real environment variable) is set to contain some 
 shellcode. 
 the program then creates a character buffer of length 160. 
 a return address is calculated using the address 0xbffffffa, minus the length of the buffer, minus
@@ -595,6 +595,8 @@ bash-3.2#
 
 
 BOOM!!! also turns out password for "test" user ssh is test lol
+
+also "victime" password  is "gg"
 
 
 
