@@ -20,7 +20,7 @@ HOP RTT     ADDRESS
 2   0.20 ms ctf03.root-me.org (212.129.29.185)
 
 
-what the fuck
+what the fuck, no apache??? alrighty then try the lone ssh port:
 
 root@kali:~/ctf_shit/acid_reloaded# ssh www-data@ctf03.root-me.org
 
