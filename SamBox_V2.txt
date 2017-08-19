@@ -268,6 +268,41 @@ uid=0(root) gid=48(apache) groups=0(root),48(apache)
 
 boom! 
 
+also here is /etc/shadow:
+
+[root@samboxv2 tmp]# cat /etc/shadow
+cat /etc/shadow
+root:$6$MDXFe3jP$mHXZfsgM7OC27Gw9x2HHqI3nGP20g/dJPlpaPaFjVyVUKUJbYJsP2p57MQXNqOWsmrGiIUHiQxY9mWfbG8j7H0:16474:0:99999:7:::
+bin:*:16231:0:99999:7:::
+daemon:*:16231:0:99999:7:::
+adm:*:16231:0:99999:7:::
+lp:*:16231:0:99999:7:::
+sync:*:16231:0:99999:7:::
+shutdown:*:16231:0:99999:7:::
+halt:*:16231:0:99999:7:::
+mail:*:16231:0:99999:7:::
+operator:*:16231:0:99999:7:::
+games:*:16231:0:99999:7:::
+ftp:*:16231:0:99999:7:::
+nobody:*:16231:0:99999:7:::
+dbus:!!:16470::::::
+apache:!!:16470::::::
+polkitd:!!:16470::::::
+avahi:!!:16470::::::
+avahi-autoipd:!!:16470::::::
+libstoragemgmt:!!:16470::::::
+abrt:!!:16470::::::
+postfix:!!:16470::::::
+sshd:!!:16470::::::
+ntp:!!:16470::::::
+chrony:!!:16470::::::
+tcpdump:!!:16470::::::
+vboxadd:!!:16470::::::
+sam:$6$fCvr8nFO$Vm8V4I5yHgBvtQRWb.OlxkNvXxE5ZrMNHI07n6LLIev5vp6XZRuuth11M0H5wEAiAAnJVj0fHQwCcvAbPw.X91:16474:0:99999:7:::
+mysql:!!:16488::::::
+[root@samboxv2 tmp]# id 
+
+
 
 
 
