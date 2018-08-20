@@ -1,3 +1,13 @@
+
+Author: Hannay Mohanna
+
+These are my notes for various vulnhub machines. 
+I did these when I was just getting into pentesting, 
+so there are probably better ways to do them. Also
+These are rough notes. Make of them what you will
+
+
+
 Starting Nmap 7.70 ( https://nmap.org ) at 2018-05-30 13:16 CDT
 Nmap scan report for 192.168.56.101
 Host is up (0.00068s latency).

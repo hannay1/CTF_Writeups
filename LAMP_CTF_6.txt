@@ -1,3 +1,11 @@
+Author: Hannay Mohanna
+
+These are my notes for various vulnhub machines. 
+I did these when I was just getting into pentesting, 
+so there are probably better ways to do them. Also
+These are rough notes. Make of them what you will
+
+
 root@kdog:~/ctf_april/lamp_6# nmap -sS -sV -A -O -T5 ctf01.root-me.org
 
 Starting Nmap 7.40 ( https://nmap.org ) at 2017-05-25 22:40 MDT

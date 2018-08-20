@@ -1,3 +1,11 @@
+Author: Hannay Mohanna
+
+These are my notes for various vulnhub machines. 
+I did these when I was just getting into pentesting, 
+so there are probably better ways to do them. Also
+These are rough notes. Make of them what you will
+
+
 Starting Nmap 7.40 ( https://nmap.org ) at 2017-05-25 22:17 MDT
 Warning: 212.129.28.18 giving up on port because retransmission cap hit (2).
 Nmap scan report for ctf01.root-me.org (212.129.28.18)

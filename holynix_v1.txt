@@ -1,5 +1,15 @@
+
+
+Author: Hannay Mohanna
+
+These are my notes for various vulnhub machines. 
+I did these when I was just getting into pentesting, 
+so there are probably better ways to do them. Also
+These are rough notes. Make of them what you will
+
+
 holynix_v1
-time taken: 2 1/2 hours
+
 
 nmap:
 Starting Nmap 7.40 ( https://nmap.org ) at 2017-07-09 22:10 MDT

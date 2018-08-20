@@ -1,5 +1,13 @@
+Author: Hannay Mohanna
+
+These are my notes for various vulnhub machines. 
+I did these when I was just getting into pentesting, 
+so there are probably better ways to do them. Also
+These are rough notes. Make of them what you will
+
+
 Ubuntu 8.04 LAMP
-time taken: ~ 5 hours
+
 
 root@kali:~/ctf_shit# nmap -sV -A -O -T5 ctf01.root-me.org
 

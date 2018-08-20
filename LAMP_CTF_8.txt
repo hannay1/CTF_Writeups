@@ -1,5 +1,13 @@
+Author: Hannay Mohanna
+
+These are my notes for various vulnhub machines. 
+I did these when I was just getting into pentesting, 
+so there are probably better ways to do them. Also
+These are rough notes. Make of them what you will
+
+
 LAMP CTF8
-time taken: 4 hours
+
 
 nmap:
 Starting Nmap 7.40 ( https://nmap.org ) at 2017-07-23 17:55 MDT

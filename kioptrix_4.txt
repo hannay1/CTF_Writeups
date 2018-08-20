@@ -1,5 +1,13 @@
+Author: Hannay Mohanna
+
+These are my notes for various vulnhub machines. 
+I did these when I was just getting into pentesting, 
+so there are probably better ways to do them. Also
+These are rough notes. Make of them what you will
+
+
 Kioptrix_4:
-Time taken: ~ 2 hours
+
 
 Alrighty so first let's start with some recon:
 nmap -sS -sV -A -O -T5 212.83.142.83:

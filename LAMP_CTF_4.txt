@@ -1,5 +1,14 @@
+Author: Hannay Mohanna
+
+These are my notes for various vulnhub machines. 
+I did these when I was just getting into pentesting, 
+so there are probably better ways to do them. Also
+These are rough notes. Make of them what you will
+
+
+
 LAMP CTF 4:
-time taken: ~ 2 hours
+
 
 Starting Nmap 7.40 ( https://nmap.org ) at 2017-05-10 17:39 MDT
 Nmap scan report for ctf03.root-me.org (212.129.29.185)

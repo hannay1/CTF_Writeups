@@ -1,5 +1,14 @@
+Author: Hannay Mohanna
+
+These are my notes for various vulnhub machines. 
+I did these when I was just getting into pentesting, 
+so there are probably better ways to do them. Also
+These are rough notes. Make of them what you will
+
+
+
 Mr Robot CTF
-time taken : ~ 4 hours
+
 
 ok so robots.txt:
 

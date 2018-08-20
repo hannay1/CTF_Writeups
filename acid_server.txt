@@ -1,5 +1,15 @@
+
+Author: Hannay Mohanna
+
+These are my notes for various vulnhub machines. 
+I did these when I was just getting into pentesting, 
+so there are probably better ways to do them. Also
+These are rough notes. Make of them what you will
+
+
+
 Acid:Server
-time taken: 2 1/2 hours
+
 
 
 root@kali:~/ctf_shit/acid_server# nmap -sV -O -A -T5 ctf01.root-me.org -p 1-60000
